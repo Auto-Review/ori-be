@@ -1,10 +1,10 @@
-package org.example.autoreview.service;
+package org.example.autoreview.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.autoreview.domain.Member;
-import org.example.autoreview.domain.MemberRepository;
-import org.example.autoreview.dto.MemberResponseDto;
-import org.example.autoreview.dto.MemberSaveDto;
+import org.example.autoreview.domain.member.dto.MemberResponseDto;
+import org.example.autoreview.domain.member.dto.MemberSaveDto;
+import org.example.autoreview.domain.member.entity.MemberRepository;
+import org.example.autoreview.domain.member.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
