@@ -1,4 +1,4 @@
-package org.example.autoreview.domain;
+package org.example.autoreview.domain.member.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,8 +1,7 @@
-package org.example.autoreview.dto;
+package org.example.autoreview.domain.member.dto;
 
-import lombok.Data;
 import lombok.Getter;
-import org.example.autoreview.domain.Member;
+import org.example.autoreview.domain.member.entity.Member;
 
 @Getter
 public class MemberResponseDto {
