@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TILPostRequestDto {
+public class TILPostUpdateRequestDto {
 
     private Long id;
 
@@ -15,7 +15,7 @@ public class TILPostRequestDto {
     private String content;
 
     @Builder
-    public TILPostRequestDto(Long id, String title, String content) {
+    public TILPostUpdateRequestDto(Long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;

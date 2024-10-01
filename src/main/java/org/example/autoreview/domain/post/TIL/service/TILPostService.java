@@ -2,7 +2,8 @@ package org.example.autoreview.domain.post.TIL.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.post.TIL.dto.request.TILPostRequestDto;
+import org.example.autoreview.domain.post.TIL.dto.request.TILPostSaveRequestDto;
+import org.example.autoreview.domain.post.TIL.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.post.TIL.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.post.TIL.entity.TILPost;
 import org.example.autoreview.domain.post.TIL.entity.TILPostRepository;
@@ -22,6 +23,11 @@ public class TILPostService {
 
     private final TILPostRepository tilPostRepository;
 
+    public Long save(TILPostSaveRequestDto requestDto) {
+        TILPost tilPost = requestDto.toEntity();
+        return tilPostRepository.save(tilPost).getId();
+    }
+
     public List<TILPostResponseDto> findAll(){
         return tilPostRepository.findAll().stream()
                 .map(TILPostResponseDto::new)
@@ -35,7 +41,7 @@ public class TILPostService {
         return new TILPostResponseDto(tilPost);
     }
 
-    public Long update(TILPostRequestDto requestDto) {
+    public Long update(TILPostUpdateRequestDto requestDto) {
         Long id = requestDto.getId();
 
         TILPost tilPost = tilPostRepository.findById(id)
