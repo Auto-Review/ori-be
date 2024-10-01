@@ -49,8 +49,9 @@ public class CodePostService {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
+        codePost.update(requestDto);
 
-        return codePost.getId();
+        return id;
     }
 
     public void delete(Long id) {
