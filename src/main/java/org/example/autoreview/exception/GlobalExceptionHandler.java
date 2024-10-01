@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.response.ErrorResponse;
+import org.example.autoreview.exception.sub_exceptions.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("handleRuntimeException", ex);
         final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException ex) {
+        log.error("handleNotFoundException", ex);
+        return handleExceptionInternal(ex.getErrorCode());
     }
 
     private ResponseEntity<ErrorResponse> handleExceptionInternal(final ErrorCode errorCode) {
