@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.example.autoreview.common.basetime.BaseEntity;
-import org.example.autoreview.domain.post.TIL.dto.request.TILPostRequestDto;
+import org.example.autoreview.domain.post.TIL.dto.request.TILPostUpdateRequestDto;
 
 @Getter
 @SuperBuilder
@@ -32,7 +32,7 @@ public class TILPost extends BaseEntity {
         this.content = content;
     }
 
-    public void update(TILPostRequestDto requestDto){
+    public void update(TILPostUpdateRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
