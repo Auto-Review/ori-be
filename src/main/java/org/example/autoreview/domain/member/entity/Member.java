@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.domain.post.CODE.entity.CodePost;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +22,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CodePost> codePosts = new ArrayList<>();
+
     @Column(nullable = false)
     private String nickname;
 
@@ -28,6 +35,10 @@ public class Member extends BaseEntity {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
+    }
+
+    public void addCodePost(CodePost codePost) {
+        codePosts.add(codePost);
     }
 
     public Member update(String nickname){
