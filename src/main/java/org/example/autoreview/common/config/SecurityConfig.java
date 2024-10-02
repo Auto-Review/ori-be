@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.member.entity.Role;
 import org.example.autoreview.domain.member.oauth2.CustomOAuth2UserService;
+import org.example.autoreview.exception.errorcode.ErrorCode;
+import org.example.autoreview.exception.response.ErrorResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -26,15 +28,21 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    private static final String[] PERMIT_ALL_PATTERNS = new String[] {
+            "/h2-console/**",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+            "/webjars/**",
+    };
+
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/"), new AntPathRequestMatcher("/css/**"),
-                                new AntPathRequestMatcher("/js/**"), new AntPathRequestMatcher("/image/**"),
-                                new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
@@ -49,9 +57,8 @@ public class SecurityConfig {
 
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {
-                ErrorResponse fail = new ErrorResponse(HttpStatus.UNAUTHORIZED, "Spring security unauthorized...");
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                String json = new ObjectMapper().writeValueAsString(fail);
+                String json = new ObjectMapper().writeValueAsString(ErrorCode.SECURITY_UNAUTHORIZED);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 PrintWriter writer = response.getWriter();
                 writer.write(json);
@@ -60,21 +67,12 @@ public class SecurityConfig {
 
     private final AccessDeniedHandler accessDeniedHandler =
             (request, response, accessDeniedException) -> {
-                ErrorResponse fail = new ErrorResponse(HttpStatus.FORBIDDEN, "Spring security forbidden...");
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                String json = new ObjectMapper().writeValueAsString(fail);
+                String json = new ObjectMapper().writeValueAsString(ErrorCode.SECURITY_FORBIDDEN);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 PrintWriter writer = response.getWriter();
                 writer.write(json);
                 writer.flush();
             };
-
-    @Getter
-    @RequiredArgsConstructor
-    public class ErrorResponse {
-
-        private final HttpStatus status;
-        private final String message;
-    }
 
 }
