@@ -13,6 +13,11 @@ public enum ErrorCode {
     RESOURCE_NOT_FOUND(404, HttpStatus.NOT_FOUND, "자원을 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다."),
 
+    // SECURITY
+    SECURITY_UNAUTHORIZED(401, HttpStatus.UNAUTHORIZED, "자격 증명에 실패했습니다."),
+    SECURITY_FORBIDDEN(401, HttpStatus.FORBIDDEN, "해당 페이지에 대한 권한이 없습니다."),
+
+
     // MEMBER
     MEMBER_NOT_FOUND(404, HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
 
