@@ -26,17 +26,17 @@ public class CodePost extends BaseEntity {
     private LocalDateTime reviewTime;
 
     @Column(length = 2000)
-    private String content;
+    private String description;
 
     @Column(length = 1000)
     private String code;
 
     @Builder
-    public CodePost(String title, int level, LocalDateTime reviewTime, String content, String code) {
+    public CodePost(String title, int level, LocalDateTime reviewTime, String description, String code) {
         this.title = title;
         this.level = level;
         this.reviewTime = reviewTime;
-        this.content = content;
+        this.description = description;
         this.code = code;
     }
 
@@ -44,7 +44,7 @@ public class CodePost extends BaseEntity {
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
         this.reviewTime = requestDto.getReviewTime();
-        this.content = requestDto.getContent();
+        this.description = requestDto.getContent();
         this.code = requestDto.getCode();
     }
 }
