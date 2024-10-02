@@ -20,7 +20,7 @@ public class CodePostResponseDto {
         this.title = entity.getTitle();
         this.level = entity.getLevel();
         this.reviewTime = entity.getReviewTime();
-        this.content = entity.getContent();
+        this.content = entity.getDescription();
         this.code = entity.getCode();
     }
 }
