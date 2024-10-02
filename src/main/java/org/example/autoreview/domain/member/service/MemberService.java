@@ -5,6 +5,8 @@ import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.exception.errorcode.ErrorCode;
+import org.example.autoreview.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberResponseDto findById(Long id){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 회원은 존재하지 않습니다. id=" + id));
+                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         return new MemberResponseDto(entity);
     }
@@ -40,7 +42,7 @@ public class MemberService {
     @Transactional
     public Long update(Long id, String nickname){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 회원은 존재하지 않습니다. id=" + id));
+                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         entity.update(nickname);
 
@@ -50,7 +52,7 @@ public class MemberService {
     @Transactional
     public void delete(Long id){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 회원은 존재하지 않습니다. id=" + id));
+                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         memberRepository.delete(entity);
     }
