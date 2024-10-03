@@ -3,6 +3,7 @@ package org.example.autoreview.domain.post.CODE.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.post.CODE.dto.request.CodePostSaveRequestDto;
+import org.example.autoreview.domain.post.CODE.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.post.CODE.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.post.CODE.service.CodePostService;
 import org.example.autoreview.exception.response.ApiResponse;
@@ -34,9 +35,13 @@ public class CodePostController {
         return ApiResponse.success(HttpStatus.OK, codePostService.findAll());
     }
 
+    @PutMapping("/api/v1/post/code/update")
+    public ApiResponse<Long> update(@RequestBody CodePostUpdateRequestDto requestDto) {
+        return ApiResponse.success(HttpStatus.OK, codePostService.update(requestDto));
+    }
+
     @DeleteMapping("/api/v1/post/code/delete")
     public ApiResponse<Long> delete(@RequestParam Long codePostId){
         return ApiResponse.success(HttpStatus.OK, codePostService.delete(codePostId));
     }
-
 }
