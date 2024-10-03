@@ -10,7 +10,7 @@ public record CodePostSaveRequestDto(
         String title,
         int level,
         LocalDateTime reviewTime,
-        String content,
+        String description,
         String code
 ) {
     public CodePost toEntity(){
@@ -18,7 +18,7 @@ public record CodePostSaveRequestDto(
                 .title(title)
                 .level(level)
                 .reviewTime(reviewTime)
-                .content(content)
+                .description(description)
                 .code(code)
                 .build();
     }
