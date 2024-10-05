@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.post.CODE.dto.request.CodePostUpdateRequestDto;
 
 import java.time.LocalDateTime;
@@ -15,8 +16,11 @@ import java.time.LocalDateTime;
 public class CodePost extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "code_post_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn()
+    private Member member;
 
     @Column(length = 100)
     private String title;
@@ -26,25 +30,31 @@ public class CodePost extends BaseEntity {
     private LocalDateTime reviewTime;
 
     @Column(length = 2000)
-    private String content;
+    private String description;
 
     @Column(length = 1000)
     private String code;
 
     @Builder
-    public CodePost(String title, int level, LocalDateTime reviewTime, String content, String code) {
+    public CodePost(String title, int level, LocalDateTime reviewTime, String description, String code) {
         this.title = title;
         this.level = level;
         this.reviewTime = reviewTime;
-        this.content = content;
+        this.description = description;
         this.code = code;
+    }
+
+    //=연관 관계 편의 메서드=//
+    public void setMember(Member member){
+        this.member = member;
+        member.addCodePost(this);
     }
 
     public void update(CodePostUpdateRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
         this.reviewTime = requestDto.getReviewTime();
-        this.content = requestDto.getContent();
+        this.description = requestDto.getContent();
         this.code = requestDto.getCode();
     }
 }

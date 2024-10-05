@@ -12,7 +12,7 @@ public class CodePostResponseDto {
     private final String title;
     private final int level;
     private final LocalDateTime reviewTime;
-    private final String content;
+    private final String description;
     private final String code;
 
     public CodePostResponseDto(CodePost entity){
@@ -20,7 +20,7 @@ public class CodePostResponseDto {
         this.title = entity.getTitle();
         this.level = entity.getLevel();
         this.reviewTime = entity.getReviewTime();
-        this.content = entity.getContent();
+        this.description= entity.getDescription();
         this.code = entity.getCode();
     }
 }

@@ -50,16 +50,15 @@ public class CodePostService {
                 () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
         codePost.update(requestDto);
-
         return id;
     }
 
-    public void delete(Long id) {
+    public Long delete(Long id) {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
-
         codePostRepository.delete(codePost);
+        return id;
     }
 
 }
