@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.post.TIL.entity;
+package org.example.autoreview.domain.tilpost.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

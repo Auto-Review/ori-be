@@ -1,12 +1,12 @@
-package org.example.autoreview.domain.post.CODE.entity;
+package org.example.autoreview.domain.codepost.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.post.CODE.dto.request.CodePostUpdateRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -54,7 +54,7 @@ public class CodePost extends BaseEntity {
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
         this.reviewTime = requestDto.getReviewTime();
-        this.description = requestDto.getContent();
+        this.description = requestDto.getDescription();
         this.code = requestDto.getCode();
     }
 }

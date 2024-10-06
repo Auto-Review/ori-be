@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.post.TIL.entity;
+package org.example.autoreview.domain.tilpost.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.example.autoreview.common.basetime.BaseEntity;
-import org.example.autoreview.domain.post.TIL.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 
 @Getter
 @SuperBuilder

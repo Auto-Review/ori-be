@@ -1,12 +1,12 @@
-package org.example.autoreview.domain.post.CODE.service;
+package org.example.autoreview.domain.codepost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.post.CODE.dto.request.CodePostSaveRequestDto;
-import org.example.autoreview.domain.post.CODE.dto.request.CodePostUpdateRequestDto;
-import org.example.autoreview.domain.post.CODE.dto.response.CodePostResponseDto;
-import org.example.autoreview.domain.post.CODE.entity.CodePost;
-import org.example.autoreview.domain.post.CODE.entity.CodePostRepository;
+import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
+import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
+import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
+import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;

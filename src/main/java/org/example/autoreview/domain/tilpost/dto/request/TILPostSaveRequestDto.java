@@ -1,8 +1,8 @@
-package org.example.autoreview.domain.post.TIL.dto.request;
+package org.example.autoreview.domain.tilpost.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.example.autoreview.domain.post.TIL.entity.TILPost;
+import org.example.autoreview.domain.tilpost.entity.TILPost;
 
 @Getter
 @Builder

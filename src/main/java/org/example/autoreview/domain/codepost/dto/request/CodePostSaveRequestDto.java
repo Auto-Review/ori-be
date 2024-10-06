@@ -1,8 +1,8 @@
-package org.example.autoreview.domain.post.CODE.dto.request;
+package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import org.example.autoreview.domain.post.CODE.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.CodePost;
 
 import java.time.LocalDateTime;
 
