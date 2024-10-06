@@ -1,12 +1,12 @@
-package org.example.autoreview.domain.post.CODE.entity;
+package org.example.autoreview.domain.codepost.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.post.CODE.dto.request.CodePostUpdateRequestDto;
 
 import java.time.LocalDateTime;
 

@@ -1,16 +1,16 @@
-package org.example.autoreview.domain.post.TIL.dto.response;
+package org.example.autoreview.domain.tilpost.dto.response;
 
 import lombok.Getter;
-import org.example.autoreview.domain.post.TIL.entity.TILPost;
+import org.example.autoreview.domain.tilpost.entity.TILPost;
 
 @Getter
 public class TILPostResponseDto {
 
-    private Long id;
+    private final Long id;
 
-    private String title;
+    private final String title;
 
-    private String content;
+    private final String content;
 
     public TILPostResponseDto(TILPost entity){
         this.id = entity.getId();

@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.post.TIL.dto.request;
+package org.example.autoreview.domain.tilpost.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
