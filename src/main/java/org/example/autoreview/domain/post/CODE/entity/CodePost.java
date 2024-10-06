@@ -54,7 +54,7 @@ public class CodePost extends BaseEntity {
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
         this.reviewTime = requestDto.getReviewTime();
-        this.description = requestDto.getContent();
+        this.description = requestDto.getDescription();
         this.code = requestDto.getCode();
     }
 }
