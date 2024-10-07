@@ -10,6 +10,8 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.jwt.JwtDto;
 import org.example.autoreview.domain.member.jwt.JwtProvider;
+import org.example.autoreview.domain.member.jwt.refresh.RefreshToken;
+import org.example.autoreview.domain.member.jwt.refresh.RefreshTokenRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -26,9 +28,8 @@ import java.io.IOException;
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
-
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -49,11 +50,16 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private void addJwtToHeader(OAuth2User oAuth2User, HttpServletResponse response){
-        final String HEADER_NAME = "token";
 
-        log.info("cookie process start");
-        String token = jwtProvider.generateAccessToken(oAuth2User);
+        log.info("Sanding Token process start");
+        JwtDto token = jwtProvider.generateToken(oAuth2User);
 
-        response.setHeader(HEADER_NAME, token);
+        RefreshToken redis = new RefreshToken(token.getRefreshToken(),
+                (String) oAuth2User.getAttributes().get("nickname"));
+        refreshTokenRepository.save(redis);
+
+        response.setHeader("accessToken", token.getAccessToken());
+        response.setHeader("refreshToken", token.getRefreshToken());
+        log.info("Sanding Token process end");
     }
 }
