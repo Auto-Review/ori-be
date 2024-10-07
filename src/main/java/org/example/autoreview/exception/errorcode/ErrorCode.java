@@ -15,7 +15,10 @@ public enum ErrorCode {
 
     // SECURITY
     SECURITY_UNAUTHORIZED(401, HttpStatus.UNAUTHORIZED, "자격 증명에 실패했습니다."),
-    SECURITY_FORBIDDEN(401, HttpStatus.FORBIDDEN, "해당 페이지에 대한 권한이 없습니다."),
+    SECURITY_FORBIDDEN(403, HttpStatus.FORBIDDEN, "해당 페이지에 대한 권한이 없습니다."),
+
+    // JWT
+    JWT_FORBIDDEN(403, HttpStatus.UNAUTHORIZED, "권한 정보가 없는 JWT 토큰입니다."),
 
 
     // MEMBER
