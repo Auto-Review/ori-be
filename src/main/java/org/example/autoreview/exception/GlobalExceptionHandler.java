@@ -43,5 +43,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private <T> ApiResponse <T> handleExceptionInternal(final ErrorCode errorCode) {
         return ApiResponse.fail(errorCode);
     }
-
 }
