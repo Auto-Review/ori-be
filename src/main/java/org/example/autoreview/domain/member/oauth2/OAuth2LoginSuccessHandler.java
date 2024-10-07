@@ -36,10 +36,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        //찾지 못하는 중
-        //Member member = memberRepository.findByNickname((String) oAuth2User.getAttributes().get("nickname")).get();
 
-        addJwtToCookie(oAuth2User, response);
+        addJwtToHeader(oAuth2User, response);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
         String redirectionUrl = uriBuilder
@@ -50,16 +48,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.sendRedirect(redirectionUrl);
     }
 
-    private void addJwtToCookie(OAuth2User oAuth2User, HttpServletResponse response){
-        final String COOKIE_NAME = "token";
+    private void addJwtToHeader(OAuth2User oAuth2User, HttpServletResponse response){
+        final String HEADER_NAME = "token";
 
         log.info("cookie process start");
         String token = jwtProvider.generateAccessToken(oAuth2User);
 
-        Cookie cookie = new Cookie(COOKIE_NAME, token);
-        cookie.setMaxAge(3600);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
+        response.setHeader(HEADER_NAME, token);
     }
 }
