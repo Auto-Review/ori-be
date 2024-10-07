@@ -34,8 +34,8 @@ out/
 /.nb-gradle/
 
 ### YAML Settings ###
-/src/main/resources/*.yaml
-/src/test/resources/application-test.yaml
+/src/main/resources/*.yml
+/src/test/resources/application-test.yml
 
 ### VS Code ###
 .vscode/
