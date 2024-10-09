@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.oauth2.dto;
+package org.example.autoreview.domain.member.sociallogin.oauth2.dto;
 
 import lombok.Getter;
 import org.example.autoreview.domain.member.entity.Member;

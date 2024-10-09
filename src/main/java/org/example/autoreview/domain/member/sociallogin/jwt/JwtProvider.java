@@ -1,17 +1,12 @@
-package org.example.autoreview.domain.member.jwt;
+package org.example.autoreview.domain.member.sociallogin.jwt;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.member.jwt.refresh.RefreshToken;
-import org.example.autoreview.domain.member.jwt.refresh.RefreshTokenRepository;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.sub_exceptions.ForbiddenException;
-import org.example.autoreview.exception.sub_exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

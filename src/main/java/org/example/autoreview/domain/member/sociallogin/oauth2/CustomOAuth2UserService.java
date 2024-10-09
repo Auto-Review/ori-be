@@ -1,9 +1,9 @@
-package org.example.autoreview.domain.member.oauth2;
+package org.example.autoreview.domain.member.sociallogin.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
-import org.example.autoreview.domain.member.oauth2.dto.OAuthAttributes;
+import org.example.autoreview.domain.member.sociallogin.oauth2.dto.OAuthAttributes;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

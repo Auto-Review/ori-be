@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.jwt;
+package org.example.autoreview.domain.member.sociallogin.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

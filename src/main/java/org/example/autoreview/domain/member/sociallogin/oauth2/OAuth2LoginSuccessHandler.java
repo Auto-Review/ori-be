@@ -1,18 +1,13 @@
-package org.example.autoreview.domain.member.oauth2;
+package org.example.autoreview.domain.member.sociallogin.oauth2;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.member.entity.MemberRepository;
-import org.example.autoreview.domain.member.jwt.JwtDto;
-import org.example.autoreview.domain.member.jwt.JwtProvider;
-import org.example.autoreview.domain.member.jwt.refresh.RefreshToken;
-import org.example.autoreview.domain.member.jwt.refresh.RefreshTokenRepository;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.example.autoreview.domain.member.sociallogin.TokenPrefix;
+import org.example.autoreview.domain.member.sociallogin.oauth2.randomcode.RandomCode;
+import org.example.autoreview.domain.member.sociallogin.oauth2.randomcode.RandomCodeRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -21,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +24,7 @@ import java.io.IOException;
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtProvider jwtProvider;
+    private final RandomCodeRepository randomCodeRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -38,28 +33,32 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-        addJwtToHeader(oAuth2User, response);
+        String randomNumber = createRandomNumber();
+
+        RandomCode redis = new RandomCode(TokenPrefix.RANDOMCODE.toString() + randomNumber,
+                oAuth2User.getAttribute("nickname"));
+        randomCodeRepository.save(redis);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
         String redirectionUrl = uriBuilder
                 .queryParam("loginSuccess", true)
+                .queryParam(randomNumber)
                 .build()
                 .toUriString();
 
         response.sendRedirect(redirectionUrl);
     }
 
-    private void addJwtToHeader(OAuth2User oAuth2User, HttpServletResponse response){
+    private String createRandomNumber() {
+        int digits = 6;
+        SecureRandom rand = new SecureRandom();
+        StringBuilder randomNum = new StringBuilder();
 
-        log.info("Sanding Token process start");
-        JwtDto token = jwtProvider.generateToken(oAuth2User);
+        for (int i = 0; i < digits; i++) {
+            String random = Integer.toString(rand.nextInt(10));
+            randomNum.append(random);
+        }
 
-        RefreshToken redis = new RefreshToken(token.getRefreshToken(),
-                (String) oAuth2User.getAttributes().get("nickname"));
-        refreshTokenRepository.save(redis);
-
-        response.setHeader("accessToken", token.getAccessToken());
-        response.setHeader("refreshToken", token.getRefreshToken());
-        log.info("Sanding Token process end");
+        return randomNum.toString();
     }
 }
