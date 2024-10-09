@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,17 +33,15 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
         String randomNumber = createRandomNumber();
-
         RandomCode redis = new RandomCode(TokenPrefix.RANDOMCODE.toString() + randomNumber,
-                oAuth2User.getAttribute("nickname"));
+                (String) oAuth2User.getAttributes().get("name"));
         randomCodeRepository.save(redis);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
         String redirectionUrl = uriBuilder
                 .queryParam("loginSuccess", true)
-                .queryParam(randomNumber)
+                .queryParam("randomCode", randomNumber)
                 .build()
                 .toUriString();
 

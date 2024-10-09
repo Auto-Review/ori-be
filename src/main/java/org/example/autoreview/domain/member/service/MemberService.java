@@ -39,6 +39,14 @@ public class MemberService {
         return new MemberResponseDto(entity);
     }
 
+    @Transactional(readOnly = true)
+    public MemberResponseDto findByNickname(String nickname){
+        Member entity = memberRepository.findByNickname(nickname).orElseThrow(() ->
+                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        return new MemberResponseDto(entity);
+    }
+
     @Transactional
     public Long update(Long id, String nickname){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
