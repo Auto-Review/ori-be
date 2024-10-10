@@ -10,11 +10,11 @@ public class RandomCode {
 
     @Id
     private String randomCode;
-    private String nickname;
+    private String email;
 
-    public RandomCode(String randomCode, String nickname){
+    public RandomCode(String randomCode, String email){
         this.randomCode = randomCode;
-        this.nickname = nickname;
+        this.email = email;
     }
 
 }

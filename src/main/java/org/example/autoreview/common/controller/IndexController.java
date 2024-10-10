@@ -20,7 +20,6 @@ import java.util.Optional;
 public class IndexController {
 
     private final RandomCodeRepository randomCodeRepository;
-    private final MemberService memberService;
 
     @GetMapping("/")
     public String index(@RequestParam(name = "randomCode", required = false) String randomCode
@@ -32,8 +31,8 @@ public class IndexController {
             RandomCode code = randomCodeRepository.findById(TokenPrefix.RANDOMCODE.toString() + randomCode)
                     .orElseThrow(IllegalArgumentException::new);
 
-            log.info(code.getNickname());
-            model.addAttribute("nickname", code.getNickname());
+            log.info(code.getEmail());
+            model.addAttribute("email", code.getEmail());
         }
 
         return "index";

@@ -35,7 +35,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String randomNumber = createRandomNumber();
         RandomCode redis = new RandomCode(TokenPrefix.RANDOMCODE.toString() + randomNumber,
-                (String) oAuth2User.getAttributes().get("name"));
+                (String) oAuth2User.getAttributes().get("email"));
         randomCodeRepository.save(redis);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
