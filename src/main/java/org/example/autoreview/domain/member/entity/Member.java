@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.scheduler.domain.Notification;
+import org.example.autoreview.domain.notification.domain.Notification;
 
 import java.util.ArrayList;
 import java.util.List;

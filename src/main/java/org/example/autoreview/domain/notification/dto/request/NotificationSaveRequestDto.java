@@ -1,7 +1,7 @@
-package org.example.autoreview.domain.scheduler.dto.request;
+package org.example.autoreview.domain.notification.dto.request;
 
-import org.example.autoreview.domain.scheduler.domain.Notification;
-import org.example.autoreview.domain.scheduler.enums.NotificationStatus;
+import org.example.autoreview.domain.notification.domain.Notification;
+import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 public class NotificationSaveRequestDto {
 

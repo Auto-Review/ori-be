@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.scheduler.domain;
+package org.example.autoreview.domain.notification.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.scheduler.enums.NotificationStatus;
+import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 import java.time.LocalDateTime;
 
