@@ -53,19 +53,17 @@ public class JwtProvider {
     }
 
     // 액세스 토큰 발급
-    public JwtDto generateToken(OAuth2User oAuth2User) {
+    public JwtDto generateToken(Authentication authentication) {
         long now = (new Date()).getTime();
         Date accessTokenExpiration = new Date(now + accessTokenExpireTime);
 
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-
         // Authorities를 Claim에 넣을 수 있도록 String으로 변경 (authority1,authority2,..)
-        String authorities = oAuth2User.getAuthorities().stream()
+        String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         String accessToken = Jwts.builder()
-                .subject((String) attributes.get("nickname"))
+                .subject(authentication.getName())
                 .claim("auth", authorities)
                 .expiration(accessTokenExpiration)
                 .signWith(key)
