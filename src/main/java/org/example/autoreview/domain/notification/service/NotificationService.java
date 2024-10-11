@@ -1,10 +1,10 @@
-package org.example.autoreview.domain.scheduler.service;
+package org.example.autoreview.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.scheduler.domain.Notification;
-import org.example.autoreview.domain.scheduler.domain.NotificationRepository;
-import org.example.autoreview.domain.scheduler.enums.NotificationStatus;
+import org.example.autoreview.domain.notification.domain.Notification;
+import org.example.autoreview.domain.notification.domain.NotificationRepository;
+import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 

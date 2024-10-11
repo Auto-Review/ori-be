@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.scheduler.enums;
+package org.example.autoreview.domain.notification.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
