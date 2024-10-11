@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.scheduler.domain.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CodePost> codePosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
+
     @Column(nullable = false)
     private String nickname;
 
@@ -39,6 +43,10 @@ public class Member extends BaseEntity {
 
     public void addCodePost(CodePost codePost) {
         codePosts.add(codePost);
+    }
+
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
     }
 
     public Member update(String nickname){
