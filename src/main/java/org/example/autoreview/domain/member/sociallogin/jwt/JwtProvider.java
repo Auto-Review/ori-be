@@ -87,10 +87,7 @@ public class JwtProvider {
             throw new ForbiddenException(ErrorCode.JWT_FORBIDDEN);
         }
 
-        Collection<? extends GrantedAuthority> authorities = Arrays
-                .stream(claims.get("auth").toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
@@ -99,13 +96,6 @@ public class JwtProvider {
     public List<SimpleGrantedAuthority> getAuthorities(Claims claims){
         return Collections.singletonList(new SimpleGrantedAuthority(
                 claims.get(AUTHORITIES_KEY).toString()));
-    }
-
-    public long getExpiration(String accessToken){
-        Claims claims = parseClaims(accessToken);
-        Date expiration = claims.getExpiration();
-        long now = (new Date()).getTime();
-        return expiration.getTime() - now;
     }
 
     public boolean validateToken(String token){

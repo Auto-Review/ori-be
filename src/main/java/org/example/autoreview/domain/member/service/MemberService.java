@@ -28,7 +28,7 @@ public class MemberService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-    // 나중에 service로 변경하기
+    // TODO 나중에 service로 변경하기
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
