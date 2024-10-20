@@ -4,39 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.domain.NotificationRepository;
-import org.example.autoreview.domain.notification.enums.NotificationStatus;
-import org.springframework.scheduling.TaskScheduler;
+import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class NotificationService {
 
-    private final TaskScheduler taskScheduler;
+    private final NotificationRepository notificationRepository;
 
-    private final NotificationRepository scheduledMessageRepository;
-
-    public void scheduleNotification(String notification, LocalDateTime dateTime) {
-        Notification scheduledNotification = Notification.builder()
-                .content(notification)
-                .executeTime(dateTime)
-                .status(NotificationStatus.PENDING)
-                .build();
-
-        scheduledMessageRepository.save(scheduledNotification);
-
-        long delay = dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() - System.currentTimeMillis();
-
-        taskScheduler.schedule(() -> {
-            sendNotification(scheduledNotification);
-            scheduledNotification.notificationStatusUpdate();
-            scheduledMessageRepository.save(scheduledNotification);
-        }, Instant.ofEpochSecond(delay));
+    private Long save(NotificationSaveRequestDto requestDto){
+        Notification notification = requestDto.toEntity();
+        return notification.getId();
     }
 
     private void sendNotification(Notification notification) {
