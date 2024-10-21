@@ -2,8 +2,6 @@ package org.example.autoreview.common.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 
@@ -12,8 +10,6 @@ import java.util.Map;
 
 @Service
 public class TokenVerifierService {
-
-    private static final String GOOGLE_TOKEN_INFO_URL = "https://oauth2.googleapis.com/tokeninfo";
 
     public Map<String, Object> validateGoogleAccessToken(String idToken) throws JsonProcessingException {
         String[] parts = idToken.split("\\."); // Splits the token into header, payload, and signature parts

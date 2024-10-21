@@ -1,6 +1,8 @@
 package org.example.autoreview.domain.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.example.autoreview.common.service.TokenVerifierService;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.MemberRepository;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class MemberService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
+    private final TokenVerifierService tokenVerifierService;
     // TODO 나중에 service로 변경하기
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -38,9 +42,14 @@ public class MemberService {
 
 
     @Transactional
-    public JwtDto issuedToken(String email){
-        Member member = memberRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    public JwtDto issuedToken(String accessToken) throws JsonProcessingException {
+
+        Map<String, Object> payload = tokenVerifierService.validateGoogleAccessToken(accessToken);
+
+        String email = (String) payload.get("email");
+
+        Member member = memberRepository.findByEmail(email).orElse(
+                memberRepository.save(new MemberSaveDto(email, "user").toEntity()));
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(member.getEmail(), "");

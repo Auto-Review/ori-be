@@ -7,6 +7,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.sub_exceptions.ForbiddenException;
+import org.example.autoreview.exception.sub_exceptions.jwt.CustomExpiredJwtException;
+import org.example.autoreview.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
+import org.example.autoreview.exception.sub_exceptions.jwt.CustomInvalidException;
+import org.example.autoreview.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -98,23 +102,22 @@ public class JwtProvider {
                 claims.get(AUTHORITIES_KEY).toString()));
     }
 
-    public boolean validateToken(String token){
+    public void validateToken(String token){
         try {
             Jwts.parser()
                     .verifyWith((SecretKey) key)
                     .build()
                     .parseSignedClaims(token);
-            return true;
-        } catch (SecurityException | MalformedJwtException e){
-            log.warn("invalid JWT", e);
+
         } catch (ExpiredJwtException e){
-            log.info("Expired JWT", e);
+            throw new CustomExpiredJwtException(ErrorCode.EXPIRED_TOKEN);
+        } catch (SecurityException | MalformedJwtException e){
+            throw new CustomInvalidException(ErrorCode.INVALID_TOKEN);
         } catch (UnsupportedJwtException e){
-            log.warn("Unsupported JWT", e);
+            throw new CustomUnsupportedJwtException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e){
-            log.error("JWT claims string is empty", e);
+            throw new CustomIllegalArgumentException(ErrorCode.TOKEN_IS_EMPTY);
         }
-        return false;
     }
 
     private Claims parseClaims(String accessToken){
