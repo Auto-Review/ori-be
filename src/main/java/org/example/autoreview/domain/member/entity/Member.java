@@ -1,15 +1,20 @@
 package org.example.autoreview.domain.member.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.notification.domain.Notification;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -39,14 +44,6 @@ public class Member extends BaseEntity {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
-    }
-
-    public void addCodePost(CodePost codePost) {
-        codePosts.add(codePost);
-    }
-
-    public void addNotification(Notification notification) {
-        notifications.add(notification);
     }
 
     public Member update(String nickname){
