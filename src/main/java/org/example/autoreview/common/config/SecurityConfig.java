@@ -1,6 +1,7 @@
 package org.example.autoreview.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.PrintWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.sociallogin.jwt.JwtAuthenticationFilter;
@@ -24,8 +25,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import java.io.PrintWriter;
-
 @Slf4j
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -39,6 +38,7 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ALL_PATTERNS = new String[] {
             "/",
+            "/v1/api/**",
             "/refresh",
             "/auth/token",
             "/h2-console/**",
