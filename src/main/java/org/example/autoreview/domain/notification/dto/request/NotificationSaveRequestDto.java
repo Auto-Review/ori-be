@@ -1,17 +1,16 @@
 package org.example.autoreview.domain.notification.dto.request;
 
+import java.time.LocalDate;
+import lombok.Getter;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
-import java.time.LocalDateTime;
-
+@Getter
 public class NotificationSaveRequestDto {
 
     private String content;
-
     private NotificationStatus status;
-
-    private LocalDateTime executeTime;
+    private LocalDate executeTime;
 
     public Notification toEntity(){
         return Notification.builder()
