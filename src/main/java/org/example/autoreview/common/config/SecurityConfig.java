@@ -3,11 +3,8 @@ package org.example.autoreview.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.member.entity.Role;
-import org.example.autoreview.domain.member.jwt.JwtAuthenticationFilter;
-import org.example.autoreview.domain.member.jwt.JwtProvider;
-import org.example.autoreview.domain.member.oauth2.CustomOAuth2UserService;
-import org.example.autoreview.domain.member.oauth2.OAuth2LoginSuccessHandler;
+import org.example.autoreview.domain.member.sociallogin.jwt.JwtAuthenticationFilter;
+import org.example.autoreview.domain.member.sociallogin.jwt.JwtProvider;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +15,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 import java.io.PrintWriter;
@@ -38,17 +32,15 @@ import java.io.PrintWriter;
 @Configuration
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-
     private final JwtProvider jwtProvider;
 
     private final CorsFilter corsFilter;
 
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-
 
     private static final String[] PERMIT_ALL_PATTERNS = new String[] {
             "/",
+            "/refresh",
+            "/auth/token",
             "/h2-console/**",
             "/swagger-ui/**",
             "/swagger-resources/**",
@@ -75,9 +67,6 @@ public class SecurityConfig {
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
 
-                .logout(logout -> logout.logoutSuccessUrl("/"))
-                .oauth2Login(login -> login.userInfoEndpoint(end -> end.userService(customOAuth2UserService)).successHandler(oAuth2LoginSuccessHandler))
-                // OAuth 2.0 로그인 구현
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.authenticationEntryPoint(unauthorizedEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 );// 401 403 관련 예외처리
@@ -85,7 +74,17 @@ public class SecurityConfig {
         return http.build();
     }
 
-
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity,
+                                                       PasswordEncoder passwordEncoder,
+                                                       UserDetailsService userDetailsService) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
+        return authenticationManagerBuilder.build();
+    }
 
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {

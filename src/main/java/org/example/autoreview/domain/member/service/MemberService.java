@@ -1,6 +1,9 @@
 package org.example.autoreview.domain.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.common.service.TokenVerifierService;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.MemberRepository;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -20,8 +24,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long save(MemberSaveDto saveDto){
-        return memberRepository.save(saveDto.toEntity()).getId();
+    public Member saveOrFind(String email){
+        return memberRepository.findByEmail(email).orElse(
+                memberRepository.save(new MemberSaveDto(email, "user").toEntity()));
     }
 
     @Transactional(readOnly = true)
@@ -38,6 +43,7 @@ public class MemberService {
 
         return new MemberResponseDto(entity);
     }
+
 
     @Transactional
     public Long update(Long id, String nickname){

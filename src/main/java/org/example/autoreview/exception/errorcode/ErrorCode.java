@@ -19,7 +19,12 @@ public enum ErrorCode {
 
     // JWT
     JWT_FORBIDDEN(403, HttpStatus.UNAUTHORIZED, "권한 정보가 없는 JWT 토큰입니다."),
-
+    // filter response 시 한글 깨짐으로 인한 영문 message 작성
+    EXPIRED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Expired Token"),
+    INVALID_TOKEN(404, HttpStatus.NOT_FOUND, "Invalid Token"),
+    UNSUPPORTED_TOKEN(404, HttpStatus.NOT_FOUND, "Unsupported Token"),
+    TOKEN_IS_EMPTY(404, HttpStatus.NOT_FOUND, "Token Is Empty"),
+    UNAUTHORIZED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Unauthorized Token.."),
 
     // MEMBER
     MEMBER_NOT_FOUND(404, HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
-import org.example.autoreview.domain.member.jwt.CustomUserDetails;
+import org.example.autoreview.domain.member.sociallogin.jwt.CustomUserDetails;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.sub_exceptions.NotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByNickname(username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return memberRepository.findByEmail(email)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
