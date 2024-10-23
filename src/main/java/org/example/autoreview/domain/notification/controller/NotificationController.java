@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "알림 API", description = "알림 API")
 @RequestMapping("/v1/api/notification")
 @RequiredArgsConstructor
 @RestController
