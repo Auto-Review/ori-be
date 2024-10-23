@@ -1,4 +1,4 @@
-package org.example.autoreview.config;
+package org.example.autoreview.global.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

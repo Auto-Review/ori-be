@@ -1,4 +1,4 @@
-package org.example.autoreview.common.basetime;
+package org.example.autoreview.global.common.basetime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

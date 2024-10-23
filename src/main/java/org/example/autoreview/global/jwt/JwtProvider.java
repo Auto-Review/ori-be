@@ -1,16 +1,16 @@
-package org.example.autoreview.common.jwt;
+package org.example.autoreview.global.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.sub_exceptions.ForbiddenException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomExpiredJwtException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomInvalidException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.ForbiddenException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomExpiredJwtException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

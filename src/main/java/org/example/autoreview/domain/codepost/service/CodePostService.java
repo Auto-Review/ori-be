@@ -7,8 +7,8 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.sub_exceptions.NotFoundException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package org.example.autoreview.common.jwt;
+package org.example.autoreview.global.jwt;
 
 import lombok.Data;
 import org.example.autoreview.domain.member.entity.Member;

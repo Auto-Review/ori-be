@@ -1,7 +1,7 @@
-package org.example.autoreview.exception.response;
+package org.example.autoreview.global.exception.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.example.autoreview.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 @Schema(description = "API 응답")

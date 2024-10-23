@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.refresh.RefreshToken;
 import org.example.autoreview.domain.refresh.RefreshTokenRepository;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomInvalidException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
 import org.springframework.stereotype.Service;
 
 @Slf4j

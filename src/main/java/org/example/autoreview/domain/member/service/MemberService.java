@@ -6,8 +6,8 @@ import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.sub_exceptions.NotFoundException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

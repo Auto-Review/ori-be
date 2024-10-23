@@ -1,7 +1,7 @@
-package org.example.autoreview.exception.base_exceptions;
+package org.example.autoreview.global.exception.base_exceptions;
 
 import lombok.Getter;
-import org.example.autoreview.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 
 @Getter
 public class CustomRuntimeException extends RuntimeException{

@@ -1,4 +1,4 @@
-package org.example.autoreview.common.config;
+package org.example.autoreview.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

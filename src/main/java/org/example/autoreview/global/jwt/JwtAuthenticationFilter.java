@@ -1,4 +1,4 @@
-package org.example.autoreview.common.jwt;
+package org.example.autoreview.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -7,12 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.response.ApiResponse;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomExpiredJwtException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomInvalidException;
-import org.example.autoreview.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.response.ApiResponse;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomExpiredJwtException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

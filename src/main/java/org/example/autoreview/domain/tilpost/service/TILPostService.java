@@ -7,8 +7,8 @@ import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.example.autoreview.domain.tilpost.entity.TILPostRepository;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.sub_exceptions.NotFoundException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

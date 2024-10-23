@@ -1,4 +1,4 @@
-package org.example.autoreview.exception.errorcode;
+package org.example.autoreview.global.exception.errorcode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

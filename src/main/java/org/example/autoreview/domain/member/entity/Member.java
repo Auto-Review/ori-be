@@ -12,7 +12,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.notification.domain.Notification;
 

@@ -1,10 +1,10 @@
-package org.example.autoreview.exception;
+package org.example.autoreview.global.exception;
 
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.exception.errorcode.ErrorCode;
-import org.example.autoreview.exception.response.ApiResponse;
-import org.example.autoreview.exception.sub_exceptions.NotFoundException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.response.ApiResponse;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public <T> ApiResponse <T> handleIllegalArgument(final IllegalArgumentException ex) {
+    public <T> ApiResponse<T> handleIllegalArgument(final IllegalArgumentException ex) {
         log.warn("handleIllegalArgument", ex);
         final ErrorCode errorCode = ErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(errorCode);
