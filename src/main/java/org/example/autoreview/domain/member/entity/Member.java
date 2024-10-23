@@ -1,14 +1,20 @@
 package org.example.autoreview.domain.member.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.example.autoreview.domain.notification.domain.Notification;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +31,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CodePost> codePosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
+
     @Column(nullable = false)
     private String nickname;
 
@@ -35,10 +44,6 @@ public class Member extends BaseEntity {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
-    }
-
-    public void addCodePost(CodePost codePost) {
-        codePosts.add(codePost);
     }
 
     public Member update(String nickname){

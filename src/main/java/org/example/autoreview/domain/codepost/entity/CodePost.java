@@ -1,14 +1,20 @@
 package org.example.autoreview.domain.codepost.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -47,7 +53,7 @@ public class CodePost extends BaseEntity {
     //=연관 관계 편의 메서드=//
     public void setMember(Member member){
         this.member = member;
-        member.addCodePost(this);
+        member.getCodePosts().add(this);
     }
 
     public void update(CodePostUpdateRequestDto requestDto){

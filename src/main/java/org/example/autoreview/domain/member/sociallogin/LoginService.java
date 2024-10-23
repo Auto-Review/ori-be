@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.member.sociallogin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.common.service.TokenVerifierService;
 import org.example.autoreview.domain.member.entity.Member;
@@ -15,8 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
