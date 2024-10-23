@@ -2,8 +2,13 @@ package org.example.autoreview.domain.member.sociallogin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Map;
+
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.member.service.MemberService;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.AuthenticationJwtException;
+import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.example.autoreview.global.jwt.JwtProvider;
 import org.example.autoreview.domain.refresh.RefreshToken;
@@ -48,6 +53,30 @@ public class LoginService {
         refreshTokenService.save(redis);
 
         return jwtDto;
+    }
+
+    public JwtDto reissue(String accessToken, String refreshToken) {
+        try {
+
+            jwtProvider.validateToken(refreshToken);
+
+            Authentication authentication = jwtProvider.getAuthentication(accessToken);
+            String getRefreshToken = refreshTokenService.getRefreshToken(authentication.getName());
+
+            if (!getRefreshToken.equals(refreshToken)) {
+                throw new AuthenticationJwtException(ErrorCode.UNMATCHED_TOKEN);
+            }
+
+            JwtDto newToken = jwtProvider.generateToken(authentication);
+
+            RefreshToken redis = new RefreshToken(authentication.getName(), newToken.getRefreshToken(), freshTokenExpiration);
+            refreshTokenService.save(redis);
+
+            return newToken;
+
+        } catch (SecurityException | MalformedJwtException e){
+            throw new CustomInvalidException(ErrorCode.INVALID_TOKEN);
+        }
     }
 
 }

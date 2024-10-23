@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.member.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class IndexController {
     private final LoginService loginService;
 
     // accessToken 하나만 있는데 requestBody 사용이 맞는가?
+    @Operation(summary = "로그인 이후 토큰 발급", description = "토큰 발급")
     @PostMapping("/auth/token")
     public ApiResponse<?> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
         log.info("client send {}", accessToken);
@@ -43,13 +45,19 @@ public class IndexController {
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 
+    @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @GetMapping("/reissued")
     public ApiResponse<?> reissuedToken(@RequestHeader String accessToken,
                                         @RequestHeader String refreshToken,
                                         HttpServletResponse response){
 
+        JwtDto jwtDto = loginService.reissue(accessToken, refreshToken);
 
+        log.info("accessToken = {}", jwtDto.getAccessToken());
+        log.info("refreshToken = {}", jwtDto.getRefreshToken());
 
+        response.setHeader("accessToken", jwtDto.getAccessToken());
+        response.setHeader("refreshToken", jwtDto.getRefreshToken());
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 }

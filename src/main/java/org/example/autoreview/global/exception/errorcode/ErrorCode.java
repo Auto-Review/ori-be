@@ -25,6 +25,7 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN(404, HttpStatus.NOT_FOUND, "Unsupported Token"),
     TOKEN_IS_EMPTY(404, HttpStatus.NOT_FOUND, "Token Is Empty"),
     UNAUTHORIZED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Unauthorized Token.."),
+    UNMATCHED_TOKEN(401, HttpStatus.UNAUTHORIZED, "RefreshToken is not matched"),
 
     // MEMBER
     MEMBER_NOT_FOUND(404, HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
