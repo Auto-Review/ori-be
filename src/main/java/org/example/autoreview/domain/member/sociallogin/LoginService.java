@@ -37,10 +37,10 @@ public class LoginService {
 
         String email = (String) payload.get("email");
 
-        Member member = memberService.saveOrFind(email);
+        memberService.saveOrFind(email);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getEmail(), "");
+                new UsernamePasswordAuthenticationToken(email, "");
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 

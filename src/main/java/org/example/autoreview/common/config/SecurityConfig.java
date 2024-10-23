@@ -38,8 +38,6 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ALL_PATTERNS = new String[] {
             "/",
-            "/v1/api/**",
-            "/refresh",
             "/auth/token",
             "/h2-console/**",
             "/swagger-ui/**",

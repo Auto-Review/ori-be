@@ -24,8 +24,6 @@ public class IndexController {
 
     private final LoginService loginService;
 
-    private final RefreshTokenService refreshTokenService;
-
     // accessToken 하나만 있는데 requestBody 사용이 맞는가?
     @PostMapping("/auth/token")
     public ApiResponse<?> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
@@ -41,9 +39,9 @@ public class IndexController {
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 
-    @PostMapping("/refresh")
-    public ApiResponse<?> confirmToken(@RequestParam(name = "email") String email){
-        log.info("current user's refreshToken is {}", refreshTokenService.getRefreshToken(email));
+    @GetMapping("/api/test")
+    public ApiResponse<?> test(@RequestHeader(name = "Authorization") String accessToken){
+        log.info("current accessToken = {}", accessToken);
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 

@@ -132,12 +132,6 @@ public class JwtProvider {
         }
     }
 
-    public String resolveAccessToken(String accessToken){
-        if(StringUtils.hasText(accessToken) && accessToken.startsWith(BEARER_PREFIX)){
-            return accessToken.substring(7);
-        }
-        return null;
-    }
 
     public String resolveRefreshToken(String refreshToken){
         if(StringUtils.hasText(refreshToken)){
