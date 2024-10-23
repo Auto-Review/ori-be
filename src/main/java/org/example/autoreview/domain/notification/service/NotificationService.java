@@ -23,10 +23,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
 
-    public void save(String email, NotificationSaveRequestDto requestDto) {
-
-        //TODO: 현재 member 객체 불러오는게 saveOrFind 밖에 없음 -> 기존 회원만 얻고 싶음
-        Member member = memberService.saveOrFind(email);
+    public void save(Long id, NotificationSaveRequestDto requestDto) {
+        Member member = memberService.findEntityById(id);
         Notification notification = requestDto.toEntity();
         notification.setMember(member);
 
