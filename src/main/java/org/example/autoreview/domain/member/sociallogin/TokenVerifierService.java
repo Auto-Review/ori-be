@@ -1,4 +1,4 @@
-package org.example.autoreview.common.service;
+package org.example.autoreview.domain.member.sociallogin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

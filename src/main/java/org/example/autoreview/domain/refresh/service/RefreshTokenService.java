@@ -1,9 +1,9 @@
-package org.example.autoreview.domain.member.sociallogin.jwt.refresh.service;
+package org.example.autoreview.domain.refresh.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.member.sociallogin.jwt.refresh.RefreshToken;
-import org.example.autoreview.domain.member.sociallogin.jwt.refresh.RefreshTokenRepository;
+import org.example.autoreview.domain.refresh.RefreshToken;
+import org.example.autoreview.domain.refresh.RefreshTokenRepository;
 import org.example.autoreview.exception.errorcode.ErrorCode;
 import org.example.autoreview.exception.sub_exceptions.jwt.CustomInvalidException;
 import org.springframework.stereotype.Service;

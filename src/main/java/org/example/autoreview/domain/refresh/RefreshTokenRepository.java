@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.sociallogin.jwt.refresh;
+package org.example.autoreview.domain.refresh;
 
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;

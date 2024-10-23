@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.sociallogin.jwt.refresh;
+package org.example.autoreview.domain.refresh;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

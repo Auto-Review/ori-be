@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.sociallogin.jwt;
+package org.example.autoreview.common.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

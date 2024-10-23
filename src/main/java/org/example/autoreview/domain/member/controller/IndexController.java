@@ -1,12 +1,11 @@
-package org.example.autoreview.common.controller;
+package org.example.autoreview.domain.member.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.sociallogin.LoginService;
-import org.example.autoreview.domain.member.sociallogin.jwt.JwtDto;
-import org.example.autoreview.domain.member.sociallogin.jwt.refresh.service.RefreshTokenService;
+import org.example.autoreview.common.jwt.JwtDto;
 import org.example.autoreview.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

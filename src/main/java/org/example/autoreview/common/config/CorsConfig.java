@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.member.sociallogin.jwt;
+package org.example.autoreview.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
