@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 

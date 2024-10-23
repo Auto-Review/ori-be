@@ -8,7 +8,7 @@ import org.example.autoreview.domain.notification.dto.request.NotificationSaveRe
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.service.NotificationService;
 import org.example.autoreview.domain.scheduler.NotificationScheduler;
-import org.example.autoreview.exception.response.ApiResponse;
+import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

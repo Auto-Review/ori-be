@@ -3,13 +3,11 @@ package org.example.autoreview.domain.member.sociallogin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.example.autoreview.common.service.TokenVerifierService;
-import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
-import org.example.autoreview.domain.member.sociallogin.jwt.JwtDto;
-import org.example.autoreview.domain.member.sociallogin.jwt.JwtProvider;
-import org.example.autoreview.domain.member.sociallogin.jwt.refresh.RefreshToken;
-import org.example.autoreview.domain.member.sociallogin.jwt.refresh.service.RefreshTokenService;
+import org.example.autoreview.global.jwt.JwtDto;
+import org.example.autoreview.global.jwt.JwtProvider;
+import org.example.autoreview.domain.refresh.RefreshToken;
+import org.example.autoreview.domain.refresh.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,10 +35,10 @@ public class LoginService {
 
         String email = (String) payload.get("email");
 
-        Member member = memberService.saveOrFind(email);
+        memberService.saveOrFind(email);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getEmail(), "");
+                new UsernamePasswordAuthenticationToken(email, "");
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 

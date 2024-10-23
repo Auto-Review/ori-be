@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.example.autoreview.common.basetime.BaseEntity;
+import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 
 @Getter
