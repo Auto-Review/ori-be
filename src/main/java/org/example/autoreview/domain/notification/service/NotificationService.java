@@ -23,8 +23,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
 
-    public void save(Long id, NotificationSaveRequestDto requestDto) {
-        Member member = memberService.findEntityById(id);
+    public void save(String email, NotificationSaveRequestDto requestDto) {
+        Member member = memberService.findByEmail(email);
         Notification notification = requestDto.toEntity();
         notification.setMember(member);
 
