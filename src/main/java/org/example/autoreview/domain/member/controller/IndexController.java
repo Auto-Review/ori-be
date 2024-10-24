@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController
+@RestController("/v1/api/auth")
 public class IndexController {
 
     private final LoginService loginService;
 
     // accessToken 하나만 있는데 requestBody 사용이 맞는가?
     @Operation(summary = "로그인 이후 토큰 발급", description = "토큰 발급")
-    @PostMapping("/auth/token")
+    @PostMapping("/token")
     public ApiResponse<?> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
         log.info("client send {}", accessToken);
 
@@ -39,7 +39,7 @@ public class IndexController {
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 
-    @GetMapping("/api/test")
+    @GetMapping("/test")
     public ApiResponse<?> test(@RequestHeader(name = "Authorization") String accessToken){
         log.info("current accessToken = {}", accessToken);
         return ApiResponse.success(HttpStatus.OK, "ok");
