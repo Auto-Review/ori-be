@@ -3,13 +3,11 @@ package org.example.autoreview.domain.member.sociallogin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Map;
 
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.jwt.AuthenticationJwtException;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.example.autoreview.global.jwt.JwtProvider;
 import org.example.autoreview.domain.refresh.RefreshToken;
@@ -57,6 +55,7 @@ public class LoginService {
         return jwtDto;
     }
 
+    @Transactional
     public JwtDto reissue(String accessToken, String refreshToken) {
         log.info("current refreshToken value = {}", refreshToken);
         jwtProvider.validateToken(refreshToken);
