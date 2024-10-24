@@ -9,16 +9,13 @@ import org.example.autoreview.domain.member.sociallogin.LoginService;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController("/v1/api/auth")
+@RequestMapping("/v1/api/auth")
+@RestController
 public class IndexController {
 
     private final LoginService loginService;
