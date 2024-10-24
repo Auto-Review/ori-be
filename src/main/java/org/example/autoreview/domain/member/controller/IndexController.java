@@ -47,8 +47,8 @@ public class IndexController {
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @GetMapping("/reissued")
-    public ApiResponse<?> reissuedToken(@RequestHeader String accessToken,
-                                        @RequestHeader String refreshToken,
+    public ApiResponse<?> reissuedToken(@RequestHeader(name = "Authorization") String accessToken,
+                                        @RequestHeader(name = "refreshToken") String refreshToken,
                                         HttpServletResponse response){
 
         JwtDto jwtDto = loginService.reissue(accessToken, refreshToken);

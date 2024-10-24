@@ -23,7 +23,7 @@ public class MemberService {
     @Transactional
     public Member saveOrFind(String email){
         return memberRepository.findByEmail(email).orElse(
-                memberRepository.save(new MemberSaveDto(email, "user").toEntity()));
+                memberRepository.save(new MemberSaveDto(email, "asdfasdfa").toEntity()));
     }
 
     @Transactional(readOnly = true)

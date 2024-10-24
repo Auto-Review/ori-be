@@ -5,6 +5,7 @@ import java.util.Map;
 
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.jwt.AuthenticationJwtException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LoginService {
@@ -56,27 +58,22 @@ public class LoginService {
     }
 
     public JwtDto reissue(String accessToken, String refreshToken) {
-        try {
+        log.info("current refreshToken value = {}", refreshToken);
+        jwtProvider.validateToken(refreshToken);
 
-            jwtProvider.validateToken(refreshToken);
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        String getRefreshToken = refreshTokenService.getRefreshToken(authentication.getName());
 
-            Authentication authentication = jwtProvider.getAuthentication(accessToken);
-            String getRefreshToken = refreshTokenService.getRefreshToken(authentication.getName());
-
-            if (!getRefreshToken.equals(refreshToken)) {
-                throw new AuthenticationJwtException(ErrorCode.UNMATCHED_TOKEN);
-            }
-
-            JwtDto newToken = jwtProvider.generateToken(authentication);
-
-            RefreshToken redis = new RefreshToken(authentication.getName(), newToken.getRefreshToken(), freshTokenExpiration);
-            refreshTokenService.save(redis);
-
-            return newToken;
-
-        } catch (SecurityException | MalformedJwtException e){
-            throw new CustomInvalidException(ErrorCode.INVALID_TOKEN);
+        if (!getRefreshToken.equals(refreshToken)) {
+            throw new AuthenticationJwtException(ErrorCode.UNMATCHED_TOKEN);
         }
+
+        JwtDto newToken = jwtProvider.generateToken(authentication);
+
+        RefreshToken redis = new RefreshToken(authentication.getName(), newToken.getRefreshToken(), freshTokenExpiration);
+        refreshTokenService.save(redis);
+
+        return newToken;
     }
 
 }
