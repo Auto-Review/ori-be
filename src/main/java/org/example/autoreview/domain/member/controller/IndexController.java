@@ -23,7 +23,7 @@ public class IndexController {
     // accessToken 하나만 있는데 requestBody 사용이 맞는가?
     @Operation(summary = "로그인 이후 토큰 발급", description = "토큰 발급")
     @PostMapping("/token")
-    public ApiResponse<?> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
+    public ApiResponse<String> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
         log.info("client send {}", accessToken);
 
         JwtDto jwtDto = loginService.issuedToken(accessToken);
@@ -37,14 +37,14 @@ public class IndexController {
     }
 
     @GetMapping("/test")
-    public ApiResponse<?> test(@RequestHeader(name = "Authorization") String accessToken){
+    public ApiResponse<String> test(@RequestHeader(name = "Authorization") String accessToken){
         log.info("current accessToken = {}", accessToken);
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @GetMapping("/reissued")
-    public ApiResponse<?> reissuedToken(@RequestHeader(name = "Authorization") String accessToken,
+    public ApiResponse<String> reissuedToken(@RequestHeader(name = "Authorization") String accessToken,
                                         @RequestHeader(name = "refreshToken") String refreshToken,
                                         HttpServletResponse response){
 

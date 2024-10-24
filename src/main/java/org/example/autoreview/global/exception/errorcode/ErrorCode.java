@@ -26,7 +26,7 @@ public enum ErrorCode {
     TOKEN_IS_EMPTY(404, HttpStatus.NOT_FOUND, "Token Is Empty"),
     UNAUTHORIZED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Unauthorized Token.."),
     UNMATCHED_TOKEN(401, HttpStatus.UNAUTHORIZED, "RefreshToken is not matched"),
-    NOMATCHED_EMIAL(404, HttpStatus.NOT_FOUND, "can't find Email"),
+    NOMATCHED_EMIAL(404, HttpStatus.NOT_FOUND, "Can't find Email"),
 
     // MEMBER
     MEMBER_NOT_FOUND(404, HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
