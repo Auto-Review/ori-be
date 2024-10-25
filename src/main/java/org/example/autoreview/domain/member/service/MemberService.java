@@ -8,6 +8,7 @@ import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
+import org.example.autoreview.domain.member.entity.Role;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,14 @@ public class MemberService {
 
     @Transactional
     public Member saveOrFind(String email){
-        return memberRepository.findByEmail(email).orElse(
-                memberRepository.save(new MemberSaveDto(email, "asdfasdfa").toEntity()));
+        Member member = memberRepository.findByEmail(email)
+                .orElse(Member.builder()
+                        .email(email)
+                        .nickname("user")
+                        .role(Role.USER)
+                        .build());
+
+        return memberRepository.save(member);
     }
 
     @Transactional(readOnly = true)

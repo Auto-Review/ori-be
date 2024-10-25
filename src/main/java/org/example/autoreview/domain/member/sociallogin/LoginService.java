@@ -75,4 +75,22 @@ public class LoginService {
         return newToken;
     }
 
+    // Test용
+    @Transactional
+    public JwtDto issuedTokenByEmail(String email) throws JsonProcessingException {
+        memberService.saveOrFind(email);
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(email, "");
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        JwtDto jwtDto = jwtProvider.generateToken(authentication);
+
+        RefreshToken redis = new RefreshToken(email, jwtDto.getRefreshToken(), freshTokenExpiration);
+        refreshTokenService.save(redis);
+
+        return jwtDto;
+    }
+
 }

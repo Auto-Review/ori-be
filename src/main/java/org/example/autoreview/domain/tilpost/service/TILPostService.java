@@ -2,13 +2,17 @@ package org.example.autoreview.domain.tilpost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILPostListResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.example.autoreview.domain.tilpost.entity.TILPostRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +25,20 @@ import java.util.stream.Collectors;
 @Service
 public class TILPostService {
 
+    private final MemberService memberService;
+
     private final TILPostRepository tilPostRepository;
 
-    public Long save(TILPostSaveRequestDto requestDto) {
-        TILPost tilPost = requestDto.toEntity();
+    public Long save(TILPostSaveRequestDto requestDto, String email) {
+        Member member = memberService.findByEmail(email);
+        TILPost tilPost = requestDto.toEntity(member);
         return tilPostRepository.save(tilPost).getId();
     }
 
-    public List<TILPostResponseDto> findAll(){
-        return tilPostRepository.findAll().stream()
-                .map(TILPostResponseDto::new)
+    public List<TILPostListResponseDto> findAll(Pageable pageable){
+
+        return tilPostRepository.findAll(pageable).stream()
+                .map(TILPostListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
