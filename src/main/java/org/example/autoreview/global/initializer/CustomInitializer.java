@@ -30,6 +30,6 @@ public class CustomInitializer implements ApplicationRunner {
         memberRepository.save(member);
 
         JwtDto jwtDto = loginService.issuedTokenByEmail(member.getEmail());
-        log.info("Test Member accessToken is = {}", jwtDto.getAccessToken());
+        log.info("Test Member accessToken is {}", jwtDto.getAccessToken());
     }
 }

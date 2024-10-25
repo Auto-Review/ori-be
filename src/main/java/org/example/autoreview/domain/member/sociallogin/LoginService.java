@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.jwt.AuthenticationJwtException;
@@ -40,16 +41,16 @@ public class LoginService {
 
         String email = (String) payload.get("email");
 
-        memberService.saveOrFind(email);
+        Member member = memberService.saveOrFind(email);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, "");
+                new UsernamePasswordAuthenticationToken(member.getEmail(), "");
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         JwtDto jwtDto = jwtProvider.generateToken(authentication);
 
-        RefreshToken redis = new RefreshToken(email, jwtDto.getRefreshToken(), freshTokenExpiration);
+        RefreshToken redis = new RefreshToken(member.getEmail(), jwtDto.getRefreshToken(), freshTokenExpiration);
         refreshTokenService.save(redis);
 
         return jwtDto;
@@ -78,16 +79,16 @@ public class LoginService {
     // Test용
     @Transactional
     public JwtDto issuedTokenByEmail(String email) throws JsonProcessingException {
-        memberService.saveOrFind(email);
+        Member member = memberService.saveOrFind(email);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, "");
+                new UsernamePasswordAuthenticationToken(member.getEmail(), "");
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         JwtDto jwtDto = jwtProvider.generateToken(authentication);
 
-        RefreshToken redis = new RefreshToken(email, jwtDto.getRefreshToken(), freshTokenExpiration);
+        RefreshToken redis = new RefreshToken(member.getEmail(), jwtDto.getRefreshToken(), freshTokenExpiration);
         refreshTokenService.save(redis);
 
         return jwtDto;

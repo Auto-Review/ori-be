@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.member.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +24,8 @@ public class MemberService {
 
     @Transactional
     public Member saveOrFind(String email){
-        Member member = memberRepository.findByEmail(email)
-                .orElse(Member.builder()
-                        .email(email)
-                        .nickname("user")
-                        .role(Role.USER)
-                        .build());
-
-        return memberRepository.save(member);
+        return memberRepository.findByEmail(email).orElseGet(() ->
+                memberRepository.save(new MemberSaveDto(email).toEntity()));
     }
 
     @Transactional(readOnly = true)
