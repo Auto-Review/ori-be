@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.refresh.RefreshToken;
 import org.example.autoreview.domain.refresh.RefreshTokenRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -15,18 +15,16 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private static final String REFRESH_PREFIX = "refreshToken:";
-
     public void save(RefreshToken refreshToken){
         refreshTokenRepository.save(refreshToken);
     }
 
     public String getRefreshToken(String email){
 
-        log.info("received email {}", email);
+        log.info("received email = {}", email);
 
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow(() ->
-                new CustomInvalidException(ErrorCode.INVALID_TOKEN));
+                new NotFoundException(ErrorCode.NOMATCHED_EMIAL));
 
         return refreshToken.getRefreshToken();
     }
