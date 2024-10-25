@@ -61,7 +61,9 @@ public class LoginService {
         log.info("current refreshToken value = {}", refreshToken);
         jwtProvider.validateToken(refreshToken);
 
-        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        String jwt = jwtProvider.resolveAccessToken(accessToken);
+
+        Authentication authentication = jwtProvider.getAuthentication(jwt);
         String getRefreshToken = refreshTokenService.getRefreshToken(authentication.getName());
 
         if (!getRefreshToken.equals(refreshToken)) {
