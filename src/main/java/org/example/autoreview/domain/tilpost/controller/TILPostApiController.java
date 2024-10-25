@@ -2,6 +2,7 @@ package org.example.autoreview.domain.tilpost.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
+import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostListResponseDto;
 import org.example.autoreview.domain.tilpost.service.TILPostService;
 import org.example.autoreview.global.exception.response.ApiResponse;
@@ -35,5 +36,17 @@ public class TILPostApiController {
 
         return ApiResponse.success(HttpStatus.OK,
                 tilPostService.save(saveRequestDto, userDetails.getUsername()));
+    }
+
+    @PutMapping("/update")
+    public ApiResponse<Long> update(@RequestBody TILPostUpdateRequestDto requestDto){
+
+        return ApiResponse.success(HttpStatus.OK, tilPostService.update(requestDto));
+    }
+
+    @DeleteMapping("/delete")
+    public ApiResponse<Long> delete(@RequestBody Long id){
+
+        return ApiResponse.success(HttpStatus.OK, tilPostService.delete(id));
     }
 }

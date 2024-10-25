@@ -2,6 +2,7 @@ package org.example.autoreview.domain.tilpost.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 
@@ -12,7 +13,7 @@ public class TILPostListResponseDto {
     private Long id;
     private String title;
     private String content;
-    private Member member;
+    private MemberResponseDto member;
     private LocalDateTime createdDate;
 
     @Builder
@@ -20,7 +21,7 @@ public class TILPostListResponseDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.member = entity.getMember();
+        this.member = new MemberResponseDto(entity.getMember());
         this.createdDate = entity.getCreateDate();
     }
 }

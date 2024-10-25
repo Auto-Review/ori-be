@@ -29,12 +29,14 @@ public class TILPostService {
 
     private final TILPostRepository tilPostRepository;
 
+    @Transactional
     public Long save(TILPostSaveRequestDto requestDto, String email) {
         Member member = memberService.findByEmail(email);
         TILPost tilPost = requestDto.toEntity(member);
         return tilPostRepository.save(tilPost).getId();
     }
 
+    @Transactional(readOnly = true)
     public List<TILPostListResponseDto> findAll(Pageable pageable){
 
         return tilPostRepository.findAll(pageable).stream()
@@ -42,6 +44,7 @@ public class TILPostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public TILPostResponseDto findById(Long id){
         TILPost tilPost = tilPostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
@@ -49,6 +52,7 @@ public class TILPostService {
         return new TILPostResponseDto(tilPost);
     }
 
+    @Transactional
     public Long update(TILPostUpdateRequestDto requestDto) {
         Long id = requestDto.getId();
 
@@ -60,10 +64,12 @@ public class TILPostService {
         return id;
     }
 
-    public void delete(Long id){
+    @Transactional
+    public Long delete(Long id){
         TILPost tilPost = tilPostRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.POST_NOT_FOUND));
 
         tilPostRepository.delete(tilPost);
+        return id;
     }
 }
