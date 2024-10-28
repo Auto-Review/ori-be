@@ -38,7 +38,7 @@ public class CodePostService {
 
     public CodePostResponseDto findById(Long id) {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
 
         return new CodePostResponseDto(codePost);
@@ -47,7 +47,7 @@ public class CodePostService {
     public Long update(CodePostUpdateRequestDto requestDto) {
         Long id = requestDto.getId();
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
         codePost.update(requestDto);
         return id;
@@ -55,7 +55,7 @@ public class CodePostService {
 
     public Long delete(Long id) {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.POST_NOT_FOUND)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
         codePostRepository.delete(codePost);
         return id;

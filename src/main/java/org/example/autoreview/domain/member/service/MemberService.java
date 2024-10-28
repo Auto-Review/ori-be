@@ -31,7 +31,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_MEMBER)
         );
     }
 
@@ -45,7 +45,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberResponseDto findById(Long id){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+                new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         return new MemberResponseDto(entity);
     }
@@ -53,13 +53,13 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findEntityById(Long id){
         return memberRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+                new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
     @Transactional
     public Long update(Long id, String nickname){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+                new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         entity.update(nickname);
 
@@ -69,7 +69,7 @@ public class MemberService {
     @Transactional
     public void delete(Long id){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+                new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         memberRepository.delete(entity);
     }

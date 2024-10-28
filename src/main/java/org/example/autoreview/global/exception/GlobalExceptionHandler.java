@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.response.ApiResponse;
+import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ServletException.class)
     public <T> ApiResponse <T> handleServletException(final ServletException ex){
         log.warn("handleServletException", ex);
-        final ErrorCode errorCode = ErrorCode.RESOURCE_NOT_FOUND;
+        final ErrorCode errorCode = ErrorCode.NOT_FOUND_RESOURCE;
         return handleExceptionInternal(errorCode);
     }
 
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public <T> ApiResponse <T> handleNotFoundException(final NotFoundException ex) {
+        log.error("handleNotFoundException", ex);
+        return handleExceptionInternal(ex.getErrorCode());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public <T> ApiResponse <T> handleBadRequestException(final BadRequestException ex) {
         log.error("handleNotFoundException", ex);
         return handleExceptionInternal(ex.getErrorCode());
     }

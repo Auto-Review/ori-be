@@ -88,7 +88,7 @@ public class SecurityConfig {
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                String json = new ObjectMapper().writeValueAsString(ErrorCode.SECURITY_UNAUTHORIZED);
+                String json = new ObjectMapper().writeValueAsString(ErrorCode.UNAUTHORIZED_SECURITY);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 PrintWriter writer = response.getWriter();
                 writer.write(json);
@@ -98,7 +98,7 @@ public class SecurityConfig {
     private final AccessDeniedHandler accessDeniedHandler =
             (request, response, accessDeniedException) -> {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                String json = new ObjectMapper().writeValueAsString(ErrorCode.SECURITY_FORBIDDEN);
+                String json = new ObjectMapper().writeValueAsString(ErrorCode.FORBIDDEN_SECURITY);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 PrintWriter writer = response.getWriter();
                 writer.write(json);

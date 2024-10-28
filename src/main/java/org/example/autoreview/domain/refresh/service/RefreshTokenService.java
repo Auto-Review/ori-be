@@ -24,7 +24,7 @@ public class RefreshTokenService {
         log.info("received email = {}", email);
 
         RefreshToken refreshToken = refreshTokenRepository.findByEmail(email).orElseThrow(() ->
-                new NotFoundException(ErrorCode.NOMATCHED_EMIAL));
+                new NotFoundException(ErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
         return refreshToken.getRefreshToken();
     }
