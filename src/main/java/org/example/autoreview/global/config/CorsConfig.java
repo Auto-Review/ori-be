@@ -14,11 +14,13 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:3000"); // 허용할 출처
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        config.addExposedHeader("accessToken");
+        config.addExposedHeader("refreshToken");
 
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/v1/api/**", config);
         return new CorsFilter(source);
     }
 }

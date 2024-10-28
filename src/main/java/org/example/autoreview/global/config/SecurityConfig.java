@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.PrintWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.jwt.JwtAuthenticationFilter;
 import org.example.autoreview.global.jwt.JwtProvider;
-import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -57,6 +57,7 @@ public class SecurityConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(authorize -> authorize
