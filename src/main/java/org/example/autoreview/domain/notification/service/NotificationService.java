@@ -14,15 +14,18 @@ import org.example.autoreview.domain.notification.dto.request.NotificationSaveRe
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final MemberService memberService;
 
+    @Transactional
     public void save(String email, NotificationSaveRequestDto requestDto) {
         Member member = memberService.findByEmail(email);
         Notification notification = requestDto.toEntity();
@@ -46,6 +49,7 @@ public class NotificationService {
     // 알림 엔티티 모두 확인
     // 복습일이 오늘과 같고 Status 가 PENDING 인 알림만 전송하기
     // 전송 후 Status -> COMPLETE 로 변경
+    @Transactional
     public void sendNotification() {
         // 여기에서 알림을 전송하는 로직을 구현합니다.
         List<Notification> notificationList = notificationRepository.findAll();
