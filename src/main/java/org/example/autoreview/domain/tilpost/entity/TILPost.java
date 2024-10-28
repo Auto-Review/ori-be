@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 
@@ -24,12 +25,16 @@ public class TILPost extends BaseEntity {
     @Column(length = 3000, nullable = false)
     private String content;
 
-    // 사진
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 
     @Builder
-    public TILPost(String title, String content) {
+    public TILPost(String title, String content, Member member) {
         this.title = title;
         this.content = content;
+        this.member = member;
     }
 
     public void update(TILPostUpdateRequestDto requestDto){

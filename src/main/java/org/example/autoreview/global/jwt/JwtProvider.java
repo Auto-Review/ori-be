@@ -78,7 +78,7 @@ public class JwtProvider {
                 .compact();
 
         return  JwtDto.builder()
-                .accessToken(accessToken)
+                .accessToken(BEARER_PREFIX + accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -131,10 +131,10 @@ public class JwtProvider {
         }
     }
 
-
-    public String resolveRefreshToken(String refreshToken){
-        if(StringUtils.hasText(refreshToken)){
-            return refreshToken;
+    public String resolveAccessToken(String accessToken){
+        if (StringUtils.hasText(accessToken) &&
+                accessToken.startsWith(BEARER_PREFIX)) {
+            return accessToken.substring(7);
         }
         return null;
     }

@@ -9,6 +9,8 @@ import org.example.autoreview.domain.member.sociallogin.LoginService;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -37,8 +39,10 @@ public class IndexController {
     }
 
     @GetMapping("/test")
-    public ApiResponse<String> test(@RequestHeader(name = "Authorization") String accessToken){
+    public ApiResponse<String> test(@RequestHeader(name = "Authorization") String accessToken,
+                                    @AuthenticationPrincipal UserDetails userDetails){
         log.info("current accessToken = {}", accessToken);
+        log.info("current user = {}", userDetails.getUsername());
         return ApiResponse.success(HttpStatus.OK, "ok");
     }
 

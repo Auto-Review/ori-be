@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.member.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.member.dto.MemberSaveDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
+import org.example.autoreview.domain.member.entity.Role;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ public class MemberService {
 
     @Transactional
     public Member saveOrFind(String email){
-        return memberRepository.findByEmail(email).orElse(
-                memberRepository.save(new MemberSaveDto(email, "asdfasdfa").toEntity()));
+        return memberRepository.findByEmail(email).orElseGet(() ->
+                memberRepository.save(new MemberSaveDto(email).toEntity()));
     }
 
     @Transactional(readOnly = true)
