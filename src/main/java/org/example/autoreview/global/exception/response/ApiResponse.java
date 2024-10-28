@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Schema(description = "API 응답")
 public record ApiResponse<T>(
-        @Schema(description = "HTTP 상태 코드", example = "200")
+        @Schema(description = "HTTP 상태 코드", example = "OK")
         HttpStatus status,
 
         @Schema(description = "응답 데이터")
