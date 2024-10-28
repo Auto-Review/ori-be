@@ -48,7 +48,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.register('copyYaml', Copy) {
+tasks.register('copyYml', Copy) {
     copy {
         from 'security_setting'
         include "*.yml"
