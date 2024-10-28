@@ -2,6 +2,7 @@ package org.example.autoreview.domain.codepost.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
@@ -9,9 +10,14 @@ import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "코드 포스트 API", description = "코드 포스트 API")
 @RequiredArgsConstructor
@@ -47,7 +53,7 @@ public class CodePostController {
 
     @Operation(summary = "코드 포스트 삭제", description = "코드 포스트 삭제")
     @DeleteMapping("/api/v1/post/code/delete")
-    public ApiResponse<Long> delete(@RequestParam Long codePostId){
+    public ApiResponse<Long> delete(@RequestBody Long codePostId){
         return ApiResponse.success(HttpStatus.OK, codePostService.delete(codePostId));
     }
 }
