@@ -87,7 +87,7 @@ public class JwtProvider {
         Claims claims = parseClaims(accessToken);
 
         if(claims.get(AUTHORITIES_KEY) == null){
-            throw new ForbiddenException(ErrorCode.JWT_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.FORBIDDEN_JWT);
         }
 
         Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
@@ -115,7 +115,7 @@ public class JwtProvider {
         } catch (UnsupportedJwtException e){
             throw new CustomUnsupportedJwtException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e){
-            throw new CustomIllegalArgumentException(ErrorCode.TOKEN_IS_EMPTY);
+            throw new CustomIllegalArgumentException(ErrorCode.NOT_FOUND_TOKEN);
         }
     }
 
