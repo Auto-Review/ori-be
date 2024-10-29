@@ -64,7 +64,7 @@ jobs:
           key: ${{ secrets.DEV_PRIVATE_KEY }}
           script:
             # 도커 컨테이너 재배포
-            sudo docker stop ori-api-server || echo "Failed to stop container"
-            sudo docker rm ori-api-server || echo "Failed to remove container"
-            sudo docker rmi ehgur062300/ori-backend:0.1 || echo "Failed to remove image"
-            sudo docker run -d --name ori-api-server --network ori-network -p 8080:8080 ehgur062300/ori-backend:0.1 || echo "Failed to run container"
+            sudo docker stop ori-api-server
+            sudo docker rm ori-api-server
+            sudo docker rmi ehgur062300/ori-backend:0.1
+            sudo docker run -d --name ori-api-server --network ori-network -p 8080:8080 ehgur062300/ori-backend:0.1
