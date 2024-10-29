@@ -36,6 +36,12 @@ public class CodePostService {
                 .collect(Collectors.toList());
     }
 
+    public CodePost findEntityById(Long id){
+        return codePostRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
+        );
+    }
+
     public CodePostResponseDto findById(Long id) {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
