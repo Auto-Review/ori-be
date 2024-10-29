@@ -62,7 +62,7 @@ jobs:
           host: ${{ secrets.DEV_HOST }}
           username: ${{ secrets.DEV_USERNAME }}
           key: ${{ secrets.DEV_PRIVATE_KEY }}
-          script:
+          script: |
             # 도커 컨테이너 재배포
             sudo docker stop ori-api-server
             sudo docker rm ori-api-server
