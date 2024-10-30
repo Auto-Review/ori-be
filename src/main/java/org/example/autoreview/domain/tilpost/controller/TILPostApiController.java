@@ -48,14 +48,17 @@ public class TILPostApiController {
                 tilPostService.save(saveRequestDto, userDetails.getUsername()));
     }
 
+    @Operation(summary = "TIL 게시물 갱신", description = "토큰을 통해 유저 식별")
     @PutMapping("/update")
-    public ApiResponse<Long> update(@RequestBody TILPostUpdateRequestDto requestDto){
+    public ApiResponse<Long> update(@RequestBody TILPostUpdateRequestDto requestDto,
+                                    @AuthenticationPrincipal UserDetails userDetails){
 
-        return ApiResponse.success(HttpStatus.OK, tilPostService.update(requestDto));
+        return ApiResponse.success(HttpStatus.OK, tilPostService.update(requestDto, userDetails.getUsername()));
     }
 
-    @DeleteMapping("/delete")
-    public ApiResponse<Long> delete(@RequestBody Long id,
+    @Operation(summary = "TIL 게시물 삭제", description = "토큰을 통해 유저 식별")
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse<Long> delete(@PathVariable Long id,
                                     @AuthenticationPrincipal UserDetails userDetails){
 
         return ApiResponse.success(HttpStatus.OK, tilPostService.delete(id, userDetails.getUsername()));

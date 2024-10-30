@@ -55,11 +55,16 @@ public class TILPostService {
     }
 
     @Transactional
-    public Long update(TILPostUpdateRequestDto requestDto) {
+    public Long update(TILPostUpdateRequestDto requestDto, String email) {
         Long id = requestDto.getId();
 
         TILPost tilPost = tilPostRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_POST));
+
+        Member member = tilPost.getMember();
+        if(!Objects.equals(member.getEmail(), email)) {
+            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
+        }
 
         tilPost.update(requestDto);
 
