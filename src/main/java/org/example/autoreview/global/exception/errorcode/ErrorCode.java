@@ -20,11 +20,11 @@ public enum ErrorCode {
     // JWT
     FORBIDDEN_JWT(403, HttpStatus.UNAUTHORIZED, "권한 정보가 없는 JWT 토큰입니다."),
     // filter response 시 한글 깨짐으로 인한 영문 message 작성
-    EXPIRED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Expired Token"),
-    INVALID_TOKEN(404, HttpStatus.NOT_FOUND, "Invalid Token"),
-    UNSUPPORTED_TOKEN(404, HttpStatus.NOT_FOUND, "Unsupported Token"),
-    NOT_FOUND_TOKEN(404, HttpStatus.NOT_FOUND, "Token Is Empty"),
-    UNAUTHORIZED_TOKEN(403, HttpStatus.UNAUTHORIZED, "Unauthorized Token.."),
+    EXPIRED_TOKEN(401, HttpStatus.UNAUTHORIZED, "Expired Token"),
+    INVALID_TOKEN(401, HttpStatus.UNAUTHORIZED, "Invalid Token"),
+    UNSUPPORTED_TOKEN(401, HttpStatus.UNAUTHORIZED, "Unsupported Token"),
+    NOT_FOUND_TOKEN(401, HttpStatus.UNAUTHORIZED, "Token Is Empty"),
+    UNAUTHORIZED_TOKEN(401, HttpStatus.UNAUTHORIZED, "Unauthorized Token.."),
     UNMATCHED_TOKEN(401, HttpStatus.UNAUTHORIZED, "RefreshToken is not matched"),
 
     NOT_FOUND_REFRESH_TOKEN(404, HttpStatus.NOT_FOUND, "RefreshToken을 찾을 수 없습니다."),
