@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostListResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.service.TILPostService;
@@ -31,6 +32,13 @@ public class TILPostApiController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.success(HttpStatus.OK, tilPostService.findAll(pageable));
+    }
+
+    @GetMapping("/cursor")
+    public ApiResponse<TILCursorResponseDto> findAllByCursorId(@RequestParam(required = false) Long cursorId,
+                                                               @RequestParam int pageSize){
+
+        return ApiResponse.success(HttpStatus.OK, tilPostService.findAllByIdCursorBased(cursorId, pageSize));
     }
 
     @Operation(summary = "특정 TIL 게시물 조회", description = "개별 조회")

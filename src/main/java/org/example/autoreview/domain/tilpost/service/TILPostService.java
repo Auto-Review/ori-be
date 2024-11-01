@@ -6,6 +6,7 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostListResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
@@ -13,6 +14,7 @@ import org.example.autoreview.domain.tilpost.entity.TILPostRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,5 +85,37 @@ public class TILPostService {
 
         tilPostRepository.delete(tilPost);
         return id;
+    }
+
+    @Transactional(readOnly = true)
+    public TILCursorResponseDto findAllByIdCursorBased(Long cursorId, int pageSize){
+        Pageable pageable = PageRequest.of(0, pageSize + 1);
+
+        List<TILPost> posts = findAllByCursorIdCheckExistsCursor(cursorId, pageable);
+
+        boolean hasNext = hasNext(posts.size(), pageSize);
+
+        return new TILCursorResponseDto (
+                toSubListIfHasNext(hasNext, pageSize, posts).stream()
+                        .map(TILPostListResponseDto::new)
+                        .collect(Collectors.toList()),
+                cursorId, pageSize);
+    }
+
+    private List<TILPost> findAllByCursorIdCheckExistsCursor(Long cursorId, Pageable pageable){
+        return cursorId == null ? tilPostRepository.findAllByOrderByIdDesc(pageable)
+                : tilPostRepository.findByIdLessThanOrderByIdDesc(cursorId, pageable);
+    }
+
+    private boolean hasNext(int postsSize, int pageSize){
+        if(postsSize == 0){
+            throw new NotFoundException(ErrorCode.NOT_FOUND_POST);
+        }
+
+        return postsSize > pageSize;
+    }
+
+    private List<TILPost> toSubListIfHasNext(boolean hasNext, int pageSize, List<TILPost> posts){
+        return hasNext ? posts.subList(0, pageSize) : posts;
     }
 }
