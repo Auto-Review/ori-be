@@ -35,7 +35,7 @@ public class TILPostApiController {
     }
 
     @GetMapping("/cursor")
-    public ApiResponse<TILCursorResponseDto> findAllByCursorId(@RequestParam Long cursorId,
+    public ApiResponse<TILCursorResponseDto> findAllByCursorId(@RequestParam(required = false) Long cursorId,
                                                                @RequestParam int pageSize){
 
         return ApiResponse.success(HttpStatus.OK, tilPostService.findAllByIdCursorBased(cursorId, pageSize));
