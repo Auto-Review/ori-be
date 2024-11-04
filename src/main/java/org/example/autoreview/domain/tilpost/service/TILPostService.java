@@ -56,6 +56,11 @@ public class TILPostService {
     }
 
     @Transactional(readOnly = true)
+    public TILPageResponseDto findByTitleContains(String keyword, Pageable pageable){
+        return new TILPageResponseDto(tilPostRepository.findByTitleContaining(keyword, pageable));
+    }
+
+    @Transactional(readOnly = true)
     public TILPostResponseDto findById(Long id){
         TILPost tilPost = tilPostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
