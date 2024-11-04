@@ -33,6 +33,16 @@ public class TILPostApiController {
         return ApiResponse.success(HttpStatus.OK, tilPostService.findAllByPage(pageable));
     }
 
+    @Operation(summary = "TIL 게시물 검색", description = "검색")
+    @GetMapping("/search")
+    public ApiResponse<TILPageResponseDto> findByTitleContains(@RequestParam(defaultValue = "0", required = false) int page,
+                                                               @RequestParam(defaultValue = "10", required = false) int size,
+                                                               @RequestParam(required = false) String keyword){
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.success(HttpStatus.OK, tilPostService.findByTitleContains(keyword, pageable));
+    }
+
     @GetMapping("/cursor")
     public ApiResponse<TILCursorResponseDto> findAllByCursorId(@RequestParam(required = false) Long cursorId,
                                                                @RequestParam int pageSize){
