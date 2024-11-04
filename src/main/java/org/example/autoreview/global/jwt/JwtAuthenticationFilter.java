@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = request.getHeader("Authorization");
         String jwt = jwtProvider.resolveAccessToken(accessToken);
 
-        if(StringUtils.hasText(jwt)){
+        if(StringUtils.hasText(jwt) && !request.getRequestURI().contains("/reissued")){
             try {
                 jwtProvider.validateToken(jwt);
                 Authentication authentication = jwtProvider.getAuthentication(jwt);

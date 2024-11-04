@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
-import org.example.autoreview.domain.tilpost.dto.response.TILPostListResponseDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.service.TILPostService;
 import org.example.autoreview.global.exception.response.ApiResponse;
@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/api/til")
@@ -27,11 +26,11 @@ public class TILPostApiController {
 
     @Operation(summary = "TIL 게시물 전체 조회", description = "전체 조회")
     @GetMapping
-    public ApiResponse<List<TILPostListResponseDto>> findAll(@RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue = "10") int size){
+    public ApiResponse<TILPageResponseDto> findAll(@RequestParam(defaultValue = "0", required = false) int page,
+                                                   @RequestParam(defaultValue = "10", required = false) int size){
 
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(HttpStatus.OK, tilPostService.findAll(pageable));
+        return ApiResponse.success(HttpStatus.OK, tilPostService.findAllByPage(pageable));
     }
 
     @GetMapping("/cursor")
