@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TILPostRepository extends JpaRepository<TILPost,Long> {
+
+    @Query("SELECT p FROM TILPost p ORDER BY p.id DESC")
     Page<TILPost> findAll(Pageable pageable);
 
     List<TILPost> findAllByOrderByIdDesc(Pageable pageable);
