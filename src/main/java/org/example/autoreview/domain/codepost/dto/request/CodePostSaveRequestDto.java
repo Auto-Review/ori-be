@@ -13,7 +13,7 @@ public record CodePostSaveRequestDto(
         @Schema(description = "코드 포스트 제목", example = "[BOJ] 0000: test 해보기")
         String title,
 
-        @Schema(description = "난이도", example = "4.5")
+        @Schema(description = "난이도", example = "4")
         int level,
 
         @Schema(description = "복습일 설정", example = "2024-10-11")

@@ -19,7 +19,7 @@ public class CodePostUpdateRequestDto {
     @Schema(description = "해설", example = "test 기법을 사용해서 구현")
     private String description;
 
-    @Schema(description = "난이도", example = "4.5")
+    @Schema(description = "난이도", example = "4")
     private int level;
 
     @Schema(description = "복습일 설정", example = "2024-10-11")
