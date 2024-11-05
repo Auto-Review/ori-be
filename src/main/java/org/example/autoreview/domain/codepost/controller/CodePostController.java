@@ -2,27 +2,22 @@ package org.example.autoreview.domain.codepost.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
+import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.example.autoreview.global.exception.response.ApiResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "코드 포스트 API", description = "코드 포스트 API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/post/code")
+@RequestMapping("/v1/api/post/code")
 public class CodePostController {
 
     private final CodePostService codePostService;
@@ -41,8 +36,8 @@ public class CodePostController {
 
     @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회")
     @GetMapping("/view-all")
-    public ApiResponse<List<CodePostResponseDto>> viewAll(){
-        return ApiResponse.success(HttpStatus.OK, codePostService.findAll());
+    public ApiResponse<CodePostListResponseDto> viewAll(@PageableDefault(page = 0, size = 10) Pageable pageable){
+        return ApiResponse.success(HttpStatus.OK, codePostService.findByPage(pageable));
     }
 
     @Operation(summary = "코드 포스트 수정", description = "코드 포스트 수정")
