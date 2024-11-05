@@ -50,18 +50,13 @@ public class CodePost extends BaseEntity {
     private String code;
 
     @Builder
-    public CodePost(String title, int level, LocalDateTime reviewTime, String description, String code) {
+    public CodePost(String title, int level, LocalDateTime reviewTime, String description, String code, Member member) {
         this.title = title;
+        this.member = member;
         this.level = level;
         this.reviewTime = reviewTime;
         this.description = description;
         this.code = code;
-    }
-
-    //=연관 관계 편의 메서드=//
-    public void setMember(Member member){
-        this.member = member;
-        member.getCodePosts().add(this);
     }
 
     public void update(CodePostUpdateRequestDto requestDto){
