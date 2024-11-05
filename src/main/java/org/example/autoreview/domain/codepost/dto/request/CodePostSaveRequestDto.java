@@ -3,6 +3,7 @@ package org.example.autoreview.domain.codepost.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.member.entity.Member;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +25,10 @@ public record CodePostSaveRequestDto(
         @Schema(description = "코드", example = "import test")
         String code
 ) {
-    public CodePost toEntity(){
+    public CodePost toEntity(Member member){
         return CodePost.builder()
                 .title(title)
+                .member(member)
                 .level(level)
                 .reviewTime(reviewTime)
                 .description(description)

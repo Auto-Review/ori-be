@@ -35,6 +35,9 @@ public enum ErrorCode {
     // POST
     NOT_FOUND_POST(404, HttpStatus.NOT_FOUND, "해당 포스트를 찾을 수 없습니다."),
 
+    // REVIEW
+    NOT_FOUND_REVIEW(404, HttpStatus.NOT_FOUND, "해당 리뷰를 찾을 수 없습니다."),
+
     // TIL_POST
     UNMATCHED_EMAIL(400, HttpStatus.BAD_REQUEST, "잘못된 사용자 접근입니다."),
     ;

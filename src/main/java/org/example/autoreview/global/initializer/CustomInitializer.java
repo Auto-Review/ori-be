@@ -21,15 +21,25 @@ public class CustomInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Member member = Member.builder()
+        Member memberA = Member.builder()
                 .email("abc@naver.com")
                 .nickname("kim")
                 .role(Role.USER)
                 .build();
 
-        memberRepository.save(member);
+        memberRepository.save(memberA);
+        JwtDto jwtDtoA = loginService.issuedTokenByEmail(memberA.getEmail());
 
-        JwtDto jwtDto = loginService.issuedTokenByEmail(member.getEmail());
-        log.info("Test Member accessToken is {}", jwtDto.getAccessToken());
+        Member memberB = Member.builder()
+                .email("ehgur@naver.com")
+                .nickname("chl")
+                .role(Role.USER)
+                .build();
+
+        memberRepository.save(memberB);
+        JwtDto jwtDtoB = loginService.issuedTokenByEmail(memberB.getEmail());
+
+        log.info("Test MemberA accessToken is {}", jwtDtoA.getAccessToken());
+        log.info("Test MemberB accessToken is {}", jwtDtoB.getAccessToken());
     }
 }

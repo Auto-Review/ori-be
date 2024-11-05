@@ -6,11 +6,13 @@ import lombok.Getter;
 @Getter
 public class ReviewUpdateRequestDto {
 
+    private final Long id;
     private final String description;
     private final String code;
 
     @Builder
-    public ReviewUpdateRequestDto(String description, String code) {
+    public ReviewUpdateRequestDto(Long id, String description, String code) {
+        this.id = id;
         this.code = code;
         this.description = description;
     }
