@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -19,11 +19,11 @@ public class CodePostUpdateRequestDto {
     @Schema(description = "해설", example = "test 기법을 사용해서 구현")
     private String description;
 
-    @Schema(description = "난이도", example = "4.5")
+    @Schema(description = "난이도", example = "4")
     private int level;
 
     @Schema(description = "복습일 설정", example = "2024-10-11")
-    private LocalDateTime reviewTime;
+    private LocalDate reviewDay;
 
     @Schema(description = "코드", example = "import test")
     private String code;

@@ -51,7 +51,6 @@ public class CodePostService {
         return new CodePostResponseDto(codePost);
     }
 
-
     public CodePostListResponseDto findByPage(Pageable pageable) {
         List<CodePostResponseDto> dtoList = findAll(pageable);
         return new CodePostListResponseDto(dtoList, pageable.getPageSize());
