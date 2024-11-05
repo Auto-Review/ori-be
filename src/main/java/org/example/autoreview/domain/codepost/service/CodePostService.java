@@ -63,6 +63,7 @@ public class CodePostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Long update(CodePostUpdateRequestDto requestDto, String email) {
         Long id = requestDto.getId();
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
@@ -73,6 +74,7 @@ public class CodePostService {
         return id;
     }
 
+    @Transactional
     public Long delete(Long id, String email) {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
