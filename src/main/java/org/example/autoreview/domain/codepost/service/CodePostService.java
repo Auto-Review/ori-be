@@ -13,6 +13,7 @@ import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,14 +53,13 @@ public class CodePostService {
     }
 
     public CodePostListResponseDto findByPage(Pageable pageable) {
-        List<CodePostResponseDto> dtoList = findAll(pageable);
-        return new CodePostListResponseDto(dtoList, pageable.getPageSize());
-    }
+        Page<CodePost> page = codePostRepository.findByPage(pageable);
 
-    private List<CodePostResponseDto> findAll(Pageable pageable){
-        return codePostRepository.findByPage(pageable).stream()
+        List<CodePostResponseDto> dtoList = page.stream()
                 .map(CodePostResponseDto::new)
                 .collect(Collectors.toList());
+
+        return new CodePostListResponseDto(dtoList, page.getTotalPages());
     }
 
     @Transactional
