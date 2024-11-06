@@ -25,7 +25,7 @@ public class TILPost extends BaseEntity {
     @Column(length = 3000, nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

@@ -25,7 +25,7 @@ public class TILPostApiController {
     private final TILPostService tilPostService;
 
     @Operation(summary = "TIL 게시물 전체 조회", description = "전체 조회")
-    @GetMapping
+    @GetMapping("/view-all")
     public ApiResponse<TILPageResponseDto> findAll(@RequestParam(defaultValue = "0", required = false) int page,
                                                    @RequestParam(defaultValue = "10", required = false) int size){
 
@@ -51,7 +51,7 @@ public class TILPostApiController {
     }
 
     @Operation(summary = "특정 TIL 게시물 조회", description = "개별 조회")
-    @GetMapping("/{id}")
+    @GetMapping("/view/{id}")
     public ApiResponse<TILPostResponseDto> findById(@PathVariable Long id){
         return ApiResponse.success(HttpStatus.OK, tilPostService.findById(id));
     }
