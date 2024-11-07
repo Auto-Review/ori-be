@@ -11,12 +11,14 @@ public class CodePostThumbnailResponseDto {
 
     private final Long id;
     private final String title;
+    private final String description;
     private final MemberResponseDto member;
     private final LocalDateTime createdDate;
 
     public CodePostThumbnailResponseDto(CodePost entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
+        this.description = entity.getDescription().substring(0,200);
         this.member = new MemberResponseDto(entity.getMember());
         this.createdDate = LocalDateTime.now();
     }
