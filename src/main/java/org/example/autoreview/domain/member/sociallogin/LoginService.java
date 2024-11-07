@@ -35,7 +35,7 @@ public class LoginService {
     private long freshTokenExpiration;
 
     @Transactional
-    public JwtDto issuedToken(String accessToken) throws JsonProcessingException {
+    public LoginDto issuedToken(String accessToken) throws JsonProcessingException {
 
         Map<String, Object> payload = tokenVerifierService.validateGoogleAccessToken(accessToken);
 
@@ -53,7 +53,7 @@ public class LoginService {
         RefreshToken redis = new RefreshToken(member.getEmail(), jwtDto.getRefreshToken(), freshTokenExpiration);
         refreshTokenService.save(redis);
 
-        return jwtDto;
+        return new LoginDto(jwtDto, email);
     }
 
     @Transactional

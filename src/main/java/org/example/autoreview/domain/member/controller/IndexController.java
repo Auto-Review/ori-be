@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.member.sociallogin.LoginDto;
 import org.example.autoreview.domain.member.sociallogin.LoginService;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.example.autoreview.global.exception.response.ApiResponse;
@@ -28,14 +29,15 @@ public class IndexController {
     public ApiResponse<String> issuedToken(@RequestBody String accessToken, HttpServletResponse response) throws JsonProcessingException {
         log.info("client send {}", accessToken);
 
-        JwtDto jwtDto = loginService.issuedToken(accessToken);
+        LoginDto loginDto = loginService.issuedToken(accessToken);
+        JwtDto jwtDto = loginDto.getJwt();
 
         log.info("accessToken = {}", jwtDto.getAccessToken());
         log.info("refreshToken = {}", jwtDto.getRefreshToken());
 
         response.setHeader("accessToken", jwtDto.getAccessToken());
         response.setHeader("refreshToken", jwtDto.getRefreshToken());
-        return ApiResponse.success(HttpStatus.OK, "ok");
+        return ApiResponse.success(HttpStatus.OK, loginDto.getEmail());
     }
 
     @GetMapping("/test")
