@@ -2,6 +2,7 @@ package org.example.autoreview.domain.codepost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.codepost.dto.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
@@ -31,14 +32,26 @@ public class CodePostService {
     private final MemberService memberService;
 
     @Transactional
-    public Long save(CodePostSaveRequestDto requestDto, String email){
+    public Long save(CodePostSaveRequestDto requestDto, String email) {
         Member member = memberService.findByEmail(email);
         CodePost codePost = requestDto.toEntity(member);
 
         return codePostRepository.save(codePost).getId();
     }
 
-    public CodePost findEntityById(Long id){
+    public CodePostListResponseDto search(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException(ErrorCode.INVALID_PARAMETER.getMessage());
+        }
+        Page<CodePost> codePostPage = codePostRepository.search(keyword, pageable);
+
+        List<CodePostThumbnailResponseDto> dtoList = codePostPage.stream()
+                .map(CodePostThumbnailResponseDto::new)
+                .toList();
+        return new CodePostListResponseDto(dtoList, codePostPage.getTotalPages());
+    }
+
+    public CodePost findEntityById(Long id) {
         return codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
@@ -55,8 +68,8 @@ public class CodePostService {
     public CodePostListResponseDto findByPage(Pageable pageable) {
         Page<CodePost> page = codePostRepository.findByPage(pageable);
 
-        List<CodePostResponseDto> dtoList = page.stream()
-                .map(CodePostResponseDto::new)
+        List<CodePostThumbnailResponseDto> dtoList = page.stream()
+                .map(CodePostThumbnailResponseDto::new)
                 .collect(Collectors.toList());
 
         return new CodePostListResponseDto(dtoList, page.getTotalPages());
@@ -84,7 +97,7 @@ public class CodePostService {
     }
 
     private static void userValidator(String email, CodePost codePost) {
-        if(!codePost.getMember().getEmail().equals(email)){
+        if (!codePost.getMember().getEmail().equals(email)) {
             throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
         }
     }

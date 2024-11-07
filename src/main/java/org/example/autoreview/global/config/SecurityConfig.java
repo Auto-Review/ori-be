@@ -42,6 +42,7 @@ public class SecurityConfig {
             "/v1/api/til/view/{id}",
             "/v1/api/post/code/view-all",
             "/v1/api/post/code/view/{id}",
+            "/v1/api/post/code/search",
             "/v1/api/auth/token",
             "/v1/api/auth/reissued",
             "/h2-console/**",

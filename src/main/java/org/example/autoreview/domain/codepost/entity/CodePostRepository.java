@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface CodePostRepository extends JpaRepository<CodePost,Long> {
+public interface CodePostRepository extends JpaRepository<CodePost, Long> {
 
     @Query("SELECT c FROM CodePost c ORDER BY c.id DESC")
     Page<CodePost> findByPage(Pageable pageable);
+
+    @Query("SELECT c FROM CodePost c WHERE c.title LIKE %:keyword% ORDER BY c.id DESC")
+    Page<CodePost> search(String keyword, Pageable pageable);
 }
