@@ -31,6 +31,13 @@ public class CodePostController {
         return ApiResponse.success(HttpStatus.OK, codePostService.save(requestDto, userDetails.getUsername()));
     }
 
+    @Operation(summary = "제목으로 코드 포스트 검색", description = "공백 또는 null 입력 시 에러 반환")
+    @GetMapping("/search")
+    public ApiResponse<CodePostListResponseDto> search(@RequestParam String keyword,
+                                                       @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return ApiResponse.success(HttpStatus.OK, codePostService.search(keyword, pageable));
+    }
+
     @Operation(summary = "코드 포스트 단일 조회", description = "코드 포스트 단일 조회")
     @GetMapping("/view/{id}")
     public ApiResponse<CodePostResponseDto> view(@PathVariable("id") Long codePostId) {
