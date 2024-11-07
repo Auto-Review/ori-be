@@ -1,13 +1,11 @@
 package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 
 import java.time.LocalDate;
 
-@Builder
 public record CodePostSaveRequestDto(
 
         @Schema(description = "코드 포스트 제목", example = "[BOJ] 0000: test 해보기")
