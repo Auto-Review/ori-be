@@ -15,6 +15,8 @@ public interface TILPostRepository extends JpaRepository<TILPost,Long> {
     Page<TILPost> findAll(Pageable pageable);
 
     Page<TILPost> findByTitleContaining(String keyword, Pageable pageable);
+    Page<TILPost> findTILPostsByMemberIdOrderByIdDesc(Long Id, Pageable pageable);
+    Page<TILPost> findTILPostsByMemberIdAndTitleContainingOrderByIdDesc(Long Id, String title, Pageable pageable);
     List<TILPost> findAllByOrderByIdDesc(Pageable pageable);
     List<TILPost> findByIdLessThanOrderByIdDesc(@Param("id") long id, Pageable pageable);
 

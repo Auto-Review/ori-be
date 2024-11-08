@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.notification.domain.Notification;
@@ -27,6 +28,9 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TILPost> tilPosts = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CodePost> codePosts = new ArrayList<>();

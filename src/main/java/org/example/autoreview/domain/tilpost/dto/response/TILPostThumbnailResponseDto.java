@@ -15,10 +15,10 @@ public class TILPostThumbnailResponseDto {
     private final MemberResponseDto member;
     private final LocalDateTime createdDate;
 
-    public TILPostThumbnailResponseDto(TILPost entity){
+    public TILPostThumbnailResponseDto(TILPost entity, String content){
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.content = entity.getContent().substring(0,200);
+        this.content = content;
         this.member = new MemberResponseDto(entity.getMember());
         this.createdDate = entity.getCreateDate();
     }
