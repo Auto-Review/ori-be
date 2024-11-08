@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/til")
+@RequestMapping("/v1/api/post/til")
 @RestController
 public class TILPostApiController {
 
@@ -31,6 +31,27 @@ public class TILPostApiController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ApiResponse.success(HttpStatus.OK, tilPostService.findAllByPage(pageable));
+    }
+
+    @Operation(summary = "본인 TIL 게시물 조회", description = "멤버별 조회")
+    @GetMapping("/my/view-all")
+    public ApiResponse<TILPageResponseDto> findByMember(@RequestParam(defaultValue = "0", required = false) int page,
+                                                        @RequestParam(defaultValue = "10", required = false) int size,
+                                                        @AuthenticationPrincipal UserDetails userDetails){
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.success(HttpStatus.OK, tilPostService.findByMember(userDetails.getUsername(), pageable));
+    }
+
+    @Operation(summary = "본인 TIL 게시물 검색", description = "멤버별 검색")
+    @GetMapping("/my/search")
+    public ApiResponse<TILPageResponseDto> findByMemberTitleContains(@RequestParam(defaultValue = "0", required = false) int page,
+                                                                     @RequestParam(defaultValue = "10", required = false) int size,
+                                                                     @RequestParam(required = false) String keyword,
+                                                                     @AuthenticationPrincipal UserDetails userDetails){
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.success(HttpStatus.OK, tilPostService.findByMemberTitleContains(userDetails.getUsername(), keyword, pageable));
     }
 
     @Operation(summary = "TIL 게시물 검색", description = "검색")

@@ -15,6 +15,7 @@ import org.example.autoreview.domain.tilpost.entity.TILPostRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,24 +42,41 @@ public class TILPostService {
         return tilPostRepository.save(tilPost).getId();
     }
 
-    @Transactional(readOnly = true)
-    public List<TILPostThumbnailResponseDto> findAll(Pageable pageable){
-        return tilPostRepository.findAll(pageable).stream()
-                .map(TILPostThumbnailResponseDto::new)
-                .collect(Collectors.toList());
+    public TILPageResponseDto findByMember(String email, Pageable pageable){
+        Member member = memberService.findByEmail(email);
+        Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdOrderByIdDesc(member.getId(), pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
-    @Transactional(readOnly = true)
+    public TILPageResponseDto findByMemberTitleContains(String email, String keyword, Pageable pageable){
+        Member member = memberService.findByEmail(email);
+        Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdAndTitleContainingOrderByIdDesc(member.getId(), keyword, pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+    }
+
     public TILPageResponseDto findAllByPage(Pageable pageable){
-        return new TILPageResponseDto(tilPostRepository.findAll(pageable));
+        Page<TILPost> posts = tilPostRepository.findAll(pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
-    @Transactional(readOnly = true)
     public TILPageResponseDto findByTitleContains(String keyword, Pageable pageable){
-        return new TILPageResponseDto(tilPostRepository.findByTitleContaining(keyword, pageable));
+        Page<TILPost> posts = tilPostRepository.findByTitleContaining(keyword, pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
-    @Transactional(readOnly = true)
+    private List<TILPostThumbnailResponseDto> convertToListDto(Page<TILPost> entity){
+        return entity.stream().map(this::getTILPostThumbnailResponseDto).collect(Collectors.toList());
+    }
+
+    private TILPostThumbnailResponseDto getTILPostThumbnailResponseDto(TILPost entity){
+        return new TILPostThumbnailResponseDto(entity, summary(entity.getContent()));
+    }
+
+    private String summary(String content){
+        if(content.length() > 200) return content.substring(0, 200);
+        return content;
+    }
+
     public TILPostResponseDto findById(Long id){
         TILPost tilPost = tilPostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
@@ -97,7 +115,6 @@ public class TILPostService {
         return id;
     }
 
-    @Transactional(readOnly = true)
     public TILCursorResponseDto findAllByIdCursorBased(Long cursorId, int pageSize){
         Pageable pageable = PageRequest.of(0, pageSize + 1);
 
@@ -107,7 +124,7 @@ public class TILPostService {
 
         return new TILCursorResponseDto (
                 toSubListIfHasNext(hasNext, pageSize, posts).stream()
-                        .map(TILPostThumbnailResponseDto::new)
+                        .map(this::getTILPostThumbnailResponseDto)
                         .collect(Collectors.toList()),
                 cursorId, pageSize);
     }

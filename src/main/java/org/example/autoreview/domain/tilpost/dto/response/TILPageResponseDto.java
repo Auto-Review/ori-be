@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 @Getter
 public class TILPageResponseDto {
 
-    private List<TILPostThumbnailResponseDto> list;
+    private List<TILPostThumbnailResponseDto> dtoList;
     private int totalPage;
 
-    public TILPageResponseDto(Page<TILPost> entity){
-        this.list = entity.getContent().stream()
-                .map(TILPostThumbnailResponseDto::new)
-                .collect(Collectors.toList());
-        this.totalPage = entity.getTotalPages();
+    public TILPageResponseDto(List<TILPostThumbnailResponseDto> dtoList, int totalPage){
+        this.dtoList = dtoList;
+        this.totalPage = totalPage;
     }
 
 }
