@@ -15,10 +15,10 @@ public class CodePostThumbnailResponseDto {
     private final MemberResponseDto member;
     private final LocalDateTime createdDate;
 
-    public CodePostThumbnailResponseDto(CodePost entity) {
+    public CodePostThumbnailResponseDto(CodePost entity, String description) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.description = entity.getDescription().substring(0,200);
+        this.description = description;
         this.member = new MemberResponseDto(entity.getMember());
         this.createdDate = LocalDateTime.now();
     }

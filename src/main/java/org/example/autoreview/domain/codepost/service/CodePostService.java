@@ -39,18 +39,6 @@ public class CodePostService {
         return codePostRepository.save(codePost).getId();
     }
 
-    public CodePostListResponseDto search(String keyword, Pageable pageable) {
-        if (keyword == null || keyword.isBlank()) {
-            throw new IllegalArgumentException(ErrorCode.INVALID_PARAMETER.getMessage());
-        }
-        Page<CodePost> codePostPage = codePostRepository.search(keyword, pageable);
-
-        List<CodePostThumbnailResponseDto> dtoList = codePostPage.stream()
-                .map(CodePostThumbnailResponseDto::new)
-                .toList();
-        return new CodePostListResponseDto(dtoList, codePostPage.getTotalPages());
-    }
-
     public CodePost findEntityById(Long id) {
         return codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
@@ -65,14 +53,57 @@ public class CodePostService {
         return new CodePostResponseDto(codePost);
     }
 
+    public CodePostListResponseDto search(String keyword, Pageable pageable) {
+        keywordValidator(keyword);
+        Page<CodePost> codePostPage = codePostRepository.search(keyword, pageable);
+
+        return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
+    }
+
+    public CodePostListResponseDto mySearch(String keyword, Pageable pageable, String email) {
+        keywordValidator(keyword);
+        Member member = memberService.findByEmail(email);
+        Page<CodePost> codePostPage = codePostRepository.mySearch(keyword, pageable, member.getId());
+
+        return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
+    }
+
+    private static void keywordValidator(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException(ErrorCode.INVALID_PARAMETER.getMessage());
+        }
+    }
+
+    public CodePostListResponseDto findByMemberId(Pageable pageable, String email) {
+        Member member = memberService.findByEmail(email);
+        Page<CodePost> codePostPage = codePostRepository.findByMemberId(member.getId(),pageable);
+
+        return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
+    }
+
     public CodePostListResponseDto findByPage(Pageable pageable) {
         Page<CodePost> page = codePostRepository.findByPage(pageable);
-
-        List<CodePostThumbnailResponseDto> dtoList = page.stream()
-                .map(CodePostThumbnailResponseDto::new)
-                .collect(Collectors.toList());
+        List<CodePostThumbnailResponseDto> dtoList = convertListDto(page);
 
         return new CodePostListResponseDto(dtoList, page.getTotalPages());
+    }
+
+    private List<CodePostThumbnailResponseDto> convertListDto(Page<CodePost> page) {
+        return page.stream()
+                .map(this::getCodePostThumbnailResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    private CodePostThumbnailResponseDto getCodePostThumbnailResponseDto(CodePost codePost) {
+        return new CodePostThumbnailResponseDto(codePost, summary(codePost.getDescription()));
+    }
+
+    //TODO: 지금은 너무 비효율 적으로 보여서 나중에 수정 해야함
+    private String summary(String description) {
+        if (description.length() > 200) {
+            return description.substring(0,200);
+        }
+        return description;
     }
 
     @Transactional

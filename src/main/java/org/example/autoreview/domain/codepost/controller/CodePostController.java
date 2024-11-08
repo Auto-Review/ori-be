@@ -50,6 +50,21 @@ public class CodePostController {
         return ApiResponse.success(HttpStatus.OK, codePostService.findByPage(pageable));
     }
 
+    @Operation(summary = "내가 쓴 코드 포스트 조회", description = "내가 쓴 코드 포스트 조회")
+    @GetMapping("/my/view-all")
+    public ApiResponse<CodePostListResponseDto> myCodePostPage(@PageableDefault(page = 0, size = 10) Pageable pageable,
+                                                               @AuthenticationPrincipal UserDetails userDetails) {
+        return ApiResponse.success(HttpStatus.OK, codePostService.findByMemberId(pageable, userDetails.getUsername()));
+    }
+
+    @Operation(summary = "내 코드 포스트 검색", description = "내 코드 포스트 검색")
+    @GetMapping("/my/search")
+    public ApiResponse<CodePostListResponseDto> mySearch(@RequestParam String keyword,
+                                                         @PageableDefault(page = 0, size = 10) Pageable pageable,
+                                                         @AuthenticationPrincipal UserDetails userDetails) {
+        return ApiResponse.success(HttpStatus.OK, codePostService.mySearch(keyword, pageable, userDetails.getUsername()));
+    }
+
     @Operation(summary = "코드 포스트 수정", description = "코드 포스트 수정")
     @PutMapping("/update")
     public ApiResponse<Long> update(@RequestBody CodePostUpdateRequestDto requestDto,
