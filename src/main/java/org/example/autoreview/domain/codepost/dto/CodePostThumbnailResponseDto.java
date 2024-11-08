@@ -11,6 +11,7 @@ public class CodePostThumbnailResponseDto {
 
     private final Long id;
     private final String title;
+    private final int level;
     private final String description;
     private final MemberResponseDto member;
     private final LocalDateTime createdDate;
@@ -18,6 +19,7 @@ public class CodePostThumbnailResponseDto {
     public CodePostThumbnailResponseDto(CodePost entity, String description) {
         this.id = entity.getId();
         this.title = entity.getTitle();
+        this.level = entity.getLevel();
         this.description = description;
         this.member = new MemberResponseDto(entity.getMember());
         this.createdDate = LocalDateTime.now();
