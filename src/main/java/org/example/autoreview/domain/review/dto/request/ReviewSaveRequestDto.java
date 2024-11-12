@@ -1,5 +1,6 @@
 package org.example.autoreview.domain.review.dto.request;
 
+import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.review.entity.Review;
 
 public record ReviewSaveRequestDto(
@@ -7,8 +8,9 @@ public record ReviewSaveRequestDto(
         String code,
         String description
 ) {
-    public Review toEntity() {
+    public Review toEntity(CodePost codePost) {
         return Review.builder()
+                .codePost(codePost)
                 .code(code)
                 .description(description)
                 .build();

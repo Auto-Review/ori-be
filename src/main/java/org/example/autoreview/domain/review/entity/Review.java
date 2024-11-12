@@ -21,7 +21,8 @@ import org.example.autoreview.global.common.basetime.BaseEntity;
 @Entity
 public class Review extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,17 +36,10 @@ public class Review extends BaseEntity {
     private String code;
 
     @Builder
-    public Review(String description, String code) {
+    public Review(String description, String code, CodePost codePost) {
+        this.codePost = codePost;
         this.description = description;
         this.code = code;
-    }
-
-    public void setCodePost(CodePost codePost) {
-        if (this.codePost != null) {
-            this.codePost.getReviewList().remove(this);
-        }
-        this.codePost = codePost;
-        codePost.getReviewList().add(this);
     }
 
     public void update(ReviewUpdateRequestDto requestDto) {
