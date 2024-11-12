@@ -3,7 +3,6 @@ package org.example.autoreview.domain.tilpost.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
@@ -31,25 +30,20 @@ import java.util.stream.Collectors;
 @Service
 public class TILPostService {
 
-    private final MemberService memberService;
-
     private final TILPostRepository tilPostRepository;
 
     @Transactional
-    public Long save(TILPostSaveRequestDto requestDto, String email) {
-        Member member = memberService.findByEmail(email);
+    public Long save(TILPostSaveRequestDto requestDto, Member member) {
         TILPost tilPost = requestDto.toEntity(member);
         return tilPostRepository.save(tilPost).getId();
     }
 
-    public TILPageResponseDto findByMember(String email, Pageable pageable){
-        Member member = memberService.findByEmail(email);
+    public TILPageResponseDto findByMember(Member member, Pageable pageable){
         Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdOrderByIdDesc(member.getId(), pageable);
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
-    public TILPageResponseDto findByMemberTitleContains(String email, String keyword, Pageable pageable){
-        Member member = memberService.findByEmail(email);
+    public TILPageResponseDto findByMemberTitleContains(Member member, String keyword, Pageable pageable){
         Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdAndTitleContainingOrderByIdDesc(member.getId(), keyword, pageable);
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }

@@ -10,7 +10,6 @@ import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
@@ -29,13 +28,10 @@ import java.util.stream.Collectors;
 public class CodePostService {
 
     private final CodePostRepository codePostRepository;
-    private final MemberService memberService;
 
     @Transactional
-    public Long save(CodePostSaveRequestDto requestDto, String email) {
-        Member member = memberService.findByEmail(email);
+    public Long save(CodePostSaveRequestDto requestDto, Member member) {
         CodePost codePost = requestDto.toEntity(member);
-
         return codePostRepository.save(codePost).getId();
     }
 
@@ -60,11 +56,9 @@ public class CodePostService {
         return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
     }
 
-    public CodePostListResponseDto mySearch(String keyword, Pageable pageable, String email) {
+    public CodePostListResponseDto mySearch(String keyword, Pageable pageable, Member member) {
         keywordValidator(keyword);
-        Member member = memberService.findByEmail(email);
         Page<CodePost> codePostPage = codePostRepository.mySearch(keyword, pageable, member.getId());
-
         return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
     }
 
@@ -74,10 +68,8 @@ public class CodePostService {
         }
     }
 
-    public CodePostListResponseDto findByMemberId(Pageable pageable, String email) {
-        Member member = memberService.findByEmail(email);
+    public CodePostListResponseDto findByMemberId(Pageable pageable, Member member) {
         Page<CodePost> codePostPage = codePostRepository.findByMemberId(member.getId(),pageable);
-
         return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
     }
 
