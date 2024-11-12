@@ -2,11 +2,11 @@ package org.example.autoreview.domain.codepost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.codepost.dto.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
+import org.example.autoreview.domain.codepost.dto.response.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.member.entity.Member;
