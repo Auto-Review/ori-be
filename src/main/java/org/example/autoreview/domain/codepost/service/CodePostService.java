@@ -2,14 +2,16 @@ package org.example.autoreview.domain.codepost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.codepost.dto.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
+import org.example.autoreview.domain.codepost.dto.response.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
+import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
@@ -45,8 +47,12 @@ public class CodePostService {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
+        List<Review> reviews = codePost.getReviewList();
+        List<ReviewResponseDto> dtoList = reviews.stream()
+                .map(ReviewResponseDto::new)
+                .toList();
 
-        return new CodePostResponseDto(codePost);
+        return new CodePostResponseDto(codePost, dtoList);
     }
 
     public CodePostListResponseDto search(String keyword, Pageable pageable) {
@@ -69,7 +75,7 @@ public class CodePostService {
     }
 
     public CodePostListResponseDto findByMemberId(Pageable pageable, Member member) {
-        Page<CodePost> codePostPage = codePostRepository.findByMemberId(member.getId(),pageable);
+        Page<CodePost> codePostPage = codePostRepository.findByMemberId(member.getId(), pageable);
         return new CodePostListResponseDto(convertListDto(codePostPage), codePostPage.getTotalPages());
     }
 
@@ -93,7 +99,7 @@ public class CodePostService {
     //TODO: 지금은 너무 비효율 적으로 보여서 나중에 수정 해야함
     private String summary(String description) {
         if (description.length() > 200) {
-            return description.substring(0,200);
+            return description.substring(0, 200);
         }
         return description;
     }

@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.codepost.dto;
+package org.example.autoreview.domain.codepost.dto.response;
 
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;

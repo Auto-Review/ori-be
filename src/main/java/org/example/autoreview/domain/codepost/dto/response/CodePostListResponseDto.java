@@ -1,7 +1,6 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
 import lombok.Getter;
-import org.example.autoreview.domain.codepost.dto.CodePostThumbnailResponseDto;
 
 import java.util.List;
 
