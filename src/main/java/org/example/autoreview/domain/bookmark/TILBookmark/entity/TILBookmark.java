@@ -22,4 +22,12 @@ public class TILBookmark {
     @Id
     @Column(name = "TILPOST_id")
     private Long postId;
+
+    @Column(nullable = true)
+    private Boolean isBookmarked;
+
+    public TILBookmark update(Boolean isBookmarked){
+        this.isBookmarked = !isBookmarked;
+        return this;
+    }
 }

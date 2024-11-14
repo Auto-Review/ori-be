@@ -12,6 +12,8 @@ import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +30,18 @@ public class TILPostDtoService {
     }
 
     public Long bookmarkPost(String email, Long postId){
-        tilBookmarkService.save(email, postId);
+        try{
+            tilPostService.findEntityById(postId);
+            tilBookmarkService.update(email, postId);
+        } catch (NoSuchElementException e){
+            log.info("create bookmark");
+            tilBookmarkService.save(email, postId);
+        }
         return postId;
+    }
+
+    public void deleteUselessPost(){
+        tilBookmarkService.deleteUseless();
     }
 
     public TILPageResponseDto findPostByMember(String email, Pageable pageable){

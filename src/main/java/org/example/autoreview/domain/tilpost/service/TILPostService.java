@@ -83,6 +83,12 @@ public class TILPostService {
         return new TILPostResponseDto(tilPost);
     }
 
+    public TILPost findEntityById(Long id){
+        return tilPostRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
+        );
+    }
+
     @Transactional
     public Long update(TILPostUpdateRequestDto requestDto, String email) {
         Long id = requestDto.getId();

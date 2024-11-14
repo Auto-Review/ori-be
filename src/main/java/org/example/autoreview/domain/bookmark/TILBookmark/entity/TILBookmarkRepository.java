@@ -9,4 +9,6 @@ import java.util.List;
 public interface TILBookmarkRepository extends JpaRepository<TILBookmark, TILBookmarkId> {
 
     List<TILBookmark> findTILBookmarksByEmail(String email);
+
+    List<TILBookmark> findTILBookmarksByIsBookmarked(Boolean flag);
 }

@@ -93,8 +93,7 @@ public class TILPostApiController {
         return ApiResponse.success(HttpStatus.OK, tilPostDtoService.postUpdate(requestDto, userDetails.getUsername()));
     }
 
-    //TODO: validation 검사를 해야하지 않나?
-    @PostMapping("/bookmark")
+    @PostMapping("/bookmark/saveorupdate")
     public ApiResponse<?> bookmark(@RequestBody Long postId,
                                    @AuthenticationPrincipal UserDetails userDetails){
         return ApiResponse.success(HttpStatus.OK, tilPostDtoService.bookmarkPost(userDetails.getUsername(), postId));
@@ -106,5 +105,11 @@ public class TILPostApiController {
                                     @AuthenticationPrincipal UserDetails userDetails){
 
         return ApiResponse.success(HttpStatus.OK, tilPostDtoService.postDelete(id, userDetails.getUsername()));
+    }
+
+    @DeleteMapping("/bookmark/delete")
+    public ApiResponse<?> deleteUselessBookmark(){
+        tilPostDtoService.deleteUselessPost();
+        return ApiResponse.success(HttpStatus.OK, "deleted");
     }
 }
