@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
-import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
-import org.example.autoreview.domain.tilpost.service.TILPostMemberService;
+import org.example.autoreview.domain.tilpost.service.TILPostDtoService;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TILPostApiController {
 
-    private final TILPostMemberService tilPostMemberService;
+    private final TILPostDtoService tilPostDtoService;
 
     @Operation(summary = "TIL 게시물 전체 조회", description = "전체 조회")
     @GetMapping("/view-all")
@@ -30,7 +29,7 @@ public class TILPostApiController {
                                                    @RequestParam(defaultValue = "10", required = false) int size){
 
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.findPostAllByPage(pageable));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostAllByPage(pageable));
     }
 
     @Operation(summary = "본인 TIL 게시물 조회", description = "멤버별 조회")
@@ -40,7 +39,7 @@ public class TILPostApiController {
                                                         @AuthenticationPrincipal UserDetails userDetails){
 
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.findPostByMember(userDetails.getUsername(), pageable));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostByMember(userDetails.getUsername(), pageable));
     }
 
     @Operation(summary = "본인 TIL 게시물 검색", description = "멤버별 검색")
@@ -51,7 +50,7 @@ public class TILPostApiController {
                                                                      @AuthenticationPrincipal UserDetails userDetails){
 
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.findPostByMemberTitleContains(userDetails.getUsername(), keyword, pageable));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostByMemberTitleContains(userDetails.getUsername(), keyword, pageable));
     }
 
     @Operation(summary = "TIL 게시물 검색", description = "검색")
@@ -61,7 +60,7 @@ public class TILPostApiController {
                                                                @RequestParam(required = false) String keyword){
 
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.findPostByTitleContains(keyword, pageable));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostByTitleContains(keyword, pageable));
     }
 
 //    @GetMapping("/cursor")
@@ -74,7 +73,7 @@ public class TILPostApiController {
     @Operation(summary = "특정 TIL 게시물 조회", description = "개별 조회")
     @GetMapping("/view/{id}")
     public ApiResponse<TILPostResponseDto> findById(@PathVariable Long id){
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.findPostById(id));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostById(id));
     }
 
     @Operation(summary = "TIL 게시물 생성", description = "토큰을 통해 유저 선택")
@@ -83,7 +82,7 @@ public class TILPostApiController {
                                   @AuthenticationPrincipal UserDetails userDetails){
 
         return ApiResponse.success(HttpStatus.OK,
-                tilPostMemberService.postSave(saveRequestDto, userDetails.getUsername()));
+                tilPostDtoService.postSave(saveRequestDto, userDetails.getUsername()));
     }
 
     @Operation(summary = "TIL 게시물 갱신", description = "토큰을 통해 유저 식별")
@@ -91,7 +90,14 @@ public class TILPostApiController {
     public ApiResponse<Long> update(@RequestBody TILPostUpdateRequestDto requestDto,
                                     @AuthenticationPrincipal UserDetails userDetails){
 
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.postUpdate(requestDto, userDetails.getUsername()));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.postUpdate(requestDto, userDetails.getUsername()));
+    }
+
+    //TODO: validation 검사를 해야하지 않나?
+    @PostMapping("/bookmark")
+    public ApiResponse<?> bookmark(@RequestBody Long postId,
+                                   @AuthenticationPrincipal UserDetails userDetails){
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.bookmarkPost(userDetails.getUsername(), postId));
     }
 
     @Operation(summary = "TIL 게시물 삭제", description = "토큰을 통해 유저 식별")
@@ -99,6 +105,6 @@ public class TILPostApiController {
     public ApiResponse<Long> delete(@PathVariable Long id,
                                     @AuthenticationPrincipal UserDetails userDetails){
 
-        return ApiResponse.success(HttpStatus.OK, tilPostMemberService.postDelete(id, userDetails.getUsername()));
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.postDelete(id, userDetails.getUsername()));
     }
 }

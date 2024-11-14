@@ -2,6 +2,7 @@ package org.example.autoreview.domain.tilpost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.bookmark.TILBookmark.service.TILBookmarkService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
@@ -10,22 +11,25 @@ import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-public class TILPostMemberService {
+public class TILPostDtoService {
 
-    private final TILPostService tilPostService;
     private final MemberService memberService;
+    private final TILPostService tilPostService;
+    private final TILBookmarkService tilBookmarkService;
 
-    @Transactional
     public Long postSave(TILPostSaveRequestDto requestDto, String email){
         Member member = memberService.findByEmail(email);
         return tilPostService.save(requestDto, member);
+    }
+
+    public Long bookmarkPost(String email, Long postId){
+        tilBookmarkService.save(email, postId);
+        return postId;
     }
 
     public TILPageResponseDto findPostByMember(String email, Pageable pageable){

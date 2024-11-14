@@ -58,6 +58,11 @@ public class TILPostService {
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
+    public TILPageResponseDto findByIdList(List<Long> idList, Pageable pageable){
+        Page<TILPost> posts = tilPostRepository.findByIdInOrderByIdDesc(idList, pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+    }
+
     private List<TILPostThumbnailResponseDto> convertToListDto(Page<TILPost> entity){
         return entity.stream().map(this::getTILPostThumbnailResponseDto).collect(Collectors.toList());
     }
