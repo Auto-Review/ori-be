@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILBookmarkPostResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.service.TILPostDtoService;
@@ -74,6 +75,13 @@ public class TILPostApiController {
     @GetMapping("/view/{id}")
     public ApiResponse<TILPostResponseDto> findById(@PathVariable Long id){
         return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findPostById(id));
+    }
+
+    @Operation(summary = "로그인된 유저의 특정 TIL 게시물 조회", description = "개별 조회")
+    @GetMapping("/my/view/{id}")
+    public ApiResponse<TILBookmarkPostResponseDto> findByIdLoginIn(@PathVariable Long id,
+                                                                   @AuthenticationPrincipal UserDetails userDetails){
+        return ApiResponse.success(HttpStatus.OK, tilPostDtoService.findBookmarkPostById(userDetails.getUsername(), id));
     }
 
     @Operation(summary = "TIL 게시물 생성", description = "토큰을 통해 유저 선택")

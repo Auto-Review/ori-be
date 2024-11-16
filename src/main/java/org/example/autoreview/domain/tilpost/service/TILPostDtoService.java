@@ -2,17 +2,21 @@ package org.example.autoreview.domain.tilpost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.bookmark.TILBookmark.entity.TILBookmark;
 import org.example.autoreview.domain.bookmark.TILBookmark.service.TILBookmarkService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILBookmarkPostResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
+import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Slf4j
@@ -64,6 +68,14 @@ public class TILPostDtoService {
 
     public TILPostResponseDto findPostById(Long id){
         return tilPostService.findById(id);
+    }
+
+    public TILBookmarkPostResponseDto findBookmarkPostById(String email, Long postId){
+        Optional<TILBookmark> bookmark = tilBookmarkService.findById(email, postId);
+        TILPost post = tilPostService.findEntityById(postId);
+        return bookmark.map(tilBookmark ->
+                new TILBookmarkPostResponseDto(post, tilBookmark.getIsBookmarked())).orElseGet(() ->
+                new TILBookmarkPostResponseDto(post, null));
     }
 
     public Long postUpdate(TILPostUpdateRequestDto requestDto, String email){

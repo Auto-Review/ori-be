@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,10 +29,9 @@ public class TILBookmarkService {
         tilBookmarkRepository.save(id);
     }
 
-    public TILBookmark findById(String email, Long postId){
+    public Optional<TILBookmark> findById(String email, Long postId){
         TILBookmarkId id = new TILBookmarkId(email, postId);
-        return tilBookmarkRepository.findById(id).orElseThrow(()
-                -> new NotFoundException(ErrorCode.NOT_FOUND_BOOKMARK));
+        return tilBookmarkRepository.findById(id);
     }
 
     public List<Long> findPostIdByMemberEmail(String email){
