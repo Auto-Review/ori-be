@@ -2,7 +2,7 @@ package org.example.autoreview.domain.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.notification.service.NotificationService;
+import org.example.autoreview.domain.notification.service.NotificationMemberService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationScheduler {
 
-    private final NotificationService notificationService;
+    private final NotificationMemberService notificationMemberService;
 
     // 매일 오전 8시에 호출
     @Scheduled(cron = "0 0 8 * * ?")
     public void pushNotification(){
         log.info("start push notification");
-        notificationService.sendNotification();
+        notificationMemberService.sendNotification();
         log.info("finish push notification");
 
     }

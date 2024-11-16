@@ -43,15 +43,11 @@ public class Notification extends BaseEntity {
     private NotificationStatus status;
 
     @Builder
-    public Notification(String content, NotificationStatus status, LocalDate executeTime){
+    public Notification(String content, NotificationStatus status, LocalDate executeTime, Member member){
         this.content = content;
         this.status = status;
         this.executeTime = executeTime;
-    }
-
-    public void setMember(Member member){
         this.member = member;
-        member.getNotifications().add(this);
     }
 
     public void notificationStatusUpdate() {
