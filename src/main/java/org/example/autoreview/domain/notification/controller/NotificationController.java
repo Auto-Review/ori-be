@@ -2,18 +2,22 @@ package org.example.autoreview.domain.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
-import org.example.autoreview.domain.notification.service.NotificationMemberService;
+import org.example.autoreview.domain.notification.service.NotificationDtoService;
 import org.example.autoreview.domain.scheduler.NotificationScheduler;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "알림 API", description = "알림 API")
 @RequestMapping("/v1/api/notification")
@@ -21,7 +25,7 @@ import java.util.List;
 @RestController
 public class NotificationController {
 
-    private final NotificationMemberService notificationMemberService;
+    private final NotificationDtoService notificationMemberService;
     private final NotificationScheduler notificationScheduler;
 
     @Operation(summary = "알림 저장", description = "회원 정보는 헤더에서")
