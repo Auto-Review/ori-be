@@ -1,9 +1,7 @@
 package org.example.autoreview.domain.fcm.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
@@ -30,30 +28,24 @@ public class FcmTokenService {
     }
 
     public void pushNotification(List<FcmToken> fcmTokens, String title, String content) {
-        for (FcmToken fcmToken : fcmTokens) {
-            CompletableFuture.runAsync(() -> {
-                try {
-                    String message = FirebaseMessaging.getInstance().send(Message.builder()
-                            .setNotification(Notification.builder()
-                                    .setTitle(title)
-                                    .setBody(content)
-                                    .build())
-                            .setToken(fcmToken.getToken())
-                            .build());
+        for (FcmToken fcmToken : fcmTokens) { CompletableFuture.runAsync(() -> {
+            try {
+                Message message = Message.builder()
+                        .setNotification(Notification.builder()
+                                .setTitle(title)
+                                .setBody(content)
+                                .build())
+                        .setToken(fcmToken.getToken())
+                        .build();
 
-                    fcmToken.updateDate();
+                FirebaseMessaging.getInstance().send(message);
+                fcmToken.updateDate();
 
-                    log.info("Member: {} / Device: {} / Message: {}", fcmToken.getMember().getEmail(), fcmToken.getId(), message);
-                    log.info("Last Used Date: {}", fcmToken.getLastUsedDate());
-
-                } catch (FirebaseMessagingException e) {
-                    log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
-                } catch (Exception e) {
-                    log.error("An unexpected error occurred: {}", e.getMessage());
-                }
-            });
+            } catch (FirebaseMessagingException e) {
+                log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
+            } catch (Exception e) {
+                log.error("An unexpected error occurred: {}", e.getMessage());
+            }});
         }
     }
-
-
 }

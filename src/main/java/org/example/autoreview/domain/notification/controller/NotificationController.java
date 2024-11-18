@@ -49,7 +49,6 @@ public class NotificationController {
         return ApiResponse.success(HttpStatus.OK,notificationMemberService.findAllByMemberId(userDetails.getUsername()));
     }
 
-
     @Operation(summary = "푸쉬 알림 강제 시작")
     @PutMapping("/push")
     public ApiResponse<String> push() {
