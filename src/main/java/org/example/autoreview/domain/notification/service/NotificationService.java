@@ -42,4 +42,15 @@ public class NotificationService {
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void delete(Long id) {
+        notificationRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAll(List<Notification> completedNotifications) {
+        notificationRepository.deleteAll(completedNotifications);
+    }
+
 }

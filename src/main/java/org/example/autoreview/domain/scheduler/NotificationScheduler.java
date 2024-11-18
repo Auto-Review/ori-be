@@ -25,7 +25,8 @@ public class NotificationScheduler {
     // 매일 오전 0시에 호출
     @Scheduled(cron = "0 0 0 * * ?")
     public void deleteCompleteNotification(){
-        // 알림 서비스에서 push notification 메서드 호출
-        log.info("delete push notification");
+        log.info("start delete notification");
+        notificationMemberService.deleteCompleteNotification();
+        log.info("end delete notification");
     }
 }

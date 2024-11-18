@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.notification.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,24 +39,31 @@ public class NotificationDtoService {
         return notificationService.findAllByMemberId(memberId);
     }
 
-    // 알림 엔티티 모두 확인
-    // 복습일이 오늘과 같고 Status 가 PENDING 인 알림만 전송하기
-    // 전송 후 Status -> COMPLETE 로 변경
     @Transactional
     public void sendNotification() {
-        // 여기에서 알림을 전송하는 로직을 구현합니다.
         List<Notification> notificationList = notificationService.findEntityAll();
+        LocalDate today = LocalDate.now();
+
         for (Notification notification : notificationList) {
             List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
 
-            if (notification.getStatus().equals(NotificationStatus.PENDING)) {
-                if (notification.getExecuteTime().isEqual(LocalDate.now())) {
-                    notification.notificationStatusUpdate();
-                    fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
-                }
+            if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
+                notification.notificationStatusUpdate();
+                fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
             }
         }
+    }
 
+    @Transactional
+    public void deleteCompleteNotification() {
+        List<Notification> completedNotifications = new ArrayList<>();
+        List<Notification> notificationList = notificationService.findEntityAll();
+        for (Notification notification : notificationList) {
+            if(notification.getStatus().equals(NotificationStatus.COMPLETE)) {
+                completedNotifications.add(notification);
+            }
+        }
+        notificationService.deleteAll(completedNotifications);
     }
 
 
