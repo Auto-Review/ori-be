@@ -10,6 +10,6 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
 
     List<Notification> findAllByStatus(NotificationStatus status);
 
-    @Query("SELECT n FROM Notification n WHERE n.member.email = :email")
-    List<Notification> findAllByEmail(@Param("email") String email);
+    @Query("SELECT n FROM Notification n WHERE n.member.id = :memberId")
+    List<Notification> findAllByMemberId(@Param("memberId") Long memberId);
 }

@@ -1,5 +1,9 @@
 package org.example.autoreview.domain.fcm.service;
 
+import com.google.firebase.messaging.*;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.fcm.dto.request.FcmTokenSaveRequestDto;
@@ -23,4 +27,25 @@ public class FcmTokenService {
         return fcmTokenRepository.save(fcmToken).getId();
     }
 
+    public void pushNotification(List<FcmToken> fcmTokens, String title, String content) {
+        for (FcmToken fcmToken : fcmTokens) { CompletableFuture.runAsync(() -> {
+            try {
+                Message message = Message.builder()
+                        .setNotification(Notification.builder()
+                                .setTitle(title)
+                                .setBody(content)
+                                .build())
+                        .setToken(fcmToken.getToken())
+                        .build();
+
+                FirebaseMessaging.getInstance().send(message);
+                fcmToken.updateDate();
+
+            } catch (FirebaseMessagingException e) {
+                log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
+            } catch (Exception e) {
+                log.error("An unexpected error occurred: {}", e.getMessage());
+            }});
+        }
+    }
 }
