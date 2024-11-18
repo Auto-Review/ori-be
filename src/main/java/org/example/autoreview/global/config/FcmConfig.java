@@ -15,7 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 public class FcmConfig {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        ClassPathResource resource = new ClassPathResource("ori-push-notification-firebase-adminsdk-k9qqe-88e5fd6428.json");
+        ClassPathResource resource = new ClassPathResource("ori-push-notification-firebase-adminsdk-k9qqe-d0581b0c52.json");
 
         InputStream refreshToken = resource.getInputStream();
 
