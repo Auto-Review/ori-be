@@ -38,8 +38,8 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ALL_PATTERNS = new String[] {
             "/",
-            "/v1/api/til/view-all",
-            "/v1/api/til/view/{id}",
+            "/v1/api/post/til/list",
+            "/v1/api/post/til/detail/{id}",
             "/v1/api/post/code/view-all",
             "/v1/api/post/code/view/{id}",
             "/v1/api/post/code/search",

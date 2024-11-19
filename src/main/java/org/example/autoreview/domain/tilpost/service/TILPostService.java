@@ -58,6 +58,11 @@ public class TILPostService {
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
+    public TILPageResponseDto findByIdList(List<Long> idList, Pageable pageable){
+        Page<TILPost> posts = tilPostRepository.findByIdInOrderByIdDesc(idList, pageable);
+        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+    }
+
     private List<TILPostThumbnailResponseDto> convertToListDto(Page<TILPost> entity){
         return entity.stream().map(this::getTILPostThumbnailResponseDto).collect(Collectors.toList());
     }
@@ -76,6 +81,12 @@ public class TILPostService {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
         return new TILPostResponseDto(tilPost);
+    }
+
+    public TILPost findEntityById(Long id){
+        return tilPostRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
+        );
     }
 
     @Transactional

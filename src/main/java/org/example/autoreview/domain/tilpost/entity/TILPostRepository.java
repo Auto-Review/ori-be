@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TILPostRepository extends JpaRepository<TILPost,Long> {
@@ -20,4 +21,5 @@ public interface TILPostRepository extends JpaRepository<TILPost,Long> {
     List<TILPost> findAllByOrderByIdDesc(Pageable pageable);
     List<TILPost> findByIdLessThanOrderByIdDesc(@Param("id") long id, Pageable pageable);
 
+    Page<TILPost> findByIdInOrderByIdDesc(Collection<Long> ids, Pageable pageable);
 }
