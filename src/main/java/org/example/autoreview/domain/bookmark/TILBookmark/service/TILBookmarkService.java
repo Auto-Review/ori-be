@@ -35,7 +35,7 @@ public class TILBookmarkService {
     }
 
     public List<Long> findPostIdByMemberEmail(String email){
-        return tilBookmarkRepository.findTILBookmarksByEmail(email).stream()
+        return tilBookmarkRepository.findTILBookmarksByEmailAndIsBookmarked(email, true).stream()
                 .map(TILBookmark::getPostId)
                 .collect(Collectors.toList());
     }

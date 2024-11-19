@@ -44,6 +44,12 @@ public class TILPostDtoService {
         return postId;
     }
 
+    // 나중에 다시 볼 것
+//    public TILBookmarkResponseDto findBookmark(String email, Long postId){
+//        return tilBookmarkService.findById(email, postId).map(TILBookmarkResponseDto::new).orElseThrow(()
+//                -> new NotFoundException(ErrorCode.NOT_FOUND_BOOKMARK));
+//    }
+
     public void deleteUselessPost(){
         tilBookmarkService.deleteUseless();
     }
