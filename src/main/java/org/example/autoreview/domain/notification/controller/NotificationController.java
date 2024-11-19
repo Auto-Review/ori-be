@@ -24,7 +24,7 @@ public class NotificationController {
     private final NotificationScheduler notificationScheduler;
 
     @Operation(summary = "알림 저장", description = "회원 정보는 헤더에서")
-    @PostMapping("/save")
+    @PostMapping
     public ApiResponse<String> save(@AuthenticationPrincipal UserDetails userDetails,
                                     @RequestBody NotificationSaveRequestDto requestDto) {
 
@@ -33,13 +33,13 @@ public class NotificationController {
     }
 
     @Operation(summary = "알림 전체 조회", description = "회원 정보는 헤더에서")
-    @GetMapping("/find-all")
+    @GetMapping("/list")
     public ApiResponse<List<NotificationResponseDto>> findAll() {
         return ApiResponse.success(HttpStatus.OK,notificationMemberService.findAll());
     }
 
     @Operation(summary = "회원 알림 전체 조회", description = "회원 정보는 헤더에서")
-    @GetMapping("/my/find-all")
+    @GetMapping("/own")
     public ApiResponse<List<NotificationResponseDto>> findAll(@AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK,notificationMemberService.findAllByMemberId(userDetails.getUsername()));
     }

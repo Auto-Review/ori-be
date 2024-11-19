@@ -25,7 +25,7 @@ public class CodePostController {
     private final CodePostMemberService codePostMemberService;
 
     @Operation(summary = "코드 포스트 생성", description = "코드 포스트 생성")
-    @PostMapping("/save")
+    @PostMapping
     public ApiResponse<Long> save(@RequestBody CodePostSaveRequestDto requestDto,
                                   @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.postSave(requestDto, userDetails.getUsername()));
@@ -34,46 +34,46 @@ public class CodePostController {
     @Operation(summary = "제목으로 코드 포스트 검색", description = "공백 또는 null 입력 시 에러 반환")
     @GetMapping("/search")
     public ApiResponse<CodePostListResponseDto> search(@RequestParam String keyword,
-                                                       @PageableDefault(page = 0, size = 10) Pageable pageable) {
+                                                       @PageableDefault(page = 0, size = 9) Pageable pageable) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.postSearch(keyword, pageable));
     }
 
     @Operation(summary = "코드 포스트 단일 조회", description = "코드 포스트 단일 조회")
-    @GetMapping("/view/{id}")
+    @GetMapping("/detail/{id}")
     public ApiResponse<CodePostResponseDto> view(@PathVariable("id") Long codePostId) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.findPostById(codePostId));
     }
 
     @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회")
-    @GetMapping("/view-all")
-    public ApiResponse<CodePostListResponseDto> viewAll(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+    @GetMapping("/list")
+    public ApiResponse<CodePostListResponseDto> viewAll(@PageableDefault(page = 0, size = 9) Pageable pageable) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.findPostByPage(pageable));
     }
 
     @Operation(summary = "내가 쓴 코드 포스트 조회", description = "내가 쓴 코드 포스트 조회")
-    @GetMapping("/my/view-all")
-    public ApiResponse<CodePostListResponseDto> myCodePostPage(@PageableDefault(page = 0, size = 10) Pageable pageable,
+    @GetMapping("/own")
+    public ApiResponse<CodePostListResponseDto> myCodePostPage(@PageableDefault(page = 0, size = 9) Pageable pageable,
                                                                @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.findPostByMemberId(pageable, userDetails.getUsername()));
     }
 
     @Operation(summary = "내 코드 포스트 검색", description = "내 코드 포스트 검색")
-    @GetMapping("/my/search")
+    @GetMapping("/own/search")
     public ApiResponse<CodePostListResponseDto> mySearch(@RequestParam String keyword,
-                                                         @PageableDefault(page = 0, size = 10) Pageable pageable,
+                                                         @PageableDefault(page = 0, size = 9) Pageable pageable,
                                                          @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.postMySearch(keyword, pageable, userDetails.getUsername()));
     }
 
     @Operation(summary = "코드 포스트 수정", description = "코드 포스트 수정")
-    @PutMapping("/update")
+    @PutMapping
     public ApiResponse<Long> update(@RequestBody CodePostUpdateRequestDto requestDto,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.postUpdate(requestDto, userDetails.getUsername()));
     }
 
     @Operation(summary = "코드 포스트 삭제", description = "코드 포스트 삭제")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ApiResponse<Long> delete(@PathVariable("id") Long codePostId,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, codePostMemberService.postDelete(codePostId, userDetails.getUsername()));

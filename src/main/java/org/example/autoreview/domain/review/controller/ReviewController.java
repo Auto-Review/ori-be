@@ -26,26 +26,26 @@ public class ReviewController {
     private final ReviewCodePostService reviewCodePostService;
 
     @Operation(summary = "리뷰 저장")
-    @PostMapping("/save")
+    @PostMapping
     public ApiResponse<String> save(ReviewSaveRequestDto requestDto) {
         reviewCodePostService.save(requestDto);
         return ApiResponse.success(HttpStatus.OK, "Review saved");
     }
 
-    @Operation(summary = "사용자 단일 조회")
-    @GetMapping("/find-one")
-    public ApiResponse<ReviewResponseDto> findOne(Long id) {
+    @Operation(summary = "리뷰 단일 조회")
+    @GetMapping("/detail/{id}")
+    public ApiResponse<ReviewResponseDto> findOne(@PathVariable("id") Long id) {
         return ApiResponse.success(HttpStatus.OK, reviewCodePostService.findOne(id));
     }
 
     @Operation(summary = "리뷰 전체 조회")
-    @GetMapping("/find-all")
+    @GetMapping("/list")
     public ApiResponse<List<ReviewResponseDto>> findAll() {
         return ApiResponse.success(HttpStatus.OK, reviewCodePostService.findAll());
     }
 
     @Operation(summary = "리뷰 수정", description = "사용자 검사 후 수정")
-    @PutMapping("/update")
+    @PutMapping
     public ApiResponse<String> update(ReviewUpdateRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails) {
         reviewCodePostService.update(requestDto, userDetails.getUsername());
@@ -53,7 +53,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰 삭제", description = "사용자 검사 후 삭제")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ApiResponse<String> delete(ReviewDeleteRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails) {
         reviewCodePostService.delete(requestDto, userDetails.getUsername());

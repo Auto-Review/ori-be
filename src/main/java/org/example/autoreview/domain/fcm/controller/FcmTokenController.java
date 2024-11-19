@@ -23,7 +23,7 @@ public class FcmTokenController {
     private final FcmTokenMemberService fcmTokenMemberService;
 
     @Operation(summary = "fcm 저장 API", description = "권한 요청 후 FCM에서 받아온 토큰 저장")
-    @PostMapping("/save")
+    @PostMapping
     public ApiResponse<Long> save(@RequestBody FcmTokenSaveRequestDto requestDto,
                                   @AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK, fcmTokenMemberService.save(requestDto, userDetails.getUsername()));
