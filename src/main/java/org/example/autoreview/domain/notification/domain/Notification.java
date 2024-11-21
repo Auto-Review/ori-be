@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 
@@ -56,5 +57,10 @@ public class Notification extends BaseEntity {
 
     public void notificationStatusUpdate() {
         this.status = NotificationStatus.COMPLETE;
+    }
+
+    public void update(NotificationUpdateRequestDto requestDto) {
+        this.content = requestDto.getContent();
+        this.executeTime = requestDto.getReviewDay();
     }
 }

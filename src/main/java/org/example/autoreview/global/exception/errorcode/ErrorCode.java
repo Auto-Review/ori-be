@@ -35,6 +35,9 @@ public enum ErrorCode {
     // POST
     NOT_FOUND_POST(404, HttpStatus.NOT_FOUND, "해당 포스트를 찾을 수 없습니다."),
 
+    // NOTIFICATION
+    NOT_FOUND_NOTIFICATION(404, HttpStatus.NOT_FOUND, "해당 알림을 찾을 수 없습니다."),
+
     // REVIEW
     NOT_FOUND_REVIEW(404, HttpStatus.NOT_FOUND, "해당 리뷰를 찾을 수 없습니다."),
 

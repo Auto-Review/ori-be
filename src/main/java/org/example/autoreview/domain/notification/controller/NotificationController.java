@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.service.NotificationDtoService;
 import org.example.autoreview.domain.scheduler.NotificationScheduler;
@@ -22,6 +23,7 @@ public class NotificationController {
 
     private final NotificationDtoService notificationMemberService;
     private final NotificationScheduler notificationScheduler;
+    private final NotificationDtoService notificationDtoService;
 
     @Operation(summary = "알림 저장", description = "회원 정보는 헤더에서")
     @PostMapping
@@ -30,6 +32,22 @@ public class NotificationController {
 
         notificationMemberService.save(userDetails.getUsername(), requestDto);
         return ApiResponse.success(HttpStatus.OK,"save success");
+    }
+
+    @Operation(summary = "알림 수정", description = "날짜 수정만 가능")
+    @PutMapping
+    public ApiResponse<String> update(@AuthenticationPrincipal UserDetails userDetails,
+                                      @RequestBody NotificationUpdateRequestDto requestDto) {
+        notificationMemberService.update(userDetails.getUsername(), requestDto);
+        return ApiResponse.success(HttpStatus.OK,"update success");
+    }
+
+    @Operation(summary = "알림 삭제", description = "알림 상태를 완료로 수정한 뒤 스케줄러로 한 번에 삭제")
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> delete(@AuthenticationPrincipal UserDetails userDetails,
+                                      @PathVariable("id") Long id) {
+        notificationDtoService.delete(userDetails.getUsername(), id);
+        return ApiResponse.success(HttpStatus.OK,"delete success");
     }
 
     @Operation(summary = "알림 전체 조회", description = "회원 정보는 헤더에서")

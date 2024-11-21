@@ -7,6 +7,8 @@ import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.domain.NotificationRepository;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +24,15 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public Long save(Member member, NotificationSaveRequestDto requestDto) {
+    public void save(Member member, NotificationSaveRequestDto requestDto) {
         Notification notification = requestDto.toEntity(member);
-        return notificationRepository.save(notification).getId();
+        notificationRepository.save(notification);
+    }
+
+    public Notification findEntityById(Long id) {
+        return notificationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
+        );
     }
 
     public List<Notification> findEntityAll() {
@@ -44,8 +52,8 @@ public class NotificationService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        notificationRepository.deleteById(id);
+    public void delete(Notification notification) {
+        notificationRepository.delete(notification);
     }
 
     @Transactional

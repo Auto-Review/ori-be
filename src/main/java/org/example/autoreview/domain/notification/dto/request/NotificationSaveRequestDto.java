@@ -9,15 +9,15 @@ import org.example.autoreview.domain.notification.enums.NotificationStatus;
 @Getter
 public class NotificationSaveRequestDto {
 
-    private String title;
     private String content;
+    private LocalDate reviewDay;
 
     public Notification toEntity(Member member){
         return Notification.builder()
-                .title(title)
+                .title("ORI 복습 알림")
                 .content(content)
                 .status(NotificationStatus.PENDING)
-                .executeTime(LocalDate.now())
+                .executeTime(reviewDay)
                 .member(member)
                 .build();
     }

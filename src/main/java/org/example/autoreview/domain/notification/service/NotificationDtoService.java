@@ -1,8 +1,5 @@
 package org.example.autoreview.domain.notification.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
@@ -11,10 +8,17 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,9 +29,23 @@ public class NotificationDtoService {
     private final MemberService memberService;
     private final FcmTokenService fcmTokenService;
 
-    public Long save(String email, NotificationSaveRequestDto requestDto) {
+    public void save(String email, NotificationSaveRequestDto requestDto) {
         Member member = memberService.findByEmail(email);
-        return notificationService.save(member, requestDto);
+        notificationService.save(member, requestDto);
+    }
+
+    @Transactional
+    public void update(String email, NotificationUpdateRequestDto requestDto) {
+        Notification notification = notificationService.findEntityById(requestDto.getId());
+        userValidator(email, notification);
+        notification.update(requestDto);
+    }
+
+    @Transactional
+    public void delete(String email, Long notificationId) {
+        Notification notification = notificationService.findEntityById(notificationId);
+        userValidator(email,notification);
+        notification.notificationStatusUpdate();
     }
 
     public List<NotificationResponseDto> findAll() {
@@ -66,5 +84,9 @@ public class NotificationDtoService {
         notificationService.deleteAll(completedNotifications);
     }
 
-
+    private static void userValidator(String email, Notification notification) {
+        if (!notification.getMember().getEmail().equals(email)) {
+            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
+        }
+    }
 }
