@@ -2,6 +2,8 @@ package org.example.autoreview.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.entity.Member;
@@ -26,12 +28,14 @@ import java.util.List;
 public class NotificationDtoService {
 
     private final NotificationService notificationService;
+    private final CodePostService codePostService;
     private final MemberService memberService;
     private final FcmTokenService fcmTokenService;
 
-    public void save(String email, NotificationSaveRequestDto requestDto) {
+    public void save(String email, Long codePostId, NotificationSaveRequestDto requestDto) {
+        CodePost codePost = codePostService.findEntityById(codePostId);
         Member member = memberService.findByEmail(email);
-        notificationService.save(member, requestDto);
+        notificationService.save(member, codePost, requestDto);
     }
 
     @Transactional
@@ -42,8 +46,8 @@ public class NotificationDtoService {
     }
 
     @Transactional
-    public void delete(String email, Long notificationId) {
-        Notification notification = notificationService.findEntityById(notificationId);
+    public void delete(String email, Long id) {
+        Notification notification = notificationService.findEntityById(id);
         userValidator(email,notification);
         notification.notificationStatusUpdate();
     }

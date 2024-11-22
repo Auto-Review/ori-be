@@ -2,6 +2,7 @@ package org.example.autoreview.domain.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.domain.NotificationRepository;
@@ -24,8 +25,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void save(Member member, NotificationSaveRequestDto requestDto) {
-        Notification notification = requestDto.toEntity(member);
+    public void save(Member member, CodePost codePost, NotificationSaveRequestDto requestDto) {
+        Notification notification = requestDto.toEntity(member, codePost);
         notificationRepository.save(notification);
     }
 

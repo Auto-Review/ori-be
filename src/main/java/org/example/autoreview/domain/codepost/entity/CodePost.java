@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 
@@ -24,6 +25,9 @@ public class CodePost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     private Member member;
+
+    @OneToOne(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Notification notification;
 
     @OneToMany(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();

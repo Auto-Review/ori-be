@@ -27,10 +27,11 @@ public class NotificationController {
 
     @Operation(summary = "알림 저장", description = "회원 정보는 헤더에서")
     @PostMapping
-    public ApiResponse<String> save(@AuthenticationPrincipal UserDetails userDetails,
+    public ApiResponse<String> save(@RequestParam Long codePostId,
+                                    @AuthenticationPrincipal UserDetails userDetails,
                                     @RequestBody NotificationSaveRequestDto requestDto) {
 
-        notificationMemberService.save(userDetails.getUsername(), requestDto);
+        notificationMemberService.save(userDetails.getUsername(), codePostId, requestDto);
         return ApiResponse.success(HttpStatus.OK,"save success");
     }
 
