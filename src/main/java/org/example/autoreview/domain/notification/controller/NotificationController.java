@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class NotificationController {
 
-    private final NotificationDtoService notificationMemberService;
     private final NotificationScheduler notificationScheduler;
     private final NotificationDtoService notificationDtoService;
 
@@ -37,7 +36,7 @@ public class NotificationController {
     public ApiResponse<String> save(@AuthenticationPrincipal UserDetails userDetails,
                                     @RequestBody NotificationSaveRequestDto requestDto) {
 
-        notificationMemberService.save(userDetails.getUsername(), requestDto);
+        notificationDtoService.save(userDetails.getUsername(), requestDto);
         return ApiResponse.success(HttpStatus.OK,"save success");
     }
 
@@ -45,7 +44,7 @@ public class NotificationController {
     @PutMapping
     public ApiResponse<String> update(@AuthenticationPrincipal UserDetails userDetails,
                                       @RequestBody NotificationUpdateRequestDto requestDto) {
-        notificationMemberService.update(userDetails.getUsername(), requestDto);
+        notificationDtoService.update(userDetails.getUsername(), requestDto);
         return ApiResponse.success(HttpStatus.OK,"update success");
     }
 
@@ -60,13 +59,13 @@ public class NotificationController {
     @Operation(summary = "알림 전체 조회", description = "회원 정보는 헤더에서")
     @GetMapping("/list")
     public ApiResponse<List<NotificationResponseDto>> findAll() {
-        return ApiResponse.success(HttpStatus.OK,notificationMemberService.findAll());
+        return ApiResponse.success(HttpStatus.OK,notificationDtoService.findAll());
     }
 
     @Operation(summary = "회원 알림 전체 조회", description = "회원 정보는 헤더에서")
     @GetMapping("/own")
     public ApiResponse<List<NotificationResponseDto>> findAll(@AuthenticationPrincipal UserDetails userDetails) {
-        return ApiResponse.success(HttpStatus.OK,notificationMemberService.findAllByMemberId(userDetails.getUsername()));
+        return ApiResponse.success(HttpStatus.OK,notificationDtoService.findAllByMemberId(userDetails.getUsername()));
     }
 
     @Operation(summary = "푸쉬 알림 강제 시작")
