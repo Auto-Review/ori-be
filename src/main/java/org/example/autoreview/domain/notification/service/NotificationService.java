@@ -31,12 +31,6 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public Notification findEntityById(Long id) {
-        return notificationRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
-        );
-    }
-
     public List<Notification> findEntityAll() {
         return notificationRepository.findAll();
     }
