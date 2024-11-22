@@ -1,8 +1,7 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
-import lombok.Getter;
-
 import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class CodePostListResponseDto {

@@ -1,9 +1,8 @@
 package org.example.autoreview.domain.notification.dto.request;
 
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor

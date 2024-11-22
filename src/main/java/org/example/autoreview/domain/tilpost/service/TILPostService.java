@@ -1,5 +1,8 @@
 package org.example.autoreview.domain.tilpost.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.entity.Member;
@@ -7,8 +10,8 @@ import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
-import org.example.autoreview.domain.tilpost.dto.response.TILPostThumbnailResponseDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
+import org.example.autoreview.domain.tilpost.dto.response.TILPostThumbnailResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.example.autoreview.domain.tilpost.entity.TILPostRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
@@ -19,10 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional(readOnly = true)

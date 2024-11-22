@@ -1,11 +1,10 @@
 package org.example.autoreview.domain.refresh;
 
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
-
-import java.util.concurrent.TimeUnit;
 
 @Getter
 @RedisHash(value = "refreshToken")

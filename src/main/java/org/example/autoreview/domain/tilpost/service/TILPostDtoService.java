@@ -1,5 +1,7 @@
 package org.example.autoreview.domain.tilpost.service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.TILBookmark.entity.TILBookmark;
@@ -14,9 +16,6 @@ import org.example.autoreview.domain.tilpost.dto.response.TILPostResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Slf4j

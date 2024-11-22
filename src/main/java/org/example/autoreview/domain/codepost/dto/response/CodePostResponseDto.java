@@ -1,12 +1,11 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
+import java.time.LocalDate;
+import java.util.List;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 public class CodePostResponseDto {

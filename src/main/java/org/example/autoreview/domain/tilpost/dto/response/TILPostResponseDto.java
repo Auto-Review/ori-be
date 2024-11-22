@@ -1,10 +1,9 @@
 package org.example.autoreview.domain.tilpost.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class TILPostResponseDto {

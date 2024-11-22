@@ -2,11 +2,9 @@ package org.example.autoreview.domain.member.sociallogin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
-
-
 import java.util.Base64;
 import java.util.Map;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TokenVerifierService {

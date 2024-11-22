@@ -1,15 +1,14 @@
 package org.example.autoreview.global.jwt;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Data;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class CustomUserDetails implements UserDetails {
