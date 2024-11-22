@@ -1,5 +1,6 @@
 package org.example.autoreview.domain.member.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.TILBookmark.service.TILBookmarkService;
@@ -9,8 +10,6 @@ import org.example.autoreview.domain.tilpost.service.TILPostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Transactional(readOnly = true)

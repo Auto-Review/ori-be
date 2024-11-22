@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
@@ -22,12 +25,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationDtoService {
 
     private final NotificationService notificationService;
+    private final CodePostService codePostService;
     private final MemberService memberService;
     private final FcmTokenService fcmTokenService;
 
-    public Long save(String email, NotificationSaveRequestDto requestDto) {
+    public void save(String email, NotificationSaveRequestDto requestDto) {
+        CodePost codePost = codePostService.findEntityById(requestDto.getId());
         Member member = memberService.findByEmail(email);
-        return notificationService.save(member, requestDto);
+        notificationService.save(member, codePost, requestDto);
+    }
+
+    @Transactional
+    public void update(String email, NotificationUpdateRequestDto requestDto) {
+        notificationService.update(email, requestDto);
+    }
+
+    @Transactional
+    public void delete(String email, Long id) {
+        notificationService.delete(email, id);
     }
 
     public List<NotificationResponseDto> findAll() {
@@ -65,6 +80,4 @@ public class NotificationDtoService {
         }
         notificationService.deleteAll(completedNotifications);
     }
-
-
 }

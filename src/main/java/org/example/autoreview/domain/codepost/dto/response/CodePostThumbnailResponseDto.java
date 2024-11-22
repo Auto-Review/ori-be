@@ -1,10 +1,9 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class CodePostThumbnailResponseDto {

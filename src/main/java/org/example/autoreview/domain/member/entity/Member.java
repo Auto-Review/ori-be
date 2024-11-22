@@ -12,11 +12,11 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
+import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 import org.example.autoreview.global.common.basetime.BaseEntity;
-import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.notification.domain.Notification;
 
 @Getter
 @NoArgsConstructor

@@ -1,5 +1,6 @@
 package org.example.autoreview.domain.review.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
@@ -9,8 +10,6 @@ import org.example.autoreview.domain.review.dto.request.ReviewSaveRequestDto;
 import org.example.autoreview.domain.review.dto.request.ReviewUpdateRequestDto;
 import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor

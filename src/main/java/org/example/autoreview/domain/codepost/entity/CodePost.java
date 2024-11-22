@@ -1,17 +1,27 @@
 package org.example.autoreview.domain.codepost.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.common.basetime.BaseEntity;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -24,6 +34,9 @@ public class CodePost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     private Member member;
+
+    @OneToOne(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Notification notification;
 
     @OneToMany(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
