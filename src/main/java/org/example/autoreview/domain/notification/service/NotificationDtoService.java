@@ -16,8 +16,6 @@ import org.example.autoreview.domain.notification.dto.request.NotificationSaveRe
 import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
-import org.example.autoreview.global.exception.errorcode.ErrorCode;
-import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,16 +37,12 @@ public class NotificationDtoService {
 
     @Transactional
     public void update(String email, NotificationUpdateRequestDto requestDto) {
-        Notification notification = notificationService.findEntityById(requestDto.getId());
-        userValidator(email, notification);
-        notification.update(requestDto);
+        notificationService.update(email, requestDto);
     }
 
     @Transactional
     public void delete(String email, Long id) {
-        Notification notification = notificationService.findEntityById(id);
-        userValidator(email,notification);
-        notification.notificationStatusUpdate();
+        notificationService.delete(email, id);
     }
 
     public List<NotificationResponseDto> findAll() {
@@ -85,11 +79,5 @@ public class NotificationDtoService {
             }
         }
         notificationService.deleteAll(completedNotifications);
-    }
-
-    private static void userValidator(String email, Notification notification) {
-        if (!notification.getMember().getEmail().equals(email)) {
-            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
-        }
     }
 }

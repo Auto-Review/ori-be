@@ -9,8 +9,10 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.domain.NotificationRepository;
 import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,13 +54,32 @@ public class NotificationService {
     }
 
     @Transactional
-    public void delete(Notification notification) {
-        notificationRepository.delete(notification);
+    public void update(String email, NotificationUpdateRequestDto requestDto) {
+        Notification notification = notificationRepository.findById(requestDto.getId()).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
+        );
+        userValidator(email, notification);
+        notification.update(requestDto);
+    }
+
+    @Transactional
+    public void delete(String email, Long id) {
+        Notification notification = notificationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
+        );
+        userValidator(email,notification);
+        notification.notificationStatusUpdate();
     }
 
     @Transactional
     public void deleteAll(List<Notification> completedNotifications) {
         notificationRepository.deleteAll(completedNotifications);
+    }
+
+    private static void userValidator(String email, Notification notification) {
+        if (!notification.getMember().getEmail().equals(email)) {
+            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
+        }
     }
 
 }
