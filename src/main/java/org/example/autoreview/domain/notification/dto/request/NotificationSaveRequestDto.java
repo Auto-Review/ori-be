@@ -1,16 +1,16 @@
 package org.example.autoreview.domain.notification.dto.request;
 
+import java.time.LocalDate;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
-import java.time.LocalDate;
-
 @Getter
 public class NotificationSaveRequestDto {
 
+    private Long id;
     private String content;
     private LocalDate reviewDay;
 
