@@ -22,8 +22,8 @@ public class NotificationScheduler {
 
     }
 
-    // 매일 오전 0시에 호출
-    @Scheduled(cron = "0 0 0 * * ?")
+    // 매달 10일 오전 7시에 호출
+    @Scheduled(cron = "0 10 7 * * ?")
     public void deleteCompleteNotification(){
         log.info("start delete notification");
         notificationMemberService.deleteCompleteNotification();
