@@ -21,6 +21,6 @@ public class CodePostThumbnailResponseDto {
         this.level = entity.getLevel();
         this.description = description;
         this.member = new MemberResponseDto(entity.getMember());
-        this.createdDate = LocalDateTime.now();
+        this.createdDate = entity.getCreateDate();
     }
 }

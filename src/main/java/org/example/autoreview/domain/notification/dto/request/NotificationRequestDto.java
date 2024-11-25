@@ -8,7 +8,7 @@ import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 @Getter
-public class NotificationSaveRequestDto {
+public class NotificationRequestDto {
 
     private Long id;
     private String content;

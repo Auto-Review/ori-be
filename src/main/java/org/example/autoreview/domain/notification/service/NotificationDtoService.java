@@ -3,6 +3,8 @@ package org.example.autoreview.domain.notification.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
@@ -12,8 +14,7 @@ import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.domain.Notification;
-import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
-import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
@@ -29,15 +30,16 @@ public class NotificationDtoService {
     private final MemberService memberService;
     private final FcmTokenService fcmTokenService;
 
-    public void save(String email, NotificationSaveRequestDto requestDto) {
+    public void saveOrUpdate(String email, NotificationRequestDto requestDto) {
         CodePost codePost = codePostService.findEntityById(requestDto.getId());
         Member member = memberService.findByEmail(email);
-        notificationService.save(member, codePost, requestDto);
-    }
+        Optional<Notification> notification = Optional.ofNullable(codePost.getNotification());
 
-    @Transactional
-    public void update(String email, NotificationUpdateRequestDto requestDto) {
-        notificationService.update(email, requestDto);
+        if(notification.isPresent()) {
+            notificationService.update(email, requestDto);
+            return;
+        }
+        notificationService.save(member, codePost, requestDto);
     }
 
     @Transactional
@@ -63,7 +65,7 @@ public class NotificationDtoService {
             List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
 
             if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
-                notification.notificationStatusUpdate();
+                notification.notificationStatusUpdateToComplete();
                 fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
             }
         }

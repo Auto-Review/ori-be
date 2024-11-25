@@ -8,8 +8,7 @@ import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.notification.domain.NotificationRepository;
-import org.example.autoreview.domain.notification.dto.request.NotificationSaveRequestDto;
-import org.example.autoreview.domain.notification.dto.request.NotificationUpdateRequestDto;
+import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
@@ -26,7 +25,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void save(Member member, CodePost codePost, NotificationSaveRequestDto requestDto) {
+    public void save(Member member, CodePost codePost, NotificationRequestDto requestDto) {
         Notification notification = requestDto.toEntity(member, codePost);
         notificationRepository.save(notification);
     }
@@ -48,11 +47,12 @@ public class NotificationService {
     }
 
     @Transactional
-    public void update(String email, NotificationUpdateRequestDto requestDto) {
+    public void update(String email, NotificationRequestDto requestDto) {
         Notification notification = notificationRepository.findById(requestDto.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email, notification);
+
         notification.update(requestDto);
     }
 
@@ -62,7 +62,7 @@ public class NotificationService {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email,notification);
-        notification.notificationStatusUpdate();
+        notification.notificationStatusUpdateToComplete();
     }
 
     @Transactional

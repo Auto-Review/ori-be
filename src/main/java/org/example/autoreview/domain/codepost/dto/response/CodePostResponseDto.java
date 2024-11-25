@@ -1,6 +1,7 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
@@ -18,6 +19,7 @@ public class CodePostResponseDto {
     private final String description;
     private final String code;
     private final List<ReviewResponseDto> dtoList;
+    private final LocalDateTime createDate;
 
     public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList) {
         this.id = entity.getId();
@@ -28,5 +30,6 @@ public class CodePostResponseDto {
         this.description = entity.getDescription();
         this.code = entity.getCode();
         this.dtoList = dtoList;
+        this.createDate = entity.getCreateDate();
     }
 }
