@@ -1,9 +1,10 @@
 package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -24,6 +25,10 @@ public class CodePostUpdateRequestDto {
     @Schema(description = "복습일 설정", example = "2024-10-11")
     private final LocalDate reviewDay;
 
+    @Schema(description = "사용 언어", example = "c++")
+    private final String language;
+
     @Schema(description = "코드", example = "import test")
     private final String code;
+
 }

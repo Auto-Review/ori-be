@@ -2,7 +2,10 @@ package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+
+import jakarta.validation.constraints.NotNull;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
 
 public record CodePostSaveRequestDto(
@@ -19,6 +22,10 @@ public record CodePostSaveRequestDto(
         @Schema(description = "해설", example = "test 기법을 사용해서 구현")
         String description,
 
+        @NotNull
+        @Schema(description = "사용 언어", example = "java")
+        String language,
+
         @Schema(description = "코드", example = "import test")
         String code
 ) {
@@ -29,6 +36,7 @@ public record CodePostSaveRequestDto(
                 .level(level)
                 .reviewDay(reviewDay)
                 .description(description)
+                .language(Language.of(language))
                 .code(code)
                 .build();
     }
