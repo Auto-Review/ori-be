@@ -54,9 +54,8 @@ public class Member extends BaseEntity {
         this.role = role;
     }
 
-    public Member update(String nickname){
+    public void update(String nickname){
         this.nickname = nickname;
-        return this;
     }
 
     public String getRoleKey(){
