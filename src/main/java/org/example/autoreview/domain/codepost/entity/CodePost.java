@@ -1,16 +1,7 @@
 package org.example.autoreview.domain.codepost.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +45,18 @@ public class CodePost extends BaseEntity {
     @Column(length = 1000)
     private String code;
 
+    @Enumerated(EnumType.STRING)
+    private Language language;
+
     @Builder
-    public CodePost(String title, int level, LocalDate reviewDay, String description, String code, Member member) {
+    public CodePost(String title, int level, LocalDate reviewDay, String description, String code, Language language, Member member) {
         this.title = title;
         this.member = member;
         this.level = level;
         this.reviewDay = reviewDay;
         this.description = description;
         this.code = code;
+        this.language = language;
     }
 
     public void update(CodePostUpdateRequestDto requestDto){
@@ -69,6 +64,7 @@ public class CodePost extends BaseEntity {
         this.level = requestDto.getLevel();
         this.reviewDay = requestDto.getReviewDay();
         this.description = requestDto.getDescription();
+        this.language = Language.of(requestDto.getLanguage());
         this.code = requestDto.getCode();
     }
 }
