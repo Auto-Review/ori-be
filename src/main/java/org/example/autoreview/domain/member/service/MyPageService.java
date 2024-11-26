@@ -5,14 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.TILBookmark.service.TILBookmarkService;
 import org.example.autoreview.domain.member.dto.MemberResponseDto;
+import org.example.autoreview.domain.member.dto.MemberUpdateDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILPageResponseDto;
 import org.example.autoreview.domain.tilpost.service.TILPostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class MyPageService {
@@ -23,6 +22,10 @@ public class MyPageService {
 
     public MemberResponseDto memberInfo(String email){
         return new MemberResponseDto(memberService.findByEmail(email));
+    }
+
+    public Long memberUpdate(MemberUpdateDto requestDto){
+        return memberService.update(requestDto.getId(), requestDto.getNickname());
     }
 
     public TILPageResponseDto memberBookmarkedTILPost(String email, Pageable pageable){
