@@ -39,10 +39,10 @@ public class CodePost extends BaseEntity {
 
     private LocalDate reviewDay;
 
-    @Column(length = 2000)
+    @Column(length = 4000)
     private String description;
 
-    @Column(length = 1000)
+    @Column(length = 4000, columnDefinition = "LONGTEXT")
     private String code;
 
     @Enumerated(EnumType.STRING)
