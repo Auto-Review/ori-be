@@ -33,7 +33,7 @@ public class NotificationController {
     @Operation(summary = "알림 저장 또는 수정", description = "회원 정보는 헤더에서")
     @PostMapping
     public ApiResponse<String> saveOrUpdate(@AuthenticationPrincipal UserDetails userDetails,
-                                    @RequestBody NotificationRequestDto requestDto) {
+                                            @RequestBody NotificationRequestDto requestDto) {
 
         notificationDtoService.saveOrUpdate(userDetails.getUsername(), requestDto);
         return ApiResponse.success(HttpStatus.OK,"save or update success");
