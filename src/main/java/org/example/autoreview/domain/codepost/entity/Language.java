@@ -8,8 +8,8 @@ public enum Language {
     JAVASCRIPT("javascript"),
     PYTHON("python"),
     JAVA("java"),
-    CSHARP("c#"),
-    CPP("c++"),
+    CSHARP("csharp"),
+    CPP("cpp"),
     C("c"),
     RUBY("ruby"),
     GO("go");
