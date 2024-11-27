@@ -13,13 +13,7 @@ import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "리뷰 API")
 @RequiredArgsConstructor
@@ -32,7 +26,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 저장")
     @PostMapping
-    public ApiResponse<String> save(ReviewSaveRequestDto requestDto) {
+    public ApiResponse<String> save(@RequestBody ReviewSaveRequestDto requestDto) {
         reviewCodePostService.save(requestDto);
         return ApiResponse.success(HttpStatus.OK, "Review saved");
     }
@@ -51,7 +45,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 수정", description = "사용자 검사 후 수정")
     @PutMapping
-    public ApiResponse<String> update(ReviewUpdateRequestDto requestDto,
+    public ApiResponse<String> update(@RequestBody ReviewUpdateRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails) {
         reviewCodePostService.update(requestDto, userDetails.getUsername());
         return ApiResponse.success(HttpStatus.OK, "Review updated");
@@ -59,7 +53,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 삭제", description = "사용자 검사 후 삭제")
     @DeleteMapping
-    public ApiResponse<String> delete(ReviewDeleteRequestDto requestDto,
+    public ApiResponse<String> delete(@RequestBody ReviewDeleteRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails) {
         reviewCodePostService.delete(requestDto, userDetails.getUsername());
         return ApiResponse.success(HttpStatus.OK, "Review deleted");
