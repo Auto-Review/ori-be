@@ -30,6 +30,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    public boolean existsById(Long id) {
+        return notificationRepository.existsById(id);
+    }
+
     public List<Notification> findEntityAll() {
         return notificationRepository.findAll();
     }
@@ -62,7 +66,7 @@ public class NotificationService {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email,notification);
-        notification.notificationStatusUpdateToComplete();
+        notificationRepository.delete(notification);
     }
 
     @Transactional

@@ -7,7 +7,7 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
-import org.example.autoreview.domain.codepost.service.CodePostMemberService;
+import org.example.autoreview.domain.codepost.service.CodePostDtoService;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/api/post/code")
 public class CodePostController {
 
-    private final CodePostMemberService codePostMemberService;
+    private final CodePostDtoService codePostMemberService;
 
     @Operation(summary = "코드 포스트 생성", description = "코드 포스트 생성")
     @PostMapping

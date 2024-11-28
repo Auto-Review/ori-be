@@ -1,18 +1,17 @@
 package org.example.autoreview.domain.codepost.entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.notification.domain.Notification;
 import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.common.basetime.BaseEntity;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,14 +19,12 @@ import org.example.autoreview.global.common.basetime.BaseEntity;
 public class CodePost extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "code_post_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     private Member member;
-
-    @OneToOne(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Notification notification;
 
     @OneToMany(mappedBy = "codePost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
