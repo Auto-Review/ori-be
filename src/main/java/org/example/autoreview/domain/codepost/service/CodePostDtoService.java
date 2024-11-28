@@ -8,16 +8,18 @@ import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseD
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
+import org.example.autoreview.domain.notification.service.NotificationService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CodePostMemberService {
+public class CodePostDtoService {
 
     private final CodePostService codePostService;
     private final MemberService memberService;
+    private final NotificationService notificationService;
 
     public Long postSave(CodePostSaveRequestDto requestDto, String email){
         Member member = memberService.findByEmail(email);
@@ -51,6 +53,9 @@ public class CodePostMemberService {
     }
 
     public Long postDelete(Long id, String email){
+        if (notificationService.existsById(id)) {
+            notificationService.delete(email, id);
+        }
         return codePostService.delete(id, email);
     }
 }

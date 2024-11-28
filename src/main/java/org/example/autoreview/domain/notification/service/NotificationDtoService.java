@@ -1,10 +1,5 @@
 package org.example.autoreview.domain.notification.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
@@ -20,6 +15,10 @@ import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -33,9 +32,8 @@ public class NotificationDtoService {
     public void saveOrUpdate(String email, NotificationRequestDto requestDto) {
         CodePost codePost = codePostService.findEntityById(requestDto.getId());
         Member member = memberService.findByEmail(email);
-        Optional<Notification> notification = Optional.ofNullable(codePost.getNotification());
 
-        if(notification.isPresent()) {
+        if(notificationService.existsById(codePost.getId())) {
             notificationService.update(email, requestDto);
             return;
         }

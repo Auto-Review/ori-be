@@ -31,7 +31,7 @@ public class Notification extends BaseEntity {
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "code_post_id")
     private CodePost codePost;
 
     @ManyToOne(fetch = FetchType.LAZY)
