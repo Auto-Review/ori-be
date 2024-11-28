@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ReviewController {
 
-
     private final ReviewCodePostService reviewCodePostService;
 
     @Operation(summary = "리뷰 저장")
@@ -37,10 +36,10 @@ public class ReviewController {
         return ApiResponse.success(HttpStatus.OK, reviewCodePostService.findOne(id));
     }
 
-    @Operation(summary = "리뷰 전체 조회")
-    @GetMapping("/list")
-    public ApiResponse<List<ReviewResponseDto>> findAll() {
-        return ApiResponse.success(HttpStatus.OK, reviewCodePostService.findAll());
+    @Operation(summary = "리뷰 전체 조회", description = "코드 포스트에 해당하는 리뷰만 볼 수 있음")
+    @GetMapping("/{codePostId}/list")
+    public ApiResponse<List<ReviewResponseDto>> findAll(@PathVariable("codePostId") Long codePostId) {
+        return ApiResponse.success(HttpStatus.OK, reviewCodePostService.findAllByCodePostId(codePostId));
     }
 
     @Operation(summary = "리뷰 수정", description = "사용자 검사 후 수정")

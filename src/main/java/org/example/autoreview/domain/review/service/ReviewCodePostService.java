@@ -28,8 +28,9 @@ public class ReviewCodePostService {
         return reviewService.findOne(reviewId);
     }
 
-    public List<ReviewResponseDto> findAll() {
-        return reviewService.findAll();
+    public List<ReviewResponseDto> findAllByCodePostId(Long codePostId) {
+        CodePost codePost = codePostService.findEntityById(codePostId);
+        return reviewService.findAllByCodePost(codePost);
     }
 
     public void update(ReviewUpdateRequestDto requestDto, String email) {
