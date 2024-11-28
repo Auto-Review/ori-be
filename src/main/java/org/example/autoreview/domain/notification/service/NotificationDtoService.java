@@ -8,7 +8,7 @@ import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
-import org.example.autoreview.domain.notification.domain.Notification;
+import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;

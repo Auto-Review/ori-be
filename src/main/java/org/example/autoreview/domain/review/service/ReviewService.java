@@ -36,8 +36,8 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
-    public List<ReviewResponseDto> findAll() {
-        return reviewRepository.findAll().stream()
+    public List<ReviewResponseDto> findAllByCodePost(CodePost codePost) {
+        return codePost.getReviewList().stream()
                 .map(ReviewResponseDto::new)
                 .toList();
     }
