@@ -2,7 +2,7 @@ package org.example.autoreview.domain.notification.dto.response;
 
 import java.time.LocalDate;
 import lombok.Getter;
-import org.example.autoreview.domain.notification.domain.Notification;
+import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 @Getter

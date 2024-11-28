@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.notification.domain.Notification;
+import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 @Getter

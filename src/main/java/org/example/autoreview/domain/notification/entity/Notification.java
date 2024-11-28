@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.notification.domain;
+package org.example.autoreview.domain.notification.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
