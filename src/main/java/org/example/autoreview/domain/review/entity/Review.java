@@ -29,10 +29,10 @@ public class Review extends BaseEntity {
     @JoinColumn
     private CodePost codePost;
 
-    @Column(length = 2000)
+    @Column(length = 4000)
     private String description;
 
-    @Column(length = 1000)
+    @Column(length = 4000, columnDefinition = "LONGTEXT")
     private String code;
 
     @Builder
