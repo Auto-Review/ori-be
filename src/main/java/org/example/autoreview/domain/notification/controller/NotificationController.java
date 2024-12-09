@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.service.NotificationDtoService;
-import org.example.autoreview.domain.scheduler.NotificationScheduler;
+import org.example.autoreview.global.scheduler.NotificationScheduler;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
