@@ -14,7 +14,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // 허용할 출처
+        config.addAllowedOrigin("https://autoreview.kr"); // 허용할 출처
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("accessToken");

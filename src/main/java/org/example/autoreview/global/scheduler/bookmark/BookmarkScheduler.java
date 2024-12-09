@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.scheduler.bookmark;
+package org.example.autoreview.global.scheduler.bookmark;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
