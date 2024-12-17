@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - dev
+      - feat/dev-ci
 
 jobs:
   build:
@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew clean build -x test
 
       - name: Build Docker image
-        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}}
+        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}} -f Dockerfile.dev
 
       - name: Push Docker image
         run: |
