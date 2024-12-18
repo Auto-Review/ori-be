@@ -12,14 +12,7 @@ import org.example.autoreview.global.exception.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "알림 API", description = "알림 API")
 @RequestMapping("/v1/api/notification")
@@ -34,7 +27,6 @@ public class NotificationController {
     @PostMapping
     public ApiResponse<String> saveOrUpdate(@AuthenticationPrincipal UserDetails userDetails,
                                             @RequestBody NotificationRequestDto requestDto) {
-
         notificationDtoService.saveOrUpdate(userDetails.getUsername(), requestDto);
         return ApiResponse.success(HttpStatus.OK,"save or update success");
     }
@@ -57,6 +49,19 @@ public class NotificationController {
     @GetMapping("/own")
     public ApiResponse<List<NotificationResponseDto>> findAll(@AuthenticationPrincipal UserDetails userDetails) {
         return ApiResponse.success(HttpStatus.OK,notificationDtoService.findAllByMemberId(userDetails.getUsername()));
+    }
+
+    @Operation(summary = "회원 안읽은 알림 전체 조회", description = "회원이 안읽은 알림을 조회한다.")
+    @GetMapping("/own/unchecked")
+    public ApiResponse<List<NotificationResponseDto>> findAllNotificationIsNotCheckedByMemberId(@AuthenticationPrincipal UserDetails userDetails) {
+        return ApiResponse.success(HttpStatus.OK,notificationDtoService.findAllNotificationIsNotCheckedByMemberId(userDetails.getUsername()));
+    }
+
+    @Operation(summary = "알림 상태 변경", description = "알림을 봤다고 상태를 변경한다.")
+    @PutMapping
+    public ApiResponse<String> update(@RequestParam Long id) {
+        notificationDtoService.update(id);
+        return ApiResponse.success(HttpStatus.OK,"update success");
     }
 
     @Operation(summary = "푸쉬 알림 강제 시작")

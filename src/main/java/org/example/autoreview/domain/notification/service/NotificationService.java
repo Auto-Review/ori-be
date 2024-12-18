@@ -1,5 +1,6 @@
 package org.example.autoreview.domain.notification.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class NotificationService {
         return notificationRepository.existsById(id);
     }
 
+    public Notification findEntityById(Long id) {
+        return notificationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
+        );
+    }
+
     public List<Notification> findEntityAll() {
         return notificationRepository.findAll();
     }
@@ -46,6 +53,15 @@ public class NotificationService {
 
     public List<NotificationResponseDto> findAllByMemberId(Long memberId) {
         return notificationRepository.findAllByMemberId(memberId).stream()
+                .map(NotificationResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(Long memberId) {
+        LocalDate now = LocalDate.now();
+        List<Notification> notifications = notificationRepository.findAllNotificationIsNotCheckedByMemberId(memberId, now);
+
+        return notifications.stream()
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
     }

@@ -20,6 +20,7 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.global.common.basetime.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,25 +52,31 @@ public class Notification extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private NotificationStatus status;
 
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean isChecked;
+
     @Builder
-    public  Notification(CodePost codePost, String title, String content, NotificationStatus status, LocalDate executeTime, Member member){
+    public Notification(CodePost codePost, String title, String content, NotificationStatus status, LocalDate executeTime, Member member, boolean isChecked){
         this.codePost = codePost;
         this.title = title;
         this.content = content;
         this.status = status;
         this.executeTime = executeTime;
+        this.isChecked = isChecked;
         this.member = member;
     }
 
-    public void notificationStatusUpdateToComplete() {
+    public void statusUpdateToComplete() {
         this.status = NotificationStatus.COMPLETE;
     }
-    public void notificationStatusUpdateToPending() {
+    public void statusUpdateToPending() {
         this.status = NotificationStatus.PENDING;
     }
+    public void checkUpdateToTrue() { this.isChecked = true; }
 
     public void update(NotificationRequestDto requestDto) {
-        notificationStatusUpdateToPending();
+        statusUpdateToPending();
         this.content = requestDto.getContent();
         this.executeTime = requestDto.getReviewDay();
     }

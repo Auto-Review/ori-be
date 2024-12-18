@@ -40,7 +40,6 @@ public class NotificationDtoService {
         notificationService.save(member, codePost, requestDto);
     }
 
-    @Transactional
     public void delete(String email, Long id) {
         notificationService.delete(email, id);
     }
@@ -54,6 +53,17 @@ public class NotificationDtoService {
         return notificationService.findAllByMemberId(memberId);
     }
 
+    public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(String email) {
+        Long memberId = memberService.findByEmail(email).getId();
+        return notificationService.findAllNotificationIsNotCheckedByMemberId(memberId);
+    }
+
+    @Transactional
+    public void update(Long id) {
+        Notification notification = notificationService.findEntityById(id);
+        notification.checkUpdateToTrue();
+    }
+
     @Transactional
     public void sendNotification() {
         List<Notification> notificationList = notificationService.findEntityAll();
@@ -63,7 +73,7 @@ public class NotificationDtoService {
             List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
 
             if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
-                notification.notificationStatusUpdateToComplete();
+                notification.statusUpdateToComplete();
                 fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
             }
         }
