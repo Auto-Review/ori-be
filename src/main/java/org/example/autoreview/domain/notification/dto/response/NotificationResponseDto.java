@@ -12,11 +12,13 @@ public class NotificationResponseDto {
     private final String content;
     private final LocalDate executeTime;
     private final NotificationStatus status;
+    private final boolean isChecked;
 
     public NotificationResponseDto(Notification entity) {
         this.id = entity.getId();
         this.content = entity.getContent();
         this.executeTime = entity.getExecuteTime();
         this.status = entity.getStatus();
+        this.isChecked = entity.isChecked();
     }
 }
