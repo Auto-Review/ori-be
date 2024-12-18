@@ -66,6 +66,10 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
+    public void contentUpdateByCodePostTitle(Notification notification, String codePostTitle) {
+        notification.contentUpdateByCodePostTitle(codePostTitle);
+    }
+
     @Transactional
     public void update(String email, NotificationRequestDto requestDto) {
         Notification notification = notificationRepository.findById(requestDto.getId()).orElseThrow(

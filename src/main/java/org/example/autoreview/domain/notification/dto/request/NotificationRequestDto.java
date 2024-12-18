@@ -9,14 +9,12 @@ import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 @Getter
 public class NotificationRequestDto {
-
-    private final String title = "ORI 복습 알림";
     private Long id;
     private LocalDate reviewDay;
 
     public Notification toEntity(Member member, CodePost codePost){
         return Notification.builder()
-                .title(title)
+                .title("ORI 복습 알림")
                 .content(codePost.getTitle())
                 .status(NotificationStatus.PENDING)
                 .executeTime(reviewDay)
