@@ -72,7 +72,6 @@ public class NotificationService {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email, notification);
-
         notification.update(requestDto);
     }
 

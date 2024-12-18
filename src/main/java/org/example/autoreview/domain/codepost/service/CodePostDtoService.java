@@ -8,7 +8,9 @@ import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseD
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
+import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.service.NotificationService;
+import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,12 @@ public class CodePostDtoService {
     }
 
     public Long postUpdate(CodePostUpdateRequestDto requestDto, String email){
+        try {
+            Notification notification = notificationService.findEntityById(requestDto.getId());
+            notification.contentUpdateByCodePostTitle(requestDto.getTitle());
+        } catch (NotFoundException e) {
+            log.info(e.getMessage());
+        }
         return codePostService.update(requestDto, email);
     }
 

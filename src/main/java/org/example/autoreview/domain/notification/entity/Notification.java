@@ -70,14 +70,15 @@ public class Notification extends BaseEntity {
     public void statusUpdateToComplete() {
         this.status = NotificationStatus.COMPLETE;
     }
-    public void statusUpdateToPending() {
-        this.status = NotificationStatus.PENDING;
-    }
     public void checkUpdateToTrue() { this.isChecked = true; }
 
+    public void contentUpdateByCodePostTitle(String content) {
+        this.content = content;
+    }
+
+
     public void update(NotificationRequestDto requestDto) {
-        statusUpdateToPending();
-        this.content = requestDto.getContent();
+        this.status = NotificationStatus.PENDING;
         this.executeTime = requestDto.getReviewDay();
     }
 }
