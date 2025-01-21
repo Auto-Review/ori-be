@@ -49,8 +49,14 @@ jobs:
       - name: Build gradle
         run: ./gradlew clean build -x test
 
-      - name: Build Docker image
-        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}} -f Dockerfile.dev
+      - name: Build Dev Docker image
+        if: github.ref == 'refs/heads/feat/main-ci'
+        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:dev -f Dockerfile.dev
+
+      - name: Build Main Docker image
+        if: github.ref == 'refs/heads/main'
+        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:main -f Dockerfile.prod
+
 
       - name: Push Docker image
         run: |
