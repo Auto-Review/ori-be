@@ -3,6 +3,7 @@ name: ci
 on:
   push:
     branches:
+      - dev
       - main
 
 jobs:
@@ -49,13 +50,27 @@ jobs:
       - name: Build gradle
         run: ./gradlew clean build -x test
 
-      - name: Build Docker image
-        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}} -f Dockerfile.dev
+      - name: Build Dev Docker image
+        if: github.ref == 'refs/heads/dev'
+        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:dev -f Dockerfile.dev
 
-      - name: Push Docker image
+      - name: Build Main Docker image
+        if: github.ref == 'refs/heads/main'
+        run: docker build . --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod -f Dockerfile.prod
+
+
+      - name: Push Dev Docker image
+        if: github.ref == 'refs/heads/dev'
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:dev
+
+      - name: Push Main Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
+          
 
   deploy:
     runs-on: ubuntu-latest
@@ -73,6 +88,21 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Deploy to Dev Server
+        if: github.ref == 'refs/heads/dev'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_PRIVATE_KEY }}
+          script: |
+            # 도커 컨테이너 재배포
+            sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
+            sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:dev
+            sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network ${{ secrets.DOCKER_NETWORK_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:dev
+
+      - name: Deploy to Main Server
+        if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PROD_HOST }}
@@ -82,5 +112,5 @@ jobs:
             # 도커 컨테이너 재배포
             sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
             sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}}
-            sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network ${{ secrets.DOCKER_NETWORK_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:${{secrets.DOCKER_TAG}}
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
+            sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network ${{ secrets.DOCKER_NETWORK_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
