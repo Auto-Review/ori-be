@@ -1,0 +1,3 @@
+[submodule "security_setting"]
+	path = security_setting
+	url = https://github.com/Auto-Review/AutoReview_Settings.git

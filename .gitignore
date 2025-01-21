@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+gradlew
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -33,5 +34,10 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### YAML Settings ###
+/src/main/resources/*.yml
+/src/test/resources/application-test.yml
+
 ### VS Code ###
 .vscode/
+ori-push-notification-firebase-adminsdk-k9qqe-d0581b0c52.json
