@@ -3,7 +3,6 @@ package org.example.autoreview.global.initializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Role;
 import org.example.autoreview.domain.member.sociallogin.LoginService;
 import org.example.autoreview.global.jwt.JwtDto;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomInitializer implements ApplicationRunner {
 
-    private final MemberRepository memberRepository;
     private final LoginService loginService;
 
     @Override
@@ -27,7 +25,6 @@ public class CustomInitializer implements ApplicationRunner {
                 .role(Role.USER)
                 .build();
 
-        memberRepository.save(memberA);
         JwtDto jwtDtoA = loginService.issuedTokenByEmail(memberA.getEmail());
 
         Member memberB = Member.builder()
@@ -36,7 +33,6 @@ public class CustomInitializer implements ApplicationRunner {
                 .role(Role.USER)
                 .build();
 
-        memberRepository.save(memberB);
         JwtDto jwtDtoB = loginService.issuedTokenByEmail(memberB.getEmail());
 
         log.info("Test MemberA accessToken is {}", jwtDtoA.getAccessToken());
