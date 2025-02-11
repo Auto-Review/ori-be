@@ -8,9 +8,9 @@ import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
-import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
+import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +28,11 @@ public class NotificationDtoService {
     private final CodePostService codePostService;
     private final MemberService memberService;
     private final FcmTokenService fcmTokenService;
+    private final NotificationCommand notificationCommand;
 
+    @Transactional
     public void saveOrUpdate(String email, NotificationRequestDto requestDto) {
-        CodePost codePost = codePostService.findEntityById(requestDto.getId());
+        CodePost codePost = codePostService.findEntityById(requestDto.getCodePostId());
         Member member = memberService.findByEmail(email);
 
         if(notificationService.existsById(codePost.getId())) {
@@ -64,16 +66,17 @@ public class NotificationDtoService {
         notification.checkUpdateToTrue();
     }
 
-    @Transactional
     public void sendNotification() {
-        List<Notification> notificationList = notificationService.findEntityAll();
         LocalDate today = LocalDate.now();
+        List<Notification> notificationList = notificationCommand.getNotifications();
+        log.info("getNotificationList 트랜잭션 종료");
 
         for (Notification notification : notificationList) {
-            List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
-
             if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
-                notification.statusUpdateToComplete();
+                notificationCommand.updateStatus(notification);
+                log.info("updateStatus 트랜잭션 종료");
+
+                List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
                 fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
             }
         }
