@@ -69,13 +69,10 @@ public class NotificationDtoService {
     public void sendNotification() {
         LocalDate today = LocalDate.now();
         List<Notification> notificationList = notificationCommand.getNotifications();
-        log.info("getNotificationList 트랜잭션 종료");
 
         for (Notification notification : notificationList) {
             if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
                 notificationCommand.updateStatus(notification);
-                log.info("updateStatus 트랜잭션 종료");
-
                 List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
                 fcmTokenService.pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
             }

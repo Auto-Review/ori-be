@@ -6,7 +6,6 @@ import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.entity.NotificationRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -19,15 +18,11 @@ public class NotificationCommand {
 
     @Transactional(readOnly = true)
     public List<Notification> getNotifications() {
-        // select
-        log.info("getNotifications 트랜잭션 존재 여부: {}", TransactionSynchronizationManager.isActualTransactionActive());
         return notificationRepository.findAll();
     }
 
     @Transactional
     public void updateStatus(Notification notification) {
-        // update
-        log.info("updateStatus 트랜잭션 존재 여부: {}", TransactionSynchronizationManager.isActualTransactionActive());
         notification.statusUpdateToComplete();
     }
 }
