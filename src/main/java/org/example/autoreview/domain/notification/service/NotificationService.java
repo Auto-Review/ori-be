@@ -72,7 +72,7 @@ public class NotificationService {
 
     @Transactional
     public void update(String email, NotificationRequestDto requestDto) {
-        Notification notification = notificationRepository.findById(requestDto.getId()).orElseThrow(
+        Notification notification = notificationRepository.findById(requestDto.getCodePostId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email, notification);

@@ -9,7 +9,7 @@ import org.example.autoreview.domain.notification.enums.NotificationStatus;
 
 @Getter
 public class NotificationRequestDto {
-    private Long id;
+    private Long codePostId;
     private LocalDate reviewDay;
 
     public Notification toEntity(Member member, CodePost codePost){
@@ -19,7 +19,7 @@ public class NotificationRequestDto {
                 .status(NotificationStatus.PENDING)
                 .executeTime(reviewDay)
                 .member(member)
-                .codePost(codePost)
+                .codePostId(codePostId)
                 .build();
     }
 }
