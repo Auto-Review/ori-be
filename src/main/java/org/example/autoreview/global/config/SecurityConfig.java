@@ -50,6 +50,7 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/webjars/**",
+            "/actuator/**",
     };
 
     @Bean
