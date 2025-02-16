@@ -45,6 +45,8 @@ public class SecurityConfig {
             "/v1/api/post/code/search",
             "/v1/api/auth/token",
             "/v1/api/auth/reissued",
+            "/v1/api/comment/comments",
+            "/v1/api/comment/replies",
             "/h2-console/**",
             "/swagger-ui/**",
             "/swagger-resources/**",

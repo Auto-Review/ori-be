@@ -45,8 +45,14 @@ public enum ErrorCode {
     UNMATCHED_EMAIL(400, HttpStatus.BAD_REQUEST, "잘못된 사용자 접근입니다."),
 
     // BOOKMARK
-    NOT_FOUND_BOOKMARK(404, HttpStatus.NOT_FOUND, "해당 북마크를 찾을 수 없습니다.")
+    NOT_FOUND_BOOKMARK(404, HttpStatus.NOT_FOUND, "해당 북마크를 찾을 수 없습니다."),
+
+    // Comment
+    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다.")
+
     ;
+
+
 
     private final int statusCode;
     private final HttpStatus httpStatus;
