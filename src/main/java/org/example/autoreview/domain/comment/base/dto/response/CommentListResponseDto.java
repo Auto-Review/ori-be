@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.comment.codepost.dto.response;
+package org.example.autoreview.domain.comment.base.dto.response;
 
 import java.util.List;
 

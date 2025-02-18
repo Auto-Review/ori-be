@@ -1,13 +1,15 @@
-package org.example.autoreview.domain.comment.codepost.dto.response;
+package org.example.autoreview.domain.comment.base.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.autoreview.domain.comment.codepost.entity.CodePostComment;
+import org.example.autoreview.domain.comment.base.Comment;
 
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
+
+    private Long id;
 
     @Schema(nullable = true)
     private Long parentId;
@@ -20,9 +22,9 @@ public class CommentResponseDto {
 
     private String body;
 
-    public CommentResponseDto(CodePostComment entity) {
-        //TODO: getParent() 가 불필요한 객체 조회이지 않나 확인해봐야함
-        this.parentId = entity.getParent() != null ? entity.getParent().getId() : null;
+    public CommentResponseDto(Comment entity) {
+        this.id = entity.getId();
+        this.parentId = entity.getParentId();
         this.writerId = entity.getWriterId();
         this.writerNickName = entity.getWriterNickName();
         this.targetNickName = entity.getTargetNickName();

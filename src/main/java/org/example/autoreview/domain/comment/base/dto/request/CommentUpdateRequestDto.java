@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.comment.codepost.dto.request;
+package org.example.autoreview.domain.comment.base.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

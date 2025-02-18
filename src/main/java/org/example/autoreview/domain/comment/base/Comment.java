@@ -1,4 +1,4 @@
-package org.example.autoreview.domain.comment;
+package org.example.autoreview.domain.comment.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -8,13 +8,13 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.autoreview.domain.comment.codepost.dto.request.CommentUpdateRequestDto;
+import org.example.autoreview.domain.comment.base.dto.request.CommentUpdateRequestDto;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 
 @MappedSuperclass
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseComment extends BaseEntity {
+public abstract class Comment extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +32,7 @@ public abstract class BaseComment extends BaseEntity {
     private String body;
 
     // 공통 필드 및 메서드
-    protected BaseComment(String targetNickName, String body, Long writerId, String writerNickName) {
+    protected Comment(String targetNickName, String body, Long writerId, String writerNickName) {
         this.targetNickName = targetNickName;
         this.body = body;
         this.writerId = writerId;
@@ -44,5 +44,7 @@ public abstract class BaseComment extends BaseEntity {
         this.targetNickName = requestDto.targetNickName();
         this.body = requestDto.body();
     }
+
+    public abstract Long getParentId();
 
 }
