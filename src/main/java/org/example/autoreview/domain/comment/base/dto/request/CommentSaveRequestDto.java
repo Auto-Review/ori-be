@@ -3,7 +3,9 @@ package org.example.autoreview.domain.comment.base.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.comment.codepost.entity.CodePostComment;
+import org.example.autoreview.domain.comment.til.entity.TilPostComment;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.tilpost.entity.TILPost;
 
 public record CommentSaveRequestDto(
 
@@ -19,7 +21,7 @@ public record CommentSaveRequestDto(
         @Schema(description = "상위 댓글 아이디", nullable = true)
         Long parentId
 ) {
-    public CodePostComment toCommentEntity(CodePost codePost, Member writer) {
+    public CodePostComment toCodePostCommentEntity(CodePost codePost, Member writer) {
         return CodePostComment.builder()
                 .codePost(codePost)
                 .writerId(writer.getId())
@@ -29,7 +31,7 @@ public record CommentSaveRequestDto(
                 .build();
     }
 
-    public CodePostComment toReplyEntity(CodePost codePost, CodePostComment parent, Member writer) {
+    public CodePostComment toCodePostReplyEntity(CodePost codePost, CodePostComment parent, Member writer) {
         return CodePostComment.builder()
                 .codePost(codePost)
                 .parent(parent)
@@ -37,6 +39,27 @@ public record CommentSaveRequestDto(
                 .writerNickName(writer.getNickname())
                 .targetNickName(targetNickName)
                 .body(body)
+                .build();
+    }
+
+    public TilPostComment toTilPostCommentEntity(TILPost tilPost, Member writer) {
+        return TilPostComment.builder()
+                .tilPost(tilPost)
+                .writerId(writer.getId())
+                .writerNickName(writer.getNickname())
+                .body(body)
+                .targetNickName(targetNickName)
+                .build();
+    }
+
+    public TilPostComment toTilPostReplyEntity(TILPost tilPost, TilPostComment parent, Member writer) {
+        return TilPostComment.builder()
+                .tilPost(tilPost)
+                .parent(parent)
+                .writerId(writer.getId())
+                .writerNickName(writer.getNickname())
+                .body(body)
+                .targetNickName(targetNickName)
                 .build();
     }
 }

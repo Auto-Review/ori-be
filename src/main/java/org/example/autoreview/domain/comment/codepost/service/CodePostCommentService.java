@@ -28,12 +28,12 @@ public class CodePostCommentService extends CommentService<CodePostComment, Code
     @Override
     protected CodePostComment createReplyEntity(CommentSaveRequestDto requestDto, CodePostComment parent, Member writer) {
         CodePost codePost = codePostCommand.findById(requestDto.postId());
-        return requestDto.toReplyEntity(codePost, parent, writer);
+        return requestDto.toCodePostReplyEntity(codePost, parent, writer);
     }
 
     @Override
     protected CodePostComment createCommentEntity(CommentSaveRequestDto requestDto, Member writer) {
         CodePost codePost = codePostCommand.findById(requestDto.postId());
-        return requestDto.toCommentEntity(codePost, writer);
+        return requestDto.toCodePostCommentEntity(codePost, writer);
     }
 }
