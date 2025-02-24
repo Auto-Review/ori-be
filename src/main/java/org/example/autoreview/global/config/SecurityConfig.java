@@ -53,6 +53,7 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/webjars/**",
             "/actuator/**",
+            "/v1/api/member/**",
     };
 
     @Bean
