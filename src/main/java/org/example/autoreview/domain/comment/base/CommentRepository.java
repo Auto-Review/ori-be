@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 @NoRepositoryBean
 public interface CommentRepository<C extends Comment> extends JpaRepository<C, Long> {
-
     Page<C> findByCommentPage(@Param("postId") Long postId, Pageable pageable);
     Page<C> findByReplyPage(@Param("postId") Long postId, @Param("parentId") Long parentId, Pageable pageable);
 }

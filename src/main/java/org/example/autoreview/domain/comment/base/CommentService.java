@@ -14,11 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public abstract class CommentService<C extends Comment, R extends CommentRepository<C>> {
+    private final String SECRETE_COMMENT = "비밀 댓글 입니다.";
 
     protected final R commentRepository;
     protected final CommentCommand<C,R> commentCommand;
@@ -38,26 +39,66 @@ public abstract class CommentService<C extends Comment, R extends CommentReposit
     protected abstract C createReplyEntity(CommentSaveRequestDto requestDto, C parent, Member writer);
     protected abstract C createCommentEntity(CommentSaveRequestDto requestDto, Member writer);
 
-    // 상위 댓글 조회
-    public CommentListResponseDto findByCommentPage(Long postId, Pageable pageable) {
+    // User 상위 댓글 조회
+    public CommentListResponseDto userFindCommentPage(Long postId, Pageable pageable, String email) {
         Page<C> commentPage = commentRepository.findByCommentPage(postId, pageable);
-        List<CommentResponseDto> dtoList = convertPageToListDto(commentPage);
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+
+        for (C c : commentPage.getContent()) {
+            // 공개 or 게시글 작성자 or 댓글 작성자 일 경우
+            if (c.isPublic() || isPostWriter(postId,email) || c.getWriterEmail().equals(email)) {
+                dtoList.add(new CommentResponseDto(c,c.getBody()));
+                continue;
+            }
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+        }
 
         return new CommentListResponseDto(dtoList, commentPage.getTotalPages());
     }
 
-    // 하위 댓글 조회
-    public CommentListResponseDto findByReplyPage(Long postId, Long parentId, Pageable pageable) {
-        Page<C> replyPage = commentRepository.findByReplyPage(postId, parentId, pageable);
-        List<CommentResponseDto> dtoList = convertPageToListDto(replyPage);
+    protected abstract boolean isPostWriter(Long postId, String email);
 
+    // User 하위 댓글 조회
+    public CommentListResponseDto userFindReplyPage(Long postId, Long parentId, Pageable pageable, String email) {
+        Page<C> replyPage = commentRepository.findByReplyPage(postId, parentId, pageable);
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+
+        for (C c : replyPage.getContent()) {
+            // 공개 or 언급된 사용자 or 댓글 작성자 일 경우
+            if (c.isPublic() || c.getMentionEmail().equals(email) || c.getWriterEmail().equals(email)) {
+                dtoList.add(new CommentResponseDto(c,c.getBody()));
+                continue;
+            }
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+        }
         return new CommentListResponseDto(dtoList, replyPage.getTotalPages());
     }
 
-    private List<CommentResponseDto> convertPageToListDto(Page<C> page) {
-        return page.stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+    // Guest 상위 댓글 조회
+    public CommentListResponseDto guestFindCommentPage(Long postId, Pageable pageable) {
+        Page<C> commentPage = commentRepository.findByCommentPage(postId, pageable);
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+
+        return getCommentListResponseDto(commentPage, dtoList);
+    }
+
+    // Guest 하위 댓글 조회
+    public CommentListResponseDto guestFindReplyPage(Long postId, Long parentId, Pageable pageable) {
+        Page<C> replyPage = commentRepository.findByReplyPage(postId, parentId, pageable);
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+
+        return getCommentListResponseDto(replyPage, dtoList);
+    }
+
+    private CommentListResponseDto getCommentListResponseDto(Page<C> replyPage, List<CommentResponseDto> dtoList) {
+        for (C c : replyPage.getContent()) {
+            if (c.isPublic()) {
+                dtoList.add(new CommentResponseDto(c,c.getBody()));
+                continue;
+            }
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+        }
+        return new CommentListResponseDto(dtoList, replyPage.getTotalPages());
     }
 
     // 수정
