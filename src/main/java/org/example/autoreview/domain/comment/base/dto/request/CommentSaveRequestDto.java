@@ -15,8 +15,14 @@ public record CommentSaveRequestDto(
         @Schema(description = "본문", example = "이 코드 이게 맞아요?")
         String body,
 
+        @Schema(description = "공개 여부")
+        boolean isPublic,
+
         @Schema(description = "언급한 닉네임", nullable = true)
-        String targetNickName,
+        String mentionNickName,
+
+        @Schema(description = "언급된 대상 이메일", nullable = true)
+        String mentionEmail,
 
         @Schema(description = "상위 댓글 아이디", nullable = true)
         Long parentId
@@ -26,8 +32,9 @@ public record CommentSaveRequestDto(
                 .codePost(codePost)
                 .writerId(writer.getId())
                 .writerNickName(writer.getNickname())
+                .writerEmail(writer.getEmail())
                 .body(body)
-                .targetNickName(targetNickName)
+                .isPublic(isPublic)
                 .build();
     }
 
@@ -37,8 +44,11 @@ public record CommentSaveRequestDto(
                 .parent(parent)
                 .writerId(writer.getId())
                 .writerNickName(writer.getNickname())
-                .targetNickName(targetNickName)
+                .writerEmail(writer.getEmail())
+                .mentionNickName(mentionNickName)
+                .mentionEmail(mentionEmail)
                 .body(body)
+                .isPublic(isPublic)
                 .build();
     }
 
@@ -47,8 +57,9 @@ public record CommentSaveRequestDto(
                 .tilPost(tilPost)
                 .writerId(writer.getId())
                 .writerNickName(writer.getNickname())
+                .writerEmail(writer.getEmail())
                 .body(body)
-                .targetNickName(targetNickName)
+                .isPublic(isPublic)
                 .build();
     }
 
@@ -58,8 +69,11 @@ public record CommentSaveRequestDto(
                 .parent(parent)
                 .writerId(writer.getId())
                 .writerNickName(writer.getNickname())
+                .writerEmail(writer.getEmail())
+                .mentionNickName(mentionNickName)
+                .mentionEmail(mentionEmail)
                 .body(body)
-                .targetNickName(targetNickName)
+                .isPublic(isPublic)
                 .build();
     }
 }

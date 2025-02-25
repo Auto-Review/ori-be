@@ -27,8 +27,9 @@ public class TilPostComment extends Comment {
     private List<TilPostComment> children = new ArrayList<>();
 
     @Builder
-    public TilPostComment(TILPost tilPost, TilPostComment parent, String targetNickName, String body, Long writerId, String writerNickName) {
-        super(targetNickName, body, writerId, writerNickName);
+    public TilPostComment(TILPost tilPost, TilPostComment parent, String mentionNickName, String mentionEmail,
+                          String body, boolean isPublic, Long writerId, String writerNickName, String writerEmail) {
+        super(mentionNickName, mentionEmail, body, isPublic, writerId, writerNickName, writerEmail);
         this.tilPost = tilPost;
         this.parent = parent;
 

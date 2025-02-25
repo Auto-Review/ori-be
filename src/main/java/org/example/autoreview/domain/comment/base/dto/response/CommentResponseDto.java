@@ -18,16 +18,22 @@ public class CommentResponseDto {
 
     private String writerNickName;
 
-    private String targetNickName;
+    private String writerEmail;
+
+    private String mentionNickName;
+
+    private String mentionEmail;
 
     private String body;
 
-    public CommentResponseDto(Comment entity) {
+    public CommentResponseDto(Comment entity, String body) {
         this.id = entity.getId();
         this.parentId = entity.getParentId();
         this.writerId = entity.getWriterId();
         this.writerNickName = entity.getWriterNickName();
-        this.targetNickName = entity.getTargetNickName();
-        this.body = entity.getBody();
+        this.writerEmail = entity.getWriterEmail();
+        this.mentionNickName = entity.getMentionNickName();
+        this.mentionEmail = entity.getMentionEmail();
+        this.body = body;
     }
 }

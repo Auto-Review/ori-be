@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.comment.base.dto.request.CommentUpdateRequestDto;
 import org.example.autoreview.global.common.basetime.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 
 @MappedSuperclass
 @Getter
@@ -25,24 +26,42 @@ public abstract class Comment extends BaseEntity {
     @Column(nullable = false)
     private String writerNickName;
 
+    @Column(nullable = false)
+    private String writerEmail;
+
     @Column(nullable = true)
-    private String targetNickName;
+    private String mentionNickName;
+
+    @Column(nullable = true)
+    private String mentionEmail;
 
     @Column(nullable = false)
     private String body;
 
+    // 댓글 공개 여부 컬럼 추가
+    @ColumnDefault("true")
+    @Column(nullable = false)
+    private boolean isPublic;
+
     // 공통 필드 및 메서드
-    protected Comment(String targetNickName, String body, Long writerId, String writerNickName) {
-        this.targetNickName = targetNickName;
+    protected Comment(String mentionNickName, String mentionEmail, String body, boolean isPublic,
+                      Long writerId, String writerNickName, String writerEmail) {
+        this.mentionNickName = mentionNickName;
+        this.mentionEmail = mentionEmail;
         this.body = body;
+        this.isPublic = isPublic;
         this.writerId = writerId;
         this.writerNickName = writerNickName;
+        this.writerEmail = writerEmail;
     }
 
     public void update(CommentUpdateRequestDto requestDto) {
         this.writerNickName = requestDto.writerNickName();
-        this.targetNickName = requestDto.targetNickName();
+        this.writerEmail = requestDto.writerEmail();
+        this.mentionNickName = requestDto.mentionNickName();
+        this.mentionEmail = requestDto.mentionEmail();
         this.body = requestDto.body();
+        this.isPublic = requestDto.isPublic();
     }
 
     public abstract Long getParentId();
