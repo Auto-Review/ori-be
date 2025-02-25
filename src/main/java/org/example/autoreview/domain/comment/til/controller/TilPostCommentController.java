@@ -30,18 +30,34 @@ public class TilPostCommentController {
         return ResponseEntity.ok().body(tilPostCommentService.save(requestDto,userDetails.getUsername()));
     }
 
-    @Operation(summary = "댓글 조회", description = "페이지네이션 적용, limit 6개")
-    @GetMapping("/{tilPostId}/comments")
+    @Operation(summary = "USER 댓글 조회", description = "USER 전용 전용 조회 api, 페이지네이션 적용, limit 6개")
+    @GetMapping("/{tilPostId}/USER/comments")
     public ResponseEntity<CommentListResponseDto> getComments(@PageableDefault(page = 0, size = 6) Pageable pageable,
+                                                              @AuthenticationPrincipal UserDetails userDetails,
                                                               @PathVariable Long tilPostId) {
-        return ResponseEntity.ok().body(tilPostCommentService.findByCommentPage(tilPostId,pageable));
+        return ResponseEntity.ok().body(tilPostCommentService.userFindCommentPage(tilPostId,pageable,userDetails.getUsername()));
     }
 
-    @Operation(summary = "대댓글 조회", description = "페이지네이션 적용, limit 3개, parent_id 있어야 함")
-    @GetMapping("/{tilPostId}/replies")
+    @Operation(summary = "USER 대댓글 조회", description = "USER 전용 조회 api, 페이지네이션 적용, limit 3개, parent_id 있어야 함")
+    @GetMapping("/{tilPostId}/USER/replies")
+    public ResponseEntity<CommentListResponseDto> getReplies(@PageableDefault(page = 0, size = 3) Pageable pageable,
+                                                             @AuthenticationPrincipal UserDetails userDetails,
+                                                             @RequestParam Long parentId, @PathVariable Long tilPostId) {
+        return ResponseEntity.ok().body(tilPostCommentService.userFindReplyPage(tilPostId, parentId, pageable, userDetails.getUsername()));
+    }
+
+    @Operation(summary = "GUEST 댓글 조회", description = "GUEST 전용 조회 api, 페이지네이션 적용, limit 6개")
+    @GetMapping("/{tilPostId}/GUEST/comments")
+    public ResponseEntity<CommentListResponseDto> getComments(@PageableDefault(page = 0, size = 6) Pageable pageable,
+                                                              @PathVariable Long tilPostId) {
+        return ResponseEntity.ok().body(tilPostCommentService.guestFindCommentPage(tilPostId,pageable));
+    }
+
+    @Operation(summary = "GUEST 대댓글 조회", description = "GUEST 전용 조회 api, 페이지네이션 적용, limit 3개, parent_id 있어야 함")
+    @GetMapping("/{tilPostId}/GUEST/replies")
     public ResponseEntity<CommentListResponseDto> getReplies(@PageableDefault(page = 0, size = 3) Pageable pageable,
                                                              @RequestParam Long parentId, @PathVariable Long tilPostId) {
-        return ResponseEntity.ok().body(tilPostCommentService.findByReplyPage(tilPostId, parentId, pageable));
+        return ResponseEntity.ok().body(tilPostCommentService.guestFindReplyPage(tilPostId, parentId, pageable));
     }
 
     @Operation(summary = "댓글 또는 대댓글 수정", description = "parent_id가 있으면 대댓글, 없으면 댓글")

@@ -23,15 +23,15 @@ public class CodePostComment extends Comment {
     @JoinColumn(nullable = true)
     private CodePostComment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<CodePostComment> children = new ArrayList<>();
 
     @Builder
-    public CodePostComment(CodePost codePost, CodePostComment parent, String targetNickName, String body, Long writerId, String writerNickName) {
-        super(targetNickName, body, writerId, writerNickName);
+    public CodePostComment(CodePost codePost, CodePostComment parent, String mentionNickName, String mentionEmail,
+                           String body, boolean isPublic, Long writerId, String writerNickName, String writerEmail) {
+        super(mentionNickName, mentionEmail, body, isPublic, writerId, writerNickName, writerEmail);
         this.codePost = codePost;
         this.parent = parent;
-
     }
 
     @Override

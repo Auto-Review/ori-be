@@ -36,4 +36,11 @@ public class CodePostCommentService extends CommentService<CodePostComment, Code
         CodePost codePost = codePostCommand.findById(requestDto.postId());
         return requestDto.toCodePostCommentEntity(codePost, writer);
     }
+
+    @Override
+    protected boolean isPostWriter(Long postId, String commentWriterEmail) {
+        CodePost codePost = codePostCommand.findById(postId);
+        //TODO: codePost 와 member 연관관계 끊게 되면 getMember() -> getMemberEmail()로 수정해야함
+        return codePost.getMember().getEmail().equals(commentWriterEmail);
+    }
 }
