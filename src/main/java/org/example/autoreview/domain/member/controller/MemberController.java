@@ -25,4 +25,9 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> postMember(@RequestBody MemberSaveDto dto){
         return ResponseEntity.ok().body(new MemberResponseDto(memberService.saveOrFind(dto.getEmail())));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteMember(@PathVariable Long id){
+        return ResponseEntity.ok().body(memberService.delete(id));
+    }
 }

@@ -65,10 +65,11 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(Long id){
+    public Long delete(Long id){
         Member entity = memberRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         memberRepository.delete(entity);
+        return id;
     }
 }
