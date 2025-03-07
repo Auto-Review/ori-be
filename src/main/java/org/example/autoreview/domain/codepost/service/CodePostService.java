@@ -109,7 +109,7 @@ public class CodePostService {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
-        userValidator(email, codePost);
+        memberValidator(email, codePost);
         codePost.update(requestDto);
         return id;
     }
@@ -119,13 +119,13 @@ public class CodePostService {
         CodePost codePost = codePostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
-        userValidator(email, codePost);
+        memberValidator(email, codePost);
         codePostRepository.delete(codePost);
         return id;
     }
 
-    private static void userValidator(String email, CodePost codePost) {
-        if (!codePost.getMember().getEmail().equals(email)) {
+    private static void memberValidator(String loginMemberEmail, CodePost codePost) {
+        if (!codePost.getWriterEmail().equals(loginMemberEmail)) {
             throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
         }
     }

@@ -1,9 +1,8 @@
 package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
@@ -31,8 +30,10 @@ public record CodePostSaveRequestDto(
 ) {
     public CodePost toEntity(Member member){
         return CodePost.builder()
+                .writerId(member.getId())
+                .writerEmail(member.getEmail())
+                .writerNickName(member.getNickname())
                 .title(title)
-                .member(member)
                 .level(level)
                 .reviewDay(reviewDay)
                 .description(description)

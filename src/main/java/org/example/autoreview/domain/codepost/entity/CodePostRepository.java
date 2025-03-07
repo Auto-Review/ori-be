@@ -14,10 +14,10 @@ public interface CodePostRepository extends JpaRepository<CodePost, Long> {
     @Query("SELECT c FROM CodePost c WHERE c.title LIKE %:keyword% ORDER BY c.id DESC")
     Page<CodePost> search(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT c FROM CodePost c WHERE c.member.id =:id AND c.title LIKE %:keyword% ORDER BY c.id DESC")
+    @Query("SELECT c FROM CodePost c WHERE c.writerId =:id AND c.title LIKE %:keyword% ORDER BY c.id DESC")
     Page<CodePost> mySearch(@Param("keyword") String keyword, Pageable pageable, @Param("id") Long id);
 
-    @Query("SELECT c FROM CodePost c WHERE c.member.id =:id ORDER BY c.id DESC")
+    @Query("SELECT c FROM CodePost c WHERE c.writerId =:id ORDER BY c.id DESC")
     Page<CodePost> findByMemberId(@Param("id") Long id, Pageable pageable);
 
 }

@@ -1,7 +1,6 @@
 package org.example.autoreview.domain.tilpost.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,12 +37,12 @@ public class TILPostService {
     }
 
     public TILPageResponseDto findByMember(Member member, Pageable pageable){
-        Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdOrderByIdDesc(member.getId(), pageable);
+        Page<TILPost> posts = tilPostRepository.findTILPostsByWriterIdOrderByIdDesc(member.getId(), pageable);
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
     public TILPageResponseDto findByMemberTitleContains(Member member, String keyword, Pageable pageable){
-        Page<TILPost> posts = tilPostRepository.findTILPostsByMemberIdAndTitleContainingOrderByIdDesc(member.getId(), keyword, pageable);
+        Page<TILPost> posts = tilPostRepository.findTILPostsByWriterIdAndTitleContainingOrderByIdDesc(member.getId(), keyword, pageable);
         return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
     }
 
@@ -95,11 +94,7 @@ public class TILPostService {
         TILPost tilPost = tilPostRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_POST));
 
-        Member member = tilPost.getMember();
-        if(!Objects.equals(member.getEmail(), email)) {
-            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
-        }
-
+        memberValidator(email, tilPost);
         tilPost.update(requestDto);
 
         return id;
@@ -110,13 +105,16 @@ public class TILPostService {
         TILPost tilPost = tilPostRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_POST));
 
-        Member member = tilPost.getMember();
-        if(!Objects.equals(member.getEmail(), email)) {
+        memberValidator(email, tilPost);
+        tilPostRepository.delete(tilPost);
+
+        return id;
+    }
+
+    private static void memberValidator(String loginMemberEmail, TILPost tilPost) {
+        if (!tilPost.getWriterEmail().equals(loginMemberEmail)) {
             throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
         }
-
-        tilPostRepository.delete(tilPost);
-        return id;
     }
 
     public TILCursorResponseDto findAllByIdCursorBased(Long cursorId, int pageSize){
