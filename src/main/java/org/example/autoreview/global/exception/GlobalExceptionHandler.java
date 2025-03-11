@@ -6,6 +6,7 @@ import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.response.ApiResponse;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.example.autoreview.global.exception.sub_exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,6 +52,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public <T> ApiResponse <T> handleBadRequestException(final BadRequestException ex) {
         log.error("handleNotFoundException", ex);
+        return handleExceptionInternal(ex.getErrorCode());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    public <T> ApiResponse <T> handleUnauthorizedException(final UnauthorizedException ex) {
+        log.error("handleUnauthorizedException", ex);
         return handleExceptionInternal(ex.getErrorCode());
     }
 
