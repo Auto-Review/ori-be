@@ -1,0 +1,7 @@
+version: '3.7'
+services:
+  k6:
+    image: grafana/k6:latest
+    volumes:
+      - ./scripts:/scripts
+      - ./reports:/results

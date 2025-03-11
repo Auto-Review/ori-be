@@ -43,3 +43,5 @@ out/
 ori-push-notification-firebase-adminsdk-k9qqe-d0581b0c52.json
 
 scripts/
+reports/
+prometheus.yml
