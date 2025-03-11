@@ -19,10 +19,7 @@ import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.ForbiddenException;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomExpiredJwtException;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomIllegalArgumentException;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomInvalidException;
-import org.example.autoreview.global.exception.sub_exceptions.jwt.CustomUnsupportedJwtException;
+import org.example.autoreview.global.exception.sub_exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -116,13 +113,13 @@ public class JwtProvider {
                     .parseSignedClaims(token);
 
         } catch (ExpiredJwtException e){
-            throw new CustomExpiredJwtException(ErrorCode.EXPIRED_TOKEN);
+            throw new UnauthorizedException(ErrorCode.EXPIRED_TOKEN);
         } catch (SecurityException | MalformedJwtException e){
-            throw new CustomInvalidException(ErrorCode.INVALID_TOKEN);
+            throw new UnauthorizedException(ErrorCode.INVALID_TOKEN);
         } catch (UnsupportedJwtException e){
-            throw new CustomUnsupportedJwtException(ErrorCode.UNSUPPORTED_TOKEN);
+            throw new UnauthorizedException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e){
-            throw new CustomIllegalArgumentException(ErrorCode.NOT_FOUND_TOKEN);
+            throw new UnauthorizedException(ErrorCode.NOT_FOUND_TOKEN);
         }
     }
 
