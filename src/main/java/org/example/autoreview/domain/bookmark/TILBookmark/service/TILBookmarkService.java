@@ -7,6 +7,7 @@ import org.example.autoreview.domain.bookmark.TILBookmark.entity.TILBookmarkId;
 import org.example.autoreview.domain.bookmark.TILBookmark.entity.TILBookmarkRepository;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +35,8 @@ public class TILBookmarkService {
         return tilBookmarkRepository.findById(id);
     }
 
-    public List<Long> findPostIdByMemberEmail(String email){
-        return tilBookmarkRepository.findTILBookmarksByEmailAndIsBookmarked(email, true).stream()
+    public List<Long> findPostIdByMemberEmail(String email, Pageable pageable){
+        return tilBookmarkRepository.findTILBookmarksByEmailAndIsBookmarked(email, true, pageable).stream()
                 .map(TILBookmark::getPostId)
                 .collect(Collectors.toList());
     }
