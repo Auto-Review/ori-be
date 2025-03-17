@@ -40,7 +40,7 @@ public class CodePost extends BaseEntity {
     @Column(nullable = false)
     private String writerEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "writer_nickname")
     private String writerNickName;
 
     @Column(length = 100)

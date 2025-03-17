@@ -26,7 +26,7 @@ public class TILPost extends BaseEntity {
     @Column(nullable = false)
     private String writerEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "writer_nickname")
     private String writerNickName;
 
     @Column(length = 100, nullable = false)

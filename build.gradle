@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.flywaydb.flyway' version '8.5.13'
 }
 
 group = 'org.example'
@@ -41,6 +42,13 @@ dependencies {
     //prometheus
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Flyway 라이브러리 사용을 위한 기본적인 의존성 추가
+    implementation 'org.flywaydb:flyway-core'
+
+    // MySQL 을 사용해야한다면 추가
+    implementation 'org.flywaydb:flyway-mysql'
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
