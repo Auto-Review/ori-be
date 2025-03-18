@@ -6,9 +6,10 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
+import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
-import org.example.autoreview.domain.notification.entity.Notification;
+import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.domain.notification.service.NotificationService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,13 @@ public class CodePostDtoService {
 
     public Long postSave(CodePostSaveRequestDto requestDto, String email){
         Member member = memberService.findByEmail(email);
-        return codePostService.save(requestDto, member);
+        CodePost codePost = codePostService.save(requestDto, member);
+
+        if (requestDto.reviewDay() != null) {
+            notificationService.save(member, codePost);
+        }
+
+        return codePost.getId();
     }
 
     public CodePostResponseDto findPostById(Long id){
@@ -49,17 +56,27 @@ public class CodePostDtoService {
         return codePostService.findByPage(pageable);
     }
 
-    public Long postUpdate(CodePostUpdateRequestDto requestDto, String email){
-        if (notificationService.existsById(requestDto.getId())) {
-            Notification notification = notificationService.findEntityById(requestDto.getId());
-            notificationService.contentUpdateByCodePostTitle(notification, requestDto.getTitle());
+    public Long postUpdate(CodePostUpdateRequestDto requestDto, String email) {
+        CodePost codePost = codePostService.update(requestDto, email);
+        boolean notificationExists = notificationService.existsById(requestDto.getId());
+
+        if (notificationExists) {
+            if (requestDto.getReviewDay() == null) {
+                notificationService.delete(email, codePost.getId());
+            } else {
+                notificationService.update(email, codePost, NotificationStatus.PENDING);
+            }
+        } else {
+            Member member = memberService.findByEmail(email);
+            notificationService.save(member, codePost);
         }
-        return codePostService.update(requestDto, email);
+
+        return codePost.getId();
     }
 
     public Long postDelete(Long id, String email){
         if (notificationService.existsById(id)) {
-            notificationService.delete(email, id);
+            notificationService.delete(email,id);
         }
         return codePostService.delete(id, email);
     }

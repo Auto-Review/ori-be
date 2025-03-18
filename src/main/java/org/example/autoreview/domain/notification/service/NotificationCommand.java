@@ -23,6 +23,6 @@ public class NotificationCommand {
 
     @Transactional
     public void updateStatus(Notification notification) {
-        notification.statusUpdateToComplete();
+        notification.updateStatusToComplete();
     }
 }
