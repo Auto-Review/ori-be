@@ -1,17 +1,17 @@
 package org.example.autoreview.domain.notification.entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
-import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,10 +32,10 @@ public class Notification extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private String content;
+    private String content; // post_title
 
     @Column(nullable = false)
-    private LocalDate executeTime;
+    private LocalDate executeTime; // post_review_day
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -56,18 +56,15 @@ public class Notification extends BaseEntity {
         this.member = member;
     }
 
-    public void statusUpdateToComplete() {
+    public void updateStatusToComplete() {
         this.status = NotificationStatus.COMPLETE;
     }
 
-    public void checkUpdateToTrue() { this.isChecked = true; }
+    public void readNotification() { this.isChecked = true; }
 
-    public void contentUpdateByCodePostTitle(String content) {
-        this.content = content;
-    }
-
-    public void update(NotificationRequestDto requestDto) {
-        this.status = NotificationStatus.PENDING;
-        this.executeTime = requestDto.getReviewDay();
+    public void update(CodePost codePost, NotificationStatus status) {
+        this.status = status;
+        this.content = codePost.getTitle();
+        this.executeTime = codePost.getReviewDay();
     }
 }

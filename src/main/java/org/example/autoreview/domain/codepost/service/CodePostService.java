@@ -31,9 +31,9 @@ public class CodePostService {
     private final CodePostRepository codePostRepository;
 
     @Transactional
-    public Long save(CodePostSaveRequestDto requestDto, Member member) {
+    public CodePost save(CodePostSaveRequestDto requestDto, Member member) {
         CodePost codePost = requestDto.toEntity(member);
-        return codePostRepository.save(codePost).getId();
+        return codePostRepository.save(codePost);
     }
 
     public CodePost findEntityById(Long id) {
@@ -104,14 +104,13 @@ public class CodePostService {
     }
 
     @Transactional
-    public Long update(CodePostUpdateRequestDto requestDto, String email) {
-        Long id = requestDto.getId();
-        CodePost codePost = codePostRepository.findById(id).orElseThrow(
+    public CodePost update(CodePostUpdateRequestDto requestDto, String email) {
+        CodePost codePost = codePostRepository.findById(requestDto.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
         userValidator(email, codePost);
         codePost.update(requestDto);
-        return id;
+        return codePost;
     }
 
     @Transactional
