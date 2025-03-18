@@ -32,7 +32,7 @@ public class LoggingAspect {
             PutMapping.class, DeleteMapping.class, PatchMapping.class
     );
 
-    @Pointcut("execution(public * org.example.autoreview.domain.*.controller.*.*(..))")
+    @Pointcut("execution(public * org.example.autoreview.domain.*.controller.*.*(..)) && !@annotation(org.example.autoreview.global.aspect.NoLogging)")
     public void controllerPointcut() {
     }
 
