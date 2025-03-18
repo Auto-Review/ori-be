@@ -34,7 +34,6 @@ public class LoginService {
     @Value("${jwt.refreshTokenExpireTime}")
     private long freshTokenExpiration;
 
-    @NoLogging
     @Transactional
     public LoginDto issuedToken(String accessToken) throws JsonProcessingException {
 
@@ -57,7 +56,6 @@ public class LoginService {
         return new LoginDto(jwtDto, email);
     }
 
-    @NoLogging
     @Transactional
     public JwtDto reissue(String accessToken, String refreshToken) {
         log.info("current refreshToken value = {}", refreshToken);

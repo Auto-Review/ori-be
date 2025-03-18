@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.sociallogin.LoginDto;
 import org.example.autoreview.domain.member.sociallogin.LoginService;
+import org.example.autoreview.global.aspect.NoLogging;
 import org.example.autoreview.global.jwt.JwtDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +28,7 @@ public class IndexController {
 
     private final LoginService loginService;
 
+    @NoLogging
     // accessToken 하나만 있는데 requestBody 사용이 맞는가?
     @Operation(summary = "로그인 이후 토큰 발급", description = "토큰 발급")
     @PostMapping("/token")
@@ -52,6 +54,7 @@ public class IndexController {
         return ResponseEntity.ok().body("ok");
     }
 
+    @NoLogging
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @GetMapping("/reissued")
     public ResponseEntity<String> reissuedToken(@RequestHeader(name = "Authorization") String accessToken,
