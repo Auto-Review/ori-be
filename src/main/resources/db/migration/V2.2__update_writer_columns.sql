@@ -9,13 +9,13 @@ UPDATE tilpost tp
 
 -- writer_id를 기준으로 writer_email, writer_nickname 업데이트
 UPDATE code_post cp
-    JOIN Member m ON cp.writer_id = m.id
+    JOIN member m ON cp.writer_id = m.id
     SET cp.writer_email = m.email,
         cp.writer_nickname = m.nickname
     WHERE cp.writer_id IS NOT NULL;  -- writer_id가 NULL이 아닌 경우에만 업데이트
 
 UPDATE tilpost tp
-    JOIN Member m ON tp.writer_id = m.id
+    JOIN member m ON tp.writer_id = m.id
     SET tp.writer_email = m.email,
         tp.writer_nickname = m.nickname
     WHERE tp.writer_id IS NOT NULL;  -- writer_id가 NULL이 아닌 경우에만 업데이트
