@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
 import org.example.autoreview.domain.tilpost.dto.response.TILCursorResponseDto;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TILPostService {
 
     private final TILPostRepository tilPostRepository;
+    private final MemberCommand memberCommand;
 
     @Transactional
     public Long save(TILPostSaveRequestDto requestDto, Member member) {
@@ -38,47 +40,45 @@ public class TILPostService {
 
     public TILPageResponseDto findByMember(Member member, Pageable pageable){
         Page<TILPost> posts = tilPostRepository.findTILPostsByWriterIdOrderByIdDesc(member.getId(), pageable);
-        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+        return new TILPageResponseDto(convertToListDto(posts,member), posts.getTotalPages());
     }
 
     public TILPageResponseDto findByMemberTitleContains(Member member, String keyword, Pageable pageable){
         Page<TILPost> posts = tilPostRepository.findTILPostsByWriterIdAndTitleContainingOrderByIdDesc(member.getId(), keyword, pageable);
-        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+        return new TILPageResponseDto(convertToListDto(posts,member), posts.getTotalPages());
     }
 
     public TILPageResponseDto findAllByPage(Pageable pageable){
-        Page<TILPost> posts = tilPostRepository.findAll(pageable);
-        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+        Page<TILPostThumbnailResponseDto> posts = tilPostRepository.findDtoAll(pageable);
+        return new TILPageResponseDto(posts.getContent(), posts.getTotalPages());
     }
 
     public TILPageResponseDto findByTitleContains(String keyword, Pageable pageable){
-        Page<TILPost> posts = tilPostRepository.findByTitleContaining(keyword, pageable);
-        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+        Page<TILPostThumbnailResponseDto> posts = tilPostRepository.findByTitleContaining(keyword, pageable);
+        return new TILPageResponseDto(posts.getContent(), posts.getTotalPages());
     }
 
     public TILPageResponseDto findByIdList(List<Long> idList, Pageable pageable){
-        Page<TILPost> posts = tilPostRepository.findByIdInOrderByIdDesc(idList, pageable);
-        return new TILPageResponseDto(convertToListDto(posts), posts.getTotalPages());
+        Page<TILPostThumbnailResponseDto> posts = tilPostRepository.findByIdInOrderByIdDesc(idList, pageable);
+        return new TILPageResponseDto(posts.getContent(), posts.getTotalPages());
     }
 
-    private List<TILPostThumbnailResponseDto> convertToListDto(Page<TILPost> entity){
-        return entity.stream().map(this::getTILPostThumbnailResponseDto).collect(Collectors.toList());
+    private List<TILPostThumbnailResponseDto> convertToListDto(Page<TILPost> entity,Member member){
+        return entity.stream()
+                .map(post -> getTILPostThumbnailResponseDto(post,member))
+                .collect(Collectors.toList());
     }
 
-    private TILPostThumbnailResponseDto getTILPostThumbnailResponseDto(TILPost entity){
-        return new TILPostThumbnailResponseDto(entity, summary(entity.getContent()));
-    }
-
-    private String summary(String content){
-        if(content.length() > 200) return content.substring(0, 200);
-        return content;
+    private TILPostThumbnailResponseDto getTILPostThumbnailResponseDto(TILPost entity, Member member){
+        return new TILPostThumbnailResponseDto(entity,member);
     }
 
     public TILPostResponseDto findById(Long id){
         TILPost tilPost = tilPostRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
-        return new TILPostResponseDto(tilPost);
+        Member member = memberCommand.findById(tilPost.getWriterId());
+        return new TILPostResponseDto(tilPost, member);
     }
 
     public TILPost findEntityById(Long id){
@@ -111,13 +111,14 @@ public class TILPostService {
         return id;
     }
 
-    private static void memberValidator(String loginMemberEmail, TILPost tilPost) {
-        if (!tilPost.getWriterEmail().equals(loginMemberEmail)) {
+    private void memberValidator(String loginMemberEmail, TILPost tilPost) {
+        Member member = memberCommand.findById(tilPost.getWriterId());
+        if (!member.getEmail().equals(loginMemberEmail)) {
             throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
         }
     }
 
-    public TILCursorResponseDto findAllByIdCursorBased(Long cursorId, int pageSize){
+    public TILCursorResponseDto findAllByIdCursorBased(Long cursorId, int pageSize, Member member){
         Pageable pageable = PageRequest.of(0, pageSize + 1);
 
         List<TILPost> posts = findAllByCursorIdCheckExistsCursor(cursorId, pageable);
@@ -126,7 +127,7 @@ public class TILPostService {
 
         return new TILCursorResponseDto (
                 toSubListIfHasNext(hasNext, pageSize, posts).stream()
-                        .map(this::getTILPostThumbnailResponseDto)
+                        .map(post -> getTILPostThumbnailResponseDto(post,member))
                         .collect(Collectors.toList()),
                 cursorId, pageSize);
     }

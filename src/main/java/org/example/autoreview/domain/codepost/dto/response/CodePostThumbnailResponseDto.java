@@ -3,6 +3,7 @@ package org.example.autoreview.domain.codepost.dto.response;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.member.entity.Member;
 
 @Getter
 public class CodePostThumbnailResponseDto {
@@ -16,14 +17,14 @@ public class CodePostThumbnailResponseDto {
     private final String description;
     private final LocalDateTime createdDate;
 
-    public CodePostThumbnailResponseDto(CodePost entity, String description) {
+    public CodePostThumbnailResponseDto(CodePost entity, Member writer) {
         this.id = entity.getId();
         this.writerId = entity.getWriterId();
-        this.writerEmail = entity.getWriterEmail();
-        this.writerNickName = entity.getWriterNickName();
+        this.writerEmail = writer.getEmail();
+        this.writerNickName = writer.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
-        this.description = description;
+        this.description = entity.getDescription();
         this.createdDate = entity.getCreateDate();
     }
 }

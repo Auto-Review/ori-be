@@ -40,6 +40,7 @@ public class CodePostCommentService extends CommentService<CodePostComment, Code
     @Override
     protected boolean isPostWriter(Long postId, String commentWriterEmail) {
         CodePost codePost = codePostCommand.findById(postId);
-        return codePost.getWriterEmail().equals(commentWriterEmail);
+        Member member = memberCommand.findById(codePost.getWriterId());
+        return member.getEmail().equals(commentWriterEmail);
     }
 }

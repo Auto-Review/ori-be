@@ -9,12 +9,6 @@ import lombok.Getter;
 @Builder
 public class CodePostUpdateRequestDto {
 
-    @Schema(description = "작성자 이메일")
-    private final String writerEmail;
-
-    @Schema(description = "작성자 닉네임")
-    private final String writerNickName;
-
     @Schema(description = "코드 포스트 PK 값", example = "1")
     private final Long id;
 

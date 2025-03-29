@@ -37,12 +37,6 @@ public class CodePost extends BaseEntity {
     @Column(nullable = false)
     private Long writerId;
 
-    @Column(nullable = false)
-    private String writerEmail;
-
-    @Column(nullable = false, name = "writer_nickname")
-    private String writerNickName;
-
     @Column(length = 100)
     private String title;
 
@@ -60,11 +54,8 @@ public class CodePost extends BaseEntity {
     private Language language;
 
     @Builder
-    public CodePost(String title, int level, LocalDate reviewDay, String description, String code, Language language,
-                    Long writerId, String writerEmail, String writerNickName) {
+    public CodePost(String title, int level, LocalDate reviewDay, String description, String code, Language language, Long writerId) {
         this.writerId = writerId;
-        this.writerEmail = writerEmail;
-        this.writerNickName = writerNickName;
         this.title = title;
         this.level = level;
         this.reviewDay = reviewDay;
@@ -74,8 +65,6 @@ public class CodePost extends BaseEntity {
     }
 
     public void update(CodePostUpdateRequestDto requestDto){
-        this.writerEmail = requestDto.getWriterEmail();
-        this.writerNickName = requestDto.getWriterNickName();
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
         this.reviewDay = requestDto.getReviewDay();
