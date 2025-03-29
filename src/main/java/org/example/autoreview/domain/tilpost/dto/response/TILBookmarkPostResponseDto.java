@@ -2,6 +2,7 @@ package org.example.autoreview.domain.tilpost.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
+import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.tilpost.entity.TILPost;
 
 @Getter
@@ -15,11 +16,11 @@ public class TILBookmarkPostResponseDto {
     private final LocalDateTime createDate;
     private final Boolean isBookmarked;
 
-    public TILBookmarkPostResponseDto(TILPost entity, Boolean isBookmarked){
+    public TILBookmarkPostResponseDto(TILPost entity, Boolean isBookmarked, Member member){
         this.id = entity.getId();
         this.writerId = entity.getWriterId();
-        this.writerEmail = entity.getWriterEmail();
-        this.writerNickName = getWriterNickName();
+        this.writerEmail = member.getEmail();
+        this.writerNickName = member.getNickname();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.createDate = entity.getCreateDate();

@@ -23,12 +23,6 @@ public class TILPost extends BaseEntity {
     @Column(nullable = false)
     private Long writerId;
 
-    @Column(nullable = false)
-    private String writerEmail;
-
-    @Column(nullable = false, name = "writer_nickname")
-    private String writerNickName;
-
     @Column(length = 100, nullable = false)
     private String title;
 
@@ -36,10 +30,8 @@ public class TILPost extends BaseEntity {
     private String content;
 
     @Builder
-    public TILPost(String title, String content, Long writerId, String writerEmail, String writerNickName) {
+    public TILPost(String title, String content, Long writerId) {
         this.writerId = writerId;
-        this.writerEmail = writerEmail;
-        this.writerNickName = writerNickName;
         this.title = title;
         this.content = content;
     }

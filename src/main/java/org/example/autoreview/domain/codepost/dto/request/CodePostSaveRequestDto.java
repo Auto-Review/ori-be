@@ -31,8 +31,6 @@ public record CodePostSaveRequestDto(
     public CodePost toEntity(Member member){
         return CodePost.builder()
                 .writerId(member.getId())
-                .writerEmail(member.getEmail())
-                .writerNickName(member.getNickname())
                 .title(title)
                 .level(level)
                 .reviewDay(reviewDay)

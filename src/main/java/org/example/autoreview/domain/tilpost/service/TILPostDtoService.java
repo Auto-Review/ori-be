@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.TILBookmark.entity.TILBookmark;
 import org.example.autoreview.domain.bookmark.TILBookmark.service.TILBookmarkService;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostSaveRequestDto;
 import org.example.autoreview.domain.tilpost.dto.request.TILPostUpdateRequestDto;
@@ -26,6 +27,7 @@ public class TILPostDtoService {
     private final MemberService memberService;
     private final TILPostService tilPostService;
     private final TILBookmarkService tilBookmarkService;
+    private final MemberCommand memberCommand;
 
     public Long postSave(TILPostSaveRequestDto requestDto, String email){
         Member member = memberService.findByEmail(email);
@@ -78,9 +80,10 @@ public class TILPostDtoService {
     public TILBookmarkPostResponseDto findBookmarkPostById(String email, Long postId){
         Optional<TILBookmark> bookmark = tilBookmarkService.findById(email, postId);
         TILPost post = tilPostService.findEntityById(postId);
+        Member member = memberCommand.findById(post.getWriterId());
         return bookmark.map(tilBookmark ->
-                new TILBookmarkPostResponseDto(post, tilBookmark.getIsBookmarked())).orElseGet(() ->
-                new TILBookmarkPostResponseDto(post, null));
+                new TILBookmarkPostResponseDto(post, tilBookmark.getIsBookmarked(), member)).orElseGet(() ->
+                new TILBookmarkPostResponseDto(post, null, member));
     }
 
     public Long postUpdate(TILPostUpdateRequestDto requestDto, String email){

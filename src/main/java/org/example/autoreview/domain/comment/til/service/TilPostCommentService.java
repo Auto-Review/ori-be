@@ -40,6 +40,7 @@ public class TilPostCommentService extends CommentService<TilPostComment, TilPos
     @Override
     protected boolean isPostWriter(Long postId, String commentWriterEmail) {
         TILPost tilPost = tilPostCommand.findById(postId);
-        return tilPost.getWriterEmail().equals(commentWriterEmail);
+        Member member = memberCommand.findById(tilPost.getWriterId());
+        return member.getEmail().equals(commentWriterEmail);
     }
 }

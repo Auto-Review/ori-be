@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
 
 @Getter
@@ -23,11 +24,11 @@ public class CodePostResponseDto {
     private final List<ReviewResponseDto> dtoList;
     private final LocalDateTime createDate;
 
-    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList) {
+    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member member) {
         this.id = entity.getId();
         this.writerId = entity.getWriterId();
-        this.writerEmail = entity.getWriterEmail();
-        this.writerNickName = entity.getWriterNickName();
+        this.writerEmail = member.getEmail();
+        this.writerNickName = member.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
         this.reviewDay = entity.getReviewDay();
