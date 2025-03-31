@@ -4,10 +4,10 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class MemberConverter implements AttributeConverter<Role, Integer> {
+public class MemberConverter implements AttributeConverter<Role, Byte> {
 
     @Override
-    public Integer convertToDatabaseColumn(Role attribute) {
+    public Byte convertToDatabaseColumn(Role attribute) {
         if(Role.USER.equals(attribute)){
             return 1;
         }
@@ -15,7 +15,7 @@ public class MemberConverter implements AttributeConverter<Role, Integer> {
     }
 
     @Override
-    public Role convertToEntityAttribute(Integer dbData) {
+    public Role convertToEntityAttribute(Byte dbData) {
         if(dbData == 1){
             return Role.USER;
         }
