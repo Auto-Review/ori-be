@@ -11,7 +11,7 @@ SELECT COUNT(*) INTO constraint_exists
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_NAME = 'member'
   AND CONSTRAINT_NAME = 'UKmbmcqelty0fbrvxp1q58dn57t'
-  AND TABLE_SCHEMA = 'localautoreview';
+  AND TABLE_SCHEMA = 'autoreview';
 
 -- 제약 조건이 존재하지 않으면 추가
 IF constraint_exists = 0 THEN
