@@ -1,4 +1,5 @@
-DELIMITER //
+-- 기존 프로시저 삭제
+DROP PROCEDURE IF EXISTS AddUniqueConstraintIfNotExists;
 
 -- 프로시저 정의
 CREATE PROCEDURE AddUniqueConstraintIfNotExists()
@@ -9,7 +10,6 @@ BEGIN
 SELECT COUNT(*) INTO constraint_exists
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_NAME = 'member'
-  AND CONSTRAINT_TYPE = 'UNIQUE'
   AND CONSTRAINT_NAME = 'UKmbmcqelty0fbrvxp1q58dn57t'
   AND TABLE_SCHEMA = 'localautoreview';
 
@@ -17,9 +17,7 @@ WHERE TABLE_NAME = 'member'
 IF constraint_exists = 0 THEN
     ALTER TABLE member ADD CONSTRAINT UKmbmcqelty0fbrvxp1q58dn57t UNIQUE (email);
 END IF;
-END //
-
-DELIMITER ;
+END;
 
 -- 프로시저 호출
 CALL AddUniqueConstraintIfNotExists();
