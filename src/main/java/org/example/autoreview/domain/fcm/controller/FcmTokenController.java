@@ -5,8 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.fcm.dto.request.FcmTokenSaveRequestDto;
 import org.example.autoreview.domain.fcm.service.FcmTokenMemberService;
-import org.example.autoreview.global.exception.response.ApiResponse;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +23,8 @@ public class FcmTokenController {
 
     @Operation(summary = "fcm 저장 API", description = "권한 요청 후 FCM에서 받아온 토큰 저장")
     @PostMapping
-    public ApiResponse<Long> save(@RequestBody FcmTokenSaveRequestDto requestDto,
+    public ResponseEntity<Long> save(@RequestBody FcmTokenSaveRequestDto requestDto,
                                   @AuthenticationPrincipal UserDetails userDetails) {
-        return ApiResponse.success(HttpStatus.OK, fcmTokenMemberService.save(requestDto, userDetails.getUsername()));
+        return ResponseEntity.ok().body(fcmTokenMemberService.save(requestDto, userDetails.getUsername()));
     }
 }
