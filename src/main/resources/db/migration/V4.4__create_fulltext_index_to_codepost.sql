@@ -1,0 +1,1 @@
+CREATE FULLTEXT INDEX built_in_index ON code_post(title);

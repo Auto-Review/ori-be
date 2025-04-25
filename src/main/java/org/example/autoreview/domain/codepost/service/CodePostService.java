@@ -59,7 +59,12 @@ public class CodePostService {
 
     public CodePostListResponseDto search(String keyword, Pageable pageable) {
         keywordValidator(keyword);
-        Page<CodePostThumbnailResponseDto> codePostPage = codePostRepository.search(keyword, pageable);
+        String wildcardKeyword = keyword + "*";
+        Page<CodePostThumbnailResponseDto> codePostPage = codePostRepository.search(wildcardKeyword, pageable)
+                .map(post -> {
+                    Member member = memberCommand.findById(post.getWriterId());
+                    return new CodePostThumbnailResponseDto(post, member);
+                });
 
         return new CodePostListResponseDto(codePostPage.getContent(), codePostPage.getTotalPages());
     }
