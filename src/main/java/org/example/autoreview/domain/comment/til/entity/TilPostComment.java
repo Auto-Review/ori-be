@@ -28,8 +28,8 @@ public class TilPostComment extends Comment {
 
     @Builder
     public TilPostComment(TILPost tilPost, TilPostComment parent, String mentionNickName, String mentionEmail,
-                          String body, boolean isPublic, Long writerId, String writerNickName, String writerEmail) {
-        super(mentionNickName, mentionEmail, body, isPublic, writerId, writerNickName, writerEmail);
+                          String body, boolean isPublic, Long writerId) {
+        super(mentionNickName, mentionEmail, body, isPublic, writerId);
         this.tilPost = tilPost;
         this.parent = parent;
 

@@ -23,12 +23,6 @@ public abstract class Comment extends BaseEntity {
     @Column(nullable = false)
     private Long writerId;
 
-    @Column(nullable = false)
-    private String writerNickName;
-
-    @Column(nullable = false)
-    private String writerEmail;
-
     @Column(nullable = true)
     private String mentionNickName;
 
@@ -44,20 +38,15 @@ public abstract class Comment extends BaseEntity {
     private boolean isPublic;
 
     // 공통 필드 및 메서드
-    protected Comment(String mentionNickName, String mentionEmail, String body, boolean isPublic,
-                      Long writerId, String writerNickName, String writerEmail) {
+    protected Comment(String mentionNickName, String mentionEmail, String body, boolean isPublic, Long writerId) {
         this.mentionNickName = mentionNickName;
         this.mentionEmail = mentionEmail;
         this.body = body;
         this.isPublic = isPublic;
         this.writerId = writerId;
-        this.writerNickName = writerNickName;
-        this.writerEmail = writerEmail;
     }
 
     public void update(CommentUpdateRequestDto requestDto) {
-        this.writerNickName = requestDto.writerNickName();
-        this.writerEmail = requestDto.writerEmail();
         this.mentionNickName = requestDto.mentionNickName();
         this.mentionEmail = requestDto.mentionEmail();
         this.body = requestDto.body();

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.autoreview.domain.comment.base.Comment;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
@@ -26,14 +28,20 @@ public class CommentResponseDto {
 
     private String body;
 
-    public CommentResponseDto(Comment entity, String body) {
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    public CommentResponseDto(Comment entity, String body, String writerEmail, String writerNickName) {
         this.id = entity.getId();
         this.parentId = entity.getParentId();
         this.writerId = entity.getWriterId();
-        this.writerNickName = entity.getWriterNickName();
-        this.writerEmail = entity.getWriterEmail();
+        this.writerNickName = writerNickName;
+        this.writerEmail = writerEmail;
         this.mentionNickName = entity.getMentionNickName();
         this.mentionEmail = entity.getMentionEmail();
         this.body = body;
+        this.createdAt = entity.getCreateDate();
+        this.updatedAt = entity.getUpdateDate();
     }
 }
