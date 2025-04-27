@@ -45,12 +45,13 @@ public abstract class CommentService<C extends Comment, R extends CommentReposit
         List<CommentResponseDto> dtoList = new ArrayList<>();
 
         for (C c : commentPage.getContent()) {
+            Member writer = memberCommand.findById(c.getWriterId());
             // 공개 or 게시글 작성자 or 댓글 작성자 일 경우
-            if (c.isPublic() || isPostWriter(postId,email) || c.getWriterEmail().equals(email)) {
-                dtoList.add(new CommentResponseDto(c,c.getBody()));
+            if (c.isPublic() || isPostWriter(postId,email) || writer.getEmail().equals(email)) {
+                dtoList.add(new CommentResponseDto(c,c.getBody(),writer.getEmail(),writer.getNickname()));
                 continue;
             }
-            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT,writer.getEmail(),writer.getNickname()));
         }
 
         return new CommentListResponseDto(dtoList, commentPage.getTotalPages());
@@ -64,12 +65,13 @@ public abstract class CommentService<C extends Comment, R extends CommentReposit
         List<CommentResponseDto> dtoList = new ArrayList<>();
 
         for (C c : replyPage.getContent()) {
+            Member writer = memberCommand.findById(c.getWriterId());
             // 공개 or 언급된 사용자 or 댓글 작성자 일 경우
-            if (c.isPublic() || c.getMentionEmail().equals(email) || c.getWriterEmail().equals(email)) {
-                dtoList.add(new CommentResponseDto(c,c.getBody()));
+            if (c.isPublic() || c.getMentionEmail().equals(email) || writer.getEmail().equals(email)) {
+                dtoList.add(new CommentResponseDto(c,c.getBody(),writer.getEmail(),writer.getNickname()));
                 continue;
             }
-            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT,writer.getEmail(),writer.getNickname()));
         }
         return new CommentListResponseDto(dtoList, replyPage.getTotalPages());
     }
@@ -92,11 +94,12 @@ public abstract class CommentService<C extends Comment, R extends CommentReposit
 
     private CommentListResponseDto getCommentListResponseDto(Page<C> replyPage, List<CommentResponseDto> dtoList) {
         for (C c : replyPage.getContent()) {
+            Member writer = memberCommand.findById(c.getWriterId());
             if (c.isPublic()) {
-                dtoList.add(new CommentResponseDto(c,c.getBody()));
+                dtoList.add(new CommentResponseDto(c,c.getBody(),writer.getEmail(),writer.getNickname()));
                 continue;
             }
-            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT));
+            dtoList.add(new CommentResponseDto(c,SECRETE_COMMENT,writer.getEmail(),writer.getNickname()));
         }
         return new CommentListResponseDto(dtoList, replyPage.getTotalPages());
     }

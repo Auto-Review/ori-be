@@ -7,12 +7,6 @@ public record CommentUpdateRequestDto(
         @Schema(description = "댓글 아이디")
         Long commentId,
 
-        @Schema(description = "작성자 닉네임")
-        String writerNickName,
-
-        @Schema(description = "작성자 이메일")
-        String writerEmail,
-
         @Schema(description = "댓글 내용")
         String body,
 

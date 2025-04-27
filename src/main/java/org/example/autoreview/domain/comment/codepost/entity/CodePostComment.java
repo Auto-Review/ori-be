@@ -28,8 +28,8 @@ public class CodePostComment extends Comment {
 
     @Builder
     public CodePostComment(CodePost codePost, CodePostComment parent, String mentionNickName, String mentionEmail,
-                           String body, boolean isPublic, Long writerId, String writerNickName, String writerEmail) {
-        super(mentionNickName, mentionEmail, body, isPublic, writerId, writerNickName, writerEmail);
+                           String body, boolean isPublic, Long writerId) {
+        super(mentionNickName, mentionEmail, body, isPublic, writerId);
         this.codePost = codePost;
         this.parent = parent;
     }
