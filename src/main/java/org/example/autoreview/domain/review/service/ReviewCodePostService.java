@@ -19,9 +19,9 @@ public class ReviewCodePostService {
     private final ReviewService reviewService;
     private final CodePostService codePostService;
 
-    public void save(ReviewSaveRequestDto requestDto) {
+    public Long save(ReviewSaveRequestDto requestDto) {
         CodePost codePost = codePostService.findEntityById(requestDto.codePostId());
-        reviewService.save(requestDto, codePost);
+        return reviewService.save(requestDto, codePost).getId();
     }
 
     public ReviewResponseDto findOne(Long reviewId) {
@@ -33,8 +33,8 @@ public class ReviewCodePostService {
         return reviewService.findAllByCodePost(codePost);
     }
 
-    public void update(ReviewUpdateRequestDto requestDto, String email) {
-        reviewService.update(requestDto, email);
+    public Long update(ReviewUpdateRequestDto requestDto, String email) {
+        return reviewService.update(requestDto, email).getId();
     }
 
     public void delete(ReviewDeleteRequestDto requestDto, String email) {

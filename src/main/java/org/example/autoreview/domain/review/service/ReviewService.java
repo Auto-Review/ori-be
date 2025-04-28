@@ -25,9 +25,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public void save(ReviewSaveRequestDto requestDto, CodePost codePost) {
+    public Review save(ReviewSaveRequestDto requestDto, CodePost codePost) {
         Review review = requestDto.toEntity(codePost);
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     public ReviewResponseDto findOne(Long reviewId) {
@@ -43,12 +43,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public void update(ReviewUpdateRequestDto requestDto, String email) {
+    public Review update(ReviewUpdateRequestDto requestDto, String email) {
         userValidator(requestDto.getEmail(), email);
         Review review = reviewRepository.findById(requestDto.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_REVIEW)
         );
-        review.update(requestDto);
+        return review.update(requestDto);
     }
 
     @Transactional

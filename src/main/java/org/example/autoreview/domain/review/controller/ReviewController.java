@@ -24,9 +24,8 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 저장")
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody ReviewSaveRequestDto requestDto) {
-        reviewCodePostService.save(requestDto);
-        return ResponseEntity.ok().body("Review saved");
+    public ResponseEntity<Long> save(@RequestBody ReviewSaveRequestDto requestDto) {
+        return ResponseEntity.ok().body(reviewCodePostService.save(requestDto));
     }
 
     @Operation(summary = "리뷰 단일 조회")
@@ -43,10 +42,9 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 수정", description = "사용자 검사 후 수정")
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody ReviewUpdateRequestDto requestDto,
+    public ResponseEntity<Long> update(@RequestBody ReviewUpdateRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails) {
-        reviewCodePostService.update(requestDto, userDetails.getUsername());
-        return ResponseEntity.ok().body("Review updated");
+        return ResponseEntity.ok().body(reviewCodePostService.update(requestDto, userDetails.getUsername()));
     }
 
     @Operation(summary = "리뷰 삭제", description = "사용자 검사 후 삭제")

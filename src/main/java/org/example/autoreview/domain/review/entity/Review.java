@@ -42,9 +42,10 @@ public class Review extends BaseEntity {
         this.code = code;
     }
 
-    public void update(ReviewUpdateRequestDto requestDto) {
+    public Review update(ReviewUpdateRequestDto requestDto) {
         this.description = requestDto.getDescription();
         this.code = requestDto.getCode();
+        return this;
     }
 
 }
