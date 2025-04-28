@@ -45,11 +45,15 @@ public class SecurityConfig {
             "/v1/api/post/code/search",
             "/v1/api/auth/token",
             "/v1/api/auth/reissued",
+            "/v1/api/til-post/{postId:\\d+}/GUEST/**",
+            "/v1/api/code-post/{postId:\\d+}/GUEST/**",
             "/h2-console/**",
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/webjars/**",
+            "/actuator/**",
+            "/v1/api/member/**",
     };
 
     @Bean

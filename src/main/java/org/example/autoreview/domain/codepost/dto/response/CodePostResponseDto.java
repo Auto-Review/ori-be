@@ -1,19 +1,20 @@
 package org.example.autoreview.domain.codepost.dto.response;
 
-import lombok.Getter;
-import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.member.dto.MemberResponseDto;
-import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
+import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
 
 @Getter
 public class CodePostResponseDto {
 
     private final Long id;
-    private final MemberResponseDto memberDto;
+    private final Long writerId;
+    private final String writerEmail;
+    private final String writerNickName;
     private final String title;
     private final int level;
     private final LocalDate reviewDay;
@@ -23,9 +24,11 @@ public class CodePostResponseDto {
     private final List<ReviewResponseDto> dtoList;
     private final LocalDateTime createDate;
 
-    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList) {
+    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member member) {
         this.id = entity.getId();
-        this.memberDto = new MemberResponseDto(entity.getMember());
+        this.writerId = entity.getWriterId();
+        this.writerEmail = member.getEmail();
+        this.writerNickName = member.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
         this.reviewDay = entity.getReviewDay();

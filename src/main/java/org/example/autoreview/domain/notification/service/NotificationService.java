@@ -1,21 +1,22 @@
 package org.example.autoreview.domain.notification.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.entity.NotificationRepository;
-import org.example.autoreview.domain.notification.dto.request.NotificationRequestDto;
-import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
+import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,8 +27,16 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void save(Member member, CodePost codePost, NotificationRequestDto requestDto) {
-        Notification notification = requestDto.toEntity(member, codePost);
+    public void save(Member member, CodePost codePost) {
+        Notification notification = Notification.builder()
+                .title("ORI 복습 알림")
+                .content(codePost.getTitle())
+                .status(NotificationStatus.PENDING)
+                .executeTime(codePost.getReviewDay())
+                .member(member)
+                .codePostId(codePost.getId())
+                .build();
+
         notificationRepository.save(notification);
     }
 
@@ -66,17 +75,13 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
-    public void contentUpdateByCodePostTitle(Notification notification, String codePostTitle) {
-        notification.contentUpdateByCodePostTitle(codePostTitle);
-    }
-
     @Transactional
-    public void update(String email, NotificationRequestDto requestDto) {
-        Notification notification = notificationRepository.findById(requestDto.getId()).orElseThrow(
+    public void update(String email, CodePost codePost, NotificationStatus status) {
+        Notification notification = notificationRepository.findById(codePost.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email, notification);
-        notification.update(requestDto);
+        notification.update(codePost, status);
     }
 
     @Transactional

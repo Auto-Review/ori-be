@@ -8,6 +8,7 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.refresh.RefreshToken;
 import org.example.autoreview.domain.refresh.service.RefreshTokenService;
+import org.example.autoreview.global.aspect.NoLogging;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.jwt.AuthenticationJwtException;
 import org.example.autoreview.global.jwt.JwtDto;

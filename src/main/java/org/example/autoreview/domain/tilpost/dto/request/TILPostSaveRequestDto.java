@@ -14,9 +14,9 @@ public class TILPostSaveRequestDto {
 
     public TILPost toEntity(Member entity){
         return TILPost.builder()
+                .writerId(entity.getId())
                 .title(title)
                 .content(content)
-                .member(entity)
                 .build();
     }
 }

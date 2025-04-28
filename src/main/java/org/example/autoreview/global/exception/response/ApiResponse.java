@@ -9,17 +9,10 @@ public record ApiResponse<T>(
         @Schema(description = "HTTP 상태 코드", example = "OK")
         HttpStatus status,
 
-        @Schema(description = "응답 데이터")
-        T data,
-
         @Schema(description = "메시지")
         String message)
 {
-    public static <T> ApiResponse<T> success(HttpStatus status, T data) {
-        return new ApiResponse<>(status, data, "성공");
-    }
-
     public static <T> ApiResponse<T> fail(ErrorCode errorCode) {
-        return new ApiResponse<>(errorCode.getHttpStatus(), null, errorCode.getMessage());
+        return new ApiResponse<>(errorCode.getHttpStatus(), errorCode.getMessage());
     }
 }
