@@ -2,6 +2,7 @@ package org.example.autoreview.domain.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.service.NotificationDtoService;
@@ -9,9 +10,12 @@ import org.example.autoreview.global.scheduler.NotificationScheduler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "알림 API", description = "알림 API")
 @RequestMapping("/v1/api/notification")
@@ -32,6 +36,14 @@ public class NotificationController {
     @GetMapping("/own")
     public ResponseEntity<List<NotificationResponseDto>> findAll(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok().body(notificationDtoService.findAllByMemberId(userDetails.getUsername()));
+    }
+
+    @Operation(summary = "회원 알림 날짜별 조회", description = "회원 정보는 헤더에서")
+    @GetMapping("/own/date")
+    public ResponseEntity<List<NotificationResponseDto>> findAllByDate(@AuthenticationPrincipal UserDetails userDetails,
+                                                                       @RequestParam int year,
+                                                                       @RequestParam int month) {
+        return ResponseEntity.ok().body(notificationDtoService.findAllByDate(userDetails.getUsername(),year,month));
     }
 
     @Operation(summary = "회원 안읽은 알림 전체 조회", description = "회원이 안읽은 알림을 조회한다.")

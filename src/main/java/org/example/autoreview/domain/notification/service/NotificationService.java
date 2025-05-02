@@ -1,5 +1,8 @@
 package org.example.autoreview.domain.notification.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
@@ -13,10 +16,6 @@ import org.example.autoreview.global.exception.sub_exceptions.BadRequestExceptio
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -64,6 +63,10 @@ public class NotificationService {
         return notificationRepository.findAllByMemberId(memberId).stream()
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<NotificationResponseDto> findAllByDate(Long memberId, int year, int month) {
+        return notificationRepository.findAllByDate(memberId,year,month);
     }
 
     public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(Long memberId) {

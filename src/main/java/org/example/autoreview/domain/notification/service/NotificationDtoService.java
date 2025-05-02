@@ -1,8 +1,10 @@
 package org.example.autoreview.domain.notification.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.fcm.service.FcmTokenService;
 import org.example.autoreview.domain.member.service.MemberService;
@@ -11,10 +13,6 @@ import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,6 +35,11 @@ public class NotificationDtoService {
     public List<NotificationResponseDto> findAllByMemberId(String email) {
         Long memberId = memberService.findByEmail(email).getId();
         return notificationService.findAllByMemberId(memberId);
+    }
+
+    public List<NotificationResponseDto> findAllByDate(String email, int year, int month) {
+        Long memberId = memberService.findByEmail(email).getId();
+        return notificationService.findAllByDate(memberId, year, month);
     }
 
     public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(String email) {
