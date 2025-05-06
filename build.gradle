@@ -68,3 +68,11 @@ tasks.register('copyYml', Copy) {
         into 'src/main/resources'
     }
 }
+
+tasks.register('copyLog', Copy) {
+    copy {
+        from 'security_setting'
+        include "logback-spring.xml"
+        into 'src/main/resources'
+    }
+}
