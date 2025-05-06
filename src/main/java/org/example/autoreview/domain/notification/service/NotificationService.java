@@ -43,6 +43,10 @@ public class NotificationService {
         return notificationRepository.existsById(id);
     }
 
+    public boolean existsByCodePostId(Long id) {
+        return notificationRepository.existsByCodePostId(id);
+    }
+
     public Notification findEntityById(Long id) {
         return notificationRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
@@ -80,7 +84,7 @@ public class NotificationService {
 
     @Transactional
     public void update(String email, CodePost codePost, NotificationStatus status) {
-        Notification notification = notificationRepository.findById(codePost.getId()).orElseThrow(
+        Notification notification = notificationRepository.findByCodePostId(codePost.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email, notification);
@@ -89,7 +93,7 @@ public class NotificationService {
 
     @Transactional
     public void delete(String email, Long id) {
-        Notification notification = notificationRepository.findById(id).orElseThrow(
+        Notification notification = notificationRepository.findByCodePostId(id).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
         );
         userValidator(email,notification);

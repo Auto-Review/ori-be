@@ -58,7 +58,7 @@ public class CodePostDtoService {
 
     public Long postUpdate(CodePostUpdateRequestDto requestDto, String email) {
         CodePost codePost = codePostService.update(requestDto, email);
-        boolean notificationExists = notificationService.existsById(requestDto.getId());
+        boolean notificationExists = notificationService.existsByCodePostId(requestDto.getId());
 
         if (notificationExists) {
             if (requestDto.getReviewDay() == null) {
@@ -75,7 +75,7 @@ public class CodePostDtoService {
     }
 
     public Long postDelete(Long id, String email){
-        if (notificationService.existsById(id)) {
+        if (notificationService.existsByCodePostId(id)) {
             notificationService.delete(email,id);
         }
         return codePostService.delete(id, email);
