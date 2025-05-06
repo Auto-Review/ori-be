@@ -2,12 +2,18 @@ package org.example.autoreview.domain.notification.entity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface NotificationRepository extends JpaRepository<Notification,Long> {
+
+    boolean existsByCodePostId(@Param("codePostId") Long codePostId);
+
+    @Query("SELECT n FROM Notification n WHERE n.codePostId = :codePostId")
+    Optional<Notification> findByCodePostId(@Param("codePostId") Long codePostId);
 
     @Query("SELECT n FROM Notification n WHERE n.member.id = :memberId")
     List<Notification> findAllByMemberId(@Param("memberId") Long memberId);
