@@ -37,6 +37,7 @@ out/
 ### YAML Settings ###
 /src/main/resources/*.yml
 /src/test/resources/application-test.yml
+/src/main/resources/logback-spring.xml
 
 ### VS Code ###
 .vscode/
