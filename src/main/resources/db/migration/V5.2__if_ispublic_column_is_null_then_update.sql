@@ -1,0 +1,1 @@
+UPDATE code_post SET is_public = 1 WHERE is_public IS NULL;

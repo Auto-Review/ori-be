@@ -14,6 +14,7 @@ public class CodePostThumbnailResponseDto {
     private final String writerNickName;
     private final String title;
     private final int level;
+    private final boolean isPublic;
     private final String description;
     private final LocalDateTime createdDate;
 
@@ -24,6 +25,7 @@ public class CodePostThumbnailResponseDto {
         this.writerNickName = writer.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
+        this.isPublic = entity.isPublic();
         this.description = entity.getDescription();
         this.createdDate = entity.getCreateDate();
     }

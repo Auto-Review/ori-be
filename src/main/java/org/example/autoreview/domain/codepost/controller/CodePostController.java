@@ -45,13 +45,14 @@ public class CodePostController {
         return ResponseEntity.ok().body(codePostMemberService.postSearch(keyword, pageable));
     }
 
-    @Operation(summary = "코드 포스트 단일 조회", description = "코드 포스트 단일 조회")
+    @Operation(summary = "코드 포스트 단일 조회", description = "공개된 포스트 or 작성자일 경우만 조회됨")
     @GetMapping("/detail/{id}")
-    public ResponseEntity<CodePostResponseDto> view(@PathVariable("id") Long codePostId) {
-        return ResponseEntity.ok().body(codePostMemberService.findPostById(codePostId));
+    public ResponseEntity<CodePostResponseDto> view(@PathVariable("id") Long codePostId,
+                                                    @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok().body(codePostMemberService.findPostById(codePostId,userDetails.getUsername()));
     }
 
-    @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회")
+    @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회(비공개 포스트는 제외)")
     @GetMapping("/list")
     public ResponseEntity<CodePostListResponseDto> viewAll(@PageableDefault(page = 0, size = 9) Pageable pageable) {
         return ResponseEntity.ok().body(codePostMemberService.findPostByPage(pageable));

@@ -1,0 +1,2 @@
+ALTER TABLE code_post
+ADD COLUMN is_public TINYINT(1) NOT NULL DEFAULT 1;

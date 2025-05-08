@@ -44,11 +44,12 @@ public class CodePostService {
         );
     }
 
-    public CodePostResponseDto findById(Long id) {
-        CodePost codePost = codePostRepository.findById(id).orElseThrow(
+    public CodePostResponseDto findById(Long id,String email) {
+        Member member = memberCommand.findByEmail(email);
+        CodePost codePost = codePostRepository.findByIdIsPublic(id,member.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
-        Member member = memberCommand.findById(codePost.getWriterId());
+
         List<Review> reviews = codePost.getReviewList();
         List<ReviewResponseDto> dtoList = reviews.stream()
                 .map(ReviewResponseDto::new)
