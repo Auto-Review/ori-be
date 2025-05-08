@@ -34,8 +34,8 @@ public class CodePostDtoService {
         return codePost.getId();
     }
 
-    public CodePostResponseDto findPostById(Long id){
-        return codePostService.findById(id);
+    public CodePostResponseDto findPostById(Long id, String email){
+        return codePostService.findById(id,email);
     }
 
     public CodePostListResponseDto postSearch(String keyword, Pageable pageable){

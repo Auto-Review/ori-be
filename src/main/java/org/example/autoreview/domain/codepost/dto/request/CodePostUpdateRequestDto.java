@@ -21,6 +21,9 @@ public class CodePostUpdateRequestDto {
     @Schema(description = "난이도", example = "4")
     private final int level;
 
+    @Schema(description = "공개여부", example = "true")
+    private final boolean isPublic;
+
     @Schema(description = "복습일 설정", example = "2024-10-11")
     private final LocalDate reviewDay;
 

@@ -19,6 +19,7 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.comment.codepost.entity.CodePostComment;
 import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.common.basetime.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @NoArgsConstructor
@@ -42,6 +43,10 @@ public class CodePost extends BaseEntity {
 
     private int level;
 
+    @Column(nullable = false)
+    @ColumnDefault("true")
+    private boolean isPublic;
+
     private LocalDate reviewDay;
 
     @Column(length = 4000)
@@ -54,7 +59,8 @@ public class CodePost extends BaseEntity {
     private Language language;
 
     @Builder
-    public CodePost(String title, int level, LocalDate reviewDay, String description, String code, Language language, Long writerId) {
+    public CodePost(String title, int level, LocalDate reviewDay, String description,
+                    String code, Language language, Long writerId, boolean isPublic) {
         this.writerId = writerId;
         this.title = title;
         this.level = level;
@@ -62,11 +68,13 @@ public class CodePost extends BaseEntity {
         this.description = description;
         this.code = code;
         this.language = language;
+        this.isPublic = isPublic;
     }
 
     public void update(CodePostUpdateRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.level = requestDto.getLevel();
+        this.isPublic = requestDto.isPublic();
         this.reviewDay = requestDto.getReviewDay();
         this.description = requestDto.getDescription();
         this.language = Language.of(requestDto.getLanguage());
