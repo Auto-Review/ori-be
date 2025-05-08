@@ -4,12 +4,12 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class CodePostListResponseDto {
+public class CodePostListResponseDto<T> {
 
-    private final List<CodePostThumbnailResponseDto> dtoList;
+    private final List<T> dtoList;
     private final int totalPage;
 
-    public CodePostListResponseDto(List<CodePostThumbnailResponseDto> dtoList, int totalPage) {
+    public CodePostListResponseDto(List<T> dtoList, int totalPage) {
         this.dtoList = dtoList;
         this.totalPage = totalPage;
     }
