@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmark;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
 import org.example.autoreview.domain.notification.entity.Notification;
 import org.example.autoreview.global.common.basetime.BaseEntity;
@@ -28,6 +29,9 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CodePostBookmark> codePostBookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FcmToken> fcmTokens = new ArrayList<>();
