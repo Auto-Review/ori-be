@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CodePostRepository extends JpaRepository<CodePost, Long> {
 
-    @Query("SELECT c FROM CodePost c WHERE c.id = :id AND c.writerId = :memberId OR c.isPublic = TRUE")
+    @Query("SELECT c FROM CodePost c WHERE c.id = :id AND (c.writerId = :memberId OR c.isPublic = TRUE)")
     Optional<CodePost> findByIdIsPublic(@Param("id") Long id, @Param("memberId") Long memberId);
 
     @Query("SELECT new org.example.autoreview.domain.codepost.dto.response.CodePostThumbnailResponseDto(c,m) " +
