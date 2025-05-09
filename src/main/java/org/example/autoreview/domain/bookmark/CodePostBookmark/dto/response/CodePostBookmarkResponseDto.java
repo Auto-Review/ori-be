@@ -10,6 +10,7 @@ import org.example.autoreview.domain.member.entity.Member;
 public class CodePostBookmarkResponseDto {
 
     private final Long id;
+    private final Long codePostId;
     private final String codePostTitle;
     private final int commentCount;
     private final String writer;
@@ -17,6 +18,7 @@ public class CodePostBookmarkResponseDto {
 
     public CodePostBookmarkResponseDto(CodePostBookmark bookmark, CodePost codePost, Member member) {
         this.id = bookmark.getId();
+        this.codePostId = codePost.getId();
         this.codePostTitle = codePost.getTitle();
         this.commentCount = codePost.getCodePostCommentList().size();
         this.writer = member.getNickname();
