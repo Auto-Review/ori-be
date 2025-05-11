@@ -24,11 +24,11 @@ public class CodePostResponseDto {
     private final List<ReviewResponseDto> dtoList;
     private final LocalDateTime createDate;
 
-    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member member) {
+    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member writer) {
         this.id = entity.getId();
         this.writerId = entity.getWriterId();
-        this.writerEmail = member.getEmail();
-        this.writerNickName = member.getNickname();
+        this.writerEmail = writer.getEmail();
+        this.writerNickName = writer.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
         this.reviewDay = entity.getReviewDay();
