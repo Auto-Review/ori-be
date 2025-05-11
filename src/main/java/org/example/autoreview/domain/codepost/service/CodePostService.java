@@ -9,7 +9,6 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostThumbnailResponseDto;
-import org.example.autoreview.domain.codepost.dto.response.MyCodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.member.entity.Member;
@@ -50,16 +49,17 @@ public class CodePostService {
         CodePost codePost = codePostRepository.findByIdIsPublic(id,member.getId()).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
+        Member writer = memberCommand.findById(codePost.getWriterId());
 
         List<Review> reviews = codePost.getReviewList();
         List<ReviewResponseDto> dtoList = reviews.stream()
                 .map(ReviewResponseDto::new)
                 .toList();
 
-        return new CodePostResponseDto(codePost, dtoList, member);
+        return new CodePostResponseDto(codePost, dtoList, writer);
     }
 
-    public CodePostListResponseDto<CodePostThumbnailResponseDto> search(String keyword, Pageable pageable) {
+    public CodePostListResponseDto search(String keyword, Pageable pageable) {
         keywordValidator(keyword);
         String wildcardKeyword = keyword + "*";
         Page<CodePostThumbnailResponseDto> codePostPage = codePostRepository.search(wildcardKeyword, pageable)
@@ -68,18 +68,18 @@ public class CodePostService {
                     return new CodePostThumbnailResponseDto(post, member);
                 });
 
-        return new CodePostListResponseDto<>(codePostPage.getContent(), codePostPage.getTotalPages());
+        return new CodePostListResponseDto(codePostPage.getContent(), codePostPage.getTotalPages());
     }
 
-    public CodePostListResponseDto<MyCodePostThumbnailResponseDto> findByMemberId(Pageable pageable, Member member) {
+    public CodePostListResponseDto findByMemberId(Pageable pageable, Member member) {
         Page<CodePost> codePostPage = codePostRepository.findByMemberId(member.getId(), pageable);
-        return new CodePostListResponseDto<>(convertMyListDto(codePostPage,member), codePostPage.getTotalPages());
+        return new CodePostListResponseDto(convertListDto(codePostPage,member), codePostPage.getTotalPages());
     }
 
-    public CodePostListResponseDto<MyCodePostThumbnailResponseDto> mySearch(String keyword, Pageable pageable, Member member) {
+    public CodePostListResponseDto mySearch(String keyword, Pageable pageable, Member member) {
         keywordValidator(keyword);
         Page<CodePost> codePostPage = codePostRepository.mySearch(keyword, pageable, member.getId());
-        return new CodePostListResponseDto<>(convertMyListDto(codePostPage,member), codePostPage.getTotalPages());
+        return new CodePostListResponseDto(convertListDto(codePostPage,member), codePostPage.getTotalPages());
     }
 
     private static void keywordValidator(String keyword) {
@@ -88,20 +88,20 @@ public class CodePostService {
         }
     }
 
-    private List<MyCodePostThumbnailResponseDto> convertMyListDto(Page<CodePost> page, Member member) {
+    private List<CodePostThumbnailResponseDto> convertListDto(Page<CodePost> page, Member member) {
         return page.stream()
-                .map(post -> getMyCodePostThumbnailResponseDto(post,member))
+                .map(post -> getCodePostThumbnailResponseDto(post,member))
                 .collect(Collectors.toList());
     }
 
-    private MyCodePostThumbnailResponseDto getMyCodePostThumbnailResponseDto(CodePost codePost, Member member) {
-        return new MyCodePostThumbnailResponseDto(codePost, member);
+    private CodePostThumbnailResponseDto getCodePostThumbnailResponseDto(CodePost codePost, Member member) {
+        return new CodePostThumbnailResponseDto(codePost, member);
     }
 
-    public CodePostListResponseDto<CodePostThumbnailResponseDto> findByPage(Pageable pageable) {
+    public CodePostListResponseDto findByPage(Pageable pageable) {
         Page<CodePostThumbnailResponseDto> page = codePostRepository.findByPage(pageable);
 
-        return new CodePostListResponseDto<>(page.getContent(), page.getTotalPages());
+        return new CodePostListResponseDto(page.getContent(), page.getTotalPages());
     }
 
     @Transactional
