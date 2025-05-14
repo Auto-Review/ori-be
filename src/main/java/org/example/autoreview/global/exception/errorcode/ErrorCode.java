@@ -48,7 +48,10 @@ public enum ErrorCode {
     NOT_FOUND_BOOKMARK(404, HttpStatus.NOT_FOUND, "해당 북마크를 찾을 수 없습니다."),
 
     // Comment
-    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다.")
+    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
+
+    // GitHub Token
+    NOT_FOUND_GITHUB_TOKEN(404, HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다.")
 
     ;
 
