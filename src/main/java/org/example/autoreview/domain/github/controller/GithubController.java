@@ -1,7 +1,9 @@
 package org.example.autoreview.domain.github.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.example.autoreview.domain.github.dto.request.GithubCodePushRequestDto;
 import org.example.autoreview.domain.github.dto.request.GithubCodeRequestDto;
 import org.example.autoreview.domain.github.service.GithubService;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,14 @@ public class GithubController {
                                                 @AuthenticationPrincipal UserDetails userDetails) {
         String accessToken = githubService.getAccessToken(requestDto);
         return ResponseEntity.ok().body(githubService.save(accessToken, userDetails.getUsername()));
+    }
+
+    @Operation
+    @PostMapping("/push/post/code")
+    public ResponseEntity<String> push(@AuthenticationPrincipal UserDetails userDetails,
+                                     @RequestBody GithubCodePushRequestDto requestDto) throws IOException {
+        githubService.pushToGithub(userDetails.getUsername(), requestDto);
+        return ResponseEntity.ok().body("Push to GitHub completed successfully.");
     }
 
 }

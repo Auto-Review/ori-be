@@ -50,6 +50,9 @@ dependencies {
     // MySQL 을 사용해야한다면 추가
     implementation 'org.flywaydb:flyway-mysql'
 
+    // Github API 사용을 위해 추가
+    implementation 'org.kohsuke:github-api:1.327'
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
