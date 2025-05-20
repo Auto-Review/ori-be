@@ -7,11 +7,14 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.domain.notification.service.NotificationService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -52,8 +55,14 @@ public class CodePostDtoService {
         return codePostService.findByMemberId(pageable, member);
     }
 
-    public CodePostListResponseDto findPostByPage(Pageable pageable){
-        return codePostService.findByPage(pageable);
+    public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, Language language){
+        if(sortBy.equals("commentCount")) {
+            Pageable pageable = PageRequest.of(page, size);
+            return codePostService.findByPageSortByCommentCount(pageable,direction,language);
+        }
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection,sortBy));
+        return codePostService.findByPage(pageable,language);
     }
 
     public Long postUpdate(CodePostUpdateRequestDto requestDto, String email) {

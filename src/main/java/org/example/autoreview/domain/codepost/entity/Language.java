@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Language {
 
+    ALL("all"),
     JAVASCRIPT("javascript"),
     PYTHON("python"),
     JAVA("java"),

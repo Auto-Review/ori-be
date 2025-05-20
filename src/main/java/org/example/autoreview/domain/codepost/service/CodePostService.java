@@ -11,6 +11,7 @@ import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostThumbnailResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.CodePostRepository;
+import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
@@ -98,9 +99,18 @@ public class CodePostService {
         return new CodePostThumbnailResponseDto(codePost, member);
     }
 
-    public CodePostListResponseDto findByPage(Pageable pageable) {
-        Page<CodePostThumbnailResponseDto> page = codePostRepository.findByPage(pageable);
+    public CodePostListResponseDto findByPage(Pageable pageable, Language language) {
+        Page<CodePostThumbnailResponseDto> page = codePostRepository.findByPage(pageable,language);
 
+        return new CodePostListResponseDto(page.getContent(), page.getTotalPages());
+    }
+
+    public CodePostListResponseDto findByPageSortByCommentCount(Pageable pageable, String direction, Language language) {
+        if (direction.equals("desc")) {
+            Page<CodePostThumbnailResponseDto> page = codePostRepository.findByPageSortByCommentCountDesc(pageable,language);
+            return new CodePostListResponseDto(page.getContent(), page.getTotalPages());
+        }
+        Page<CodePostThumbnailResponseDto> page = codePostRepository.findByPageSortByCommentCountAsc(pageable,language);
         return new CodePostListResponseDto(page.getContent(), page.getTotalPages());
     }
 

@@ -17,6 +17,7 @@ public class CodePostResponseDto {
     private final String writerNickName;
     private final String title;
     private final int level;
+    private final boolean isPublic;
     private final LocalDate reviewDay;
     private final String description;
     private final String language;
@@ -31,6 +32,7 @@ public class CodePostResponseDto {
         this.writerNickName = writer.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
+        this.isPublic = entity.isPublic();
         this.reviewDay = entity.getReviewDay();
         this.description = entity.getDescription();
         this.language = entity.getLanguage().getType();
