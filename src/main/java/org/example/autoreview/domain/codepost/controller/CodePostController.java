@@ -7,7 +7,6 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
-import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.codepost.service.CodePostDtoService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -51,7 +50,7 @@ public class CodePostController {
                                                            @RequestParam(defaultValue = "9") int size,
                                                            @RequestParam(defaultValue = "desc") String direction,
                                                            @RequestParam(defaultValue = "id") String sortBy,
-                                                           @RequestParam(defaultValue = "all") Language language) {
+                                                           @RequestParam(defaultValue = "all") String language) {
         return ResponseEntity.ok().body(codePostMemberService.findPostByPage(page,size,direction,sortBy,language));
     }
 

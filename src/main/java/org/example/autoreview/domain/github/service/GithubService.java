@@ -1,26 +1,25 @@
 package org.example.autoreview.domain.github.service;
 
-import java.io.IOException;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.github.dto.request.GithubCodePushRequestDto;
 import org.example.autoreview.domain.github.dto.request.GithubCodeRequestDto;
 import org.example.autoreview.domain.github.dto.request.GithubTokenRequestDto;
 import org.example.autoreview.domain.github.entity.GithubToken;
 import org.example.autoreview.domain.github.entity.GithubTokenRepository;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
-import org.kohsuke.github.GHContent;
-import org.kohsuke.github.GHFileNotFoundException;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -78,10 +77,13 @@ public class GithubService {
         return (String) response.get("access_token");
     }
 
-    //TODO: language와 github에서 인식하는 파일 형식이 달라서 매핑해야함
     @Transactional
     public void pushToGithub(String email, GithubCodePushRequestDto requestDto) throws IOException {
-        String codePath = requestDto.title() + "[" + requestDto.language() + "]" + "/code." + requestDto.language();
+        String fileExtension = Objects.requireNonNull(Language.of(requestDto.language())
+                        .orElseThrow(() -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE))
+                ).getFileExtension();
+
+        String codePath = requestDto.title() + "[" + requestDto.language() + "]" + "/code." + fileExtension;
         String readmePath = requestDto.title() + "[" + requestDto.language() + "]" + "/description.md";
 
         String githubToken = githubTokenRepository.findByEmail(email).orElseThrow(
@@ -92,7 +94,9 @@ public class GithubService {
         GHRepository repo = getOrCreateRepository(github, getGithubName(github));
 
         pushFile(repo, codePath, requestDto.code(), "Initial commit: code", "Updated code");
-        pushFile(repo, readmePath, requestDto.description(), "Initial commit: description", "Updated README");
+
+        String newDescription = requestDto.description().replaceAll("\n", "  \n");
+        pushFile(repo, readmePath, newDescription, "Initial commit: description", "Updated README");
 
     }
 

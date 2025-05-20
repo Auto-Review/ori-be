@@ -12,6 +12,8 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.domain.notification.service.NotificationService;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -55,14 +57,17 @@ public class CodePostDtoService {
         return codePostService.findByMemberId(pageable, member);
     }
 
-    public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, Language language){
+    public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, String language){
+        Language lang = Language.of(language).orElseThrow(
+                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE)
+        );
         if(sortBy.equals("commentCount")) {
             Pageable pageable = PageRequest.of(page, size);
-            return codePostService.findByPageSortByCommentCount(pageable,direction,language);
+            return codePostService.findByPageSortByCommentCount(pageable,direction,lang);
         }
         Sort.Direction sortDirection = Sort.Direction.fromString(direction);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection,sortBy));
-        return codePostService.findByPage(pageable,language);
+        return codePostService.findByPage(pageable,lang);
     }
 
     public Long postUpdate(CodePostUpdateRequestDto requestDto, String email) {

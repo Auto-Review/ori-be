@@ -19,6 +19,8 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.comment.codepost.entity.CodePostComment;
 import org.example.autoreview.domain.review.entity.Review;
 import org.example.autoreview.global.common.basetime.BaseEntity;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.hibernate.annotations.ColumnDefault;
 
 @Getter
@@ -77,7 +79,9 @@ public class CodePost extends BaseEntity {
         this.isPublic = requestDto.isPublic();
         this.reviewDay = requestDto.getReviewDay();
         this.description = requestDto.getDescription();
-        this.language = Language.of(requestDto.getLanguage());
+        this.language = Language.of(requestDto.getLanguage()).orElseThrow(
+                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE)
+        );
         this.code = requestDto.getCode();
     }
 }

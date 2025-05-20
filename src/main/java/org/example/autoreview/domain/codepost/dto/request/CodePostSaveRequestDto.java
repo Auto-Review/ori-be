@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 
 public record CodePostSaveRequestDto(
 
@@ -39,7 +41,9 @@ public record CodePostSaveRequestDto(
                 .isPublic(isPublic)
                 .reviewDay(reviewDay)
                 .description(description)
-                .language(Language.of(language))
+                .language(Language.of(language).orElseThrow(
+                        () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE)
+                ))
                 .code(code)
                 .build();
     }
