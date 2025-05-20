@@ -7,21 +7,14 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
+import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.codepost.service.CodePostDtoService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "코드 포스트 API", description = "코드 포스트 API")
 @RequiredArgsConstructor
@@ -54,8 +47,12 @@ public class CodePostController {
 
     @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회(비공개 포스트는 제외)")
     @GetMapping("/list")
-    public ResponseEntity<CodePostListResponseDto> viewAll(@PageableDefault(page = 0, size = 9) Pageable pageable) {
-        return ResponseEntity.ok().body(codePostMemberService.findPostByPage(pageable));
+    public ResponseEntity<CodePostListResponseDto> viewAll(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "9") int size,
+                                                           @RequestParam(defaultValue = "desc") String direction,
+                                                           @RequestParam(defaultValue = "id") String sortBy,
+                                                           @RequestParam(defaultValue = "all") Language language) {
+        return ResponseEntity.ok().body(codePostMemberService.findPostByPage(page,size,direction,sortBy,language));
     }
 
     @Operation(summary = "내가 쓴 코드 포스트 조회", description = "내가 쓴 코드 포스트 조회")
