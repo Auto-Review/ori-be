@@ -55,14 +55,15 @@ public class CodePostDtoService {
         return codePostService.findByMemberId(pageable, member);
     }
 
-    public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, Language language){
+    public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, String language){
+        Language lang = Language.of(language);
         if(sortBy.equals("commentCount")) {
             Pageable pageable = PageRequest.of(page, size);
-            return codePostService.findByPageSortByCommentCount(pageable,direction,language);
+            return codePostService.findByPageSortByCommentCount(pageable,direction,lang);
         }
         Sort.Direction sortDirection = Sort.Direction.fromString(direction);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection,sortBy));
-        return codePostService.findByPage(pageable,language);
+        return codePostService.findByPage(pageable,lang);
     }
 
     public Long postUpdate(CodePostUpdateRequestDto requestDto, String email) {
