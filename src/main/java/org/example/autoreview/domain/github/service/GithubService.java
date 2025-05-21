@@ -8,9 +8,12 @@ import org.example.autoreview.domain.github.dto.request.GithubCodeRequestDto;
 import org.example.autoreview.domain.github.dto.request.GithubTokenRequestDto;
 import org.example.autoreview.domain.github.entity.GithubToken;
 import org.example.autoreview.domain.github.entity.GithubTokenRepository;
-import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
+import org.kohsuke.github.GHFileNotFoundException;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -79,9 +81,7 @@ public class GithubService {
 
     @Transactional
     public void pushToGithub(String email, GithubCodePushRequestDto requestDto) throws IOException {
-        String fileExtension = Objects.requireNonNull(Language.of(requestDto.language())
-                        .orElseThrow(() -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE))
-                ).getFileExtension();
+        String fileExtension = Language.of(requestDto.language()).getFileExtension();
 
         String codePath = requestDto.title() + "[" + requestDto.language() + "]" + "/code." + fileExtension;
         String readmePath = requestDto.title() + "[" + requestDto.language() + "]" + "/description.md";
@@ -113,7 +113,7 @@ public class GithubService {
 
     private void pushFile(GHRepository repo, String path, String content, String initialMsg, String updateMsg) throws IOException {
         try {
-            GHContent existing = repo.getFileContent(path, "main");
+            org.kohsuke.github.GHContent existing = repo.getFileContent(path, "main");
             existing.update(content, updateMsg, "main");
         } catch (GHFileNotFoundException e) {
             repo.createContent()

@@ -3,7 +3,6 @@ package org.example.autoreview.domain.codepost.entity;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 @Getter
 public enum Language {
@@ -27,9 +26,10 @@ public enum Language {
         this.fileExtension = fileExtension;
     }
 
-    public static Optional<Language> of(String name) {
+    public static Language of(String name) {
         return Arrays.stream(values())
                 .filter(lang -> lang.type.equalsIgnoreCase(name))
-                .findFirst();
+                .findFirst()
+                .get();
     }
 }

@@ -12,8 +12,6 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberService;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.domain.notification.service.NotificationService;
-import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
-import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -58,9 +56,7 @@ public class CodePostDtoService {
     }
 
     public CodePostListResponseDto findPostByPage(int page, int size, String direction, String sortBy, String language){
-        Language lang = Language.of(language).orElseThrow(
-                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_LANGUAGE)
-        );
+        Language lang = Language.of(language);
         if(sortBy.equals("commentCount")) {
             Pageable pageable = PageRequest.of(page, size);
             return codePostService.findByPageSortByCommentCount(pageable,direction,lang);
