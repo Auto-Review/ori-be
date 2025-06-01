@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Code Post Bookmark API", description = "Code Post Bookmark API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/api/code-post/bookmark")
+@RequestMapping("/v1/api/post/code/bookmark")
 public class CodePostBookmarkController {
 
     private final CodePostBookmarkService codePostBookmarkService;
