@@ -21,7 +21,7 @@ public class BookmarkHelper {
 
     @Transactional
     public Long fallbackToUpdate(Long codePostId, Long memberId) {
-        return codePostBookmarkRepository.findById(codePostId, memberId)
+        return codePostBookmarkRepository.findById(memberId, codePostId)
                 .map(CodePostBookmark::update)
                 .orElseThrow(() -> new IllegalStateException("Bookmark should exist but was not found"));
     }
