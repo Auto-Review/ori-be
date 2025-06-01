@@ -2,6 +2,8 @@ package org.example.autoreview.domain.codepost.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmark;
+import org.example.autoreview.domain.bookmark.CodePostBookmark.service.CodePostBookmarkCommand;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +36,7 @@ public class CodePostService {
 
     private final CodePostRepository codePostRepository;
     private final MemberCommand memberCommand;
+    private final CodePostBookmarkCommand codePostBookmarkCommand;
 
     @Transactional
     public CodePost save(CodePostSaveRequestDto requestDto, Member member) {
@@ -52,13 +56,18 @@ public class CodePostService {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_POST)
         );
         Member writer = memberCommand.findById(codePost.getWriterId());
+        Optional<CodePostBookmark> codePostBookmark = codePostBookmarkCommand.findByCodePostBookmark(member.getId(),codePost.getId());
+        boolean isBookmarked = false;
+        if (codePostBookmark.isPresent()) {
+            isBookmarked = !codePostBookmark.get().isDeleted();
+        }
 
         List<Review> reviews = codePost.getReviewList();
         List<ReviewResponseDto> dtoList = reviews.stream()
                 .map(ReviewResponseDto::new)
                 .toList();
 
-        return new CodePostResponseDto(codePost, dtoList, writer);
+        return new CodePostResponseDto(codePost, dtoList, writer, isBookmarked);
     }
 
     public CodePostListResponseDto search(String keyword, Pageable pageable) {

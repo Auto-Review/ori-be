@@ -22,10 +22,11 @@ public class CodePostResponseDto {
     private final String description;
     private final String language;
     private final String code;
+    private final boolean isBookmarked;
     private final List<ReviewResponseDto> dtoList;
     private final LocalDateTime createDate;
 
-    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member writer) {
+    public CodePostResponseDto(CodePost entity, List<ReviewResponseDto> dtoList, Member writer, boolean isBookmarked) {
         this.id = entity.getId();
         this.writerId = entity.getWriterId();
         this.writerEmail = writer.getEmail();
@@ -37,6 +38,7 @@ public class CodePostResponseDto {
         this.description = entity.getDescription();
         this.language = entity.getLanguage().getType();
         this.code = entity.getCode();
+        this.isBookmarked = isBookmarked;
         this.dtoList = dtoList;
         this.createDate = entity.getCreateDate();
     }

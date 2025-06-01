@@ -37,7 +37,7 @@ public class CodePostController {
         return ResponseEntity.ok().body(codePostMemberService.postSearch(keyword, pageable));
     }
 
-    @Operation(summary = "코드 포스트 단일 조회", description = "공개된 포스트 or 작성자일 경우만 조회됨")
+    @Operation(summary = "코드 포스트 단일 조회", description = "공개된 포스트 or 작성자일 경우만 조회됨 + 북마크 여부 포함")
     @GetMapping("/detail/{id}")
     public ResponseEntity<CodePostResponseDto> view(@PathVariable("id") Long codePostId,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
