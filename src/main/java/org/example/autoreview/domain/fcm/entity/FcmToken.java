@@ -36,7 +36,7 @@ public class FcmToken {
         this.lastUsedDate = LocalDate.now();
     }
 
-    public void updateDate() {
-        this.lastUsedDate = LocalDate.now();
+    public void updateDate(LocalDate newDate) {
+        this.lastUsedDate = newDate;
     }
 }

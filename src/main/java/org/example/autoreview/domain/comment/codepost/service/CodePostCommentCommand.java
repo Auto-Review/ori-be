@@ -11,4 +11,5 @@ public class CodePostCommentCommand extends CommentCommand<CodePostComment, Code
     public CodePostCommentCommand(CodePostCommentRepository repository) {
         super(repository);
     }
+
 }

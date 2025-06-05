@@ -1,114 +1,137 @@
 package org.example.autoreview.domain.notification.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.fcm.entity.FcmToken;
+import org.example.autoreview.domain.fcm.service.FcmTokenCommand;
+import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.domain.notification.dto.response.NotificationResponseDto;
 import org.example.autoreview.domain.notification.entity.Notification;
-import org.example.autoreview.domain.notification.entity.NotificationRepository;
 import org.example.autoreview.domain.notification.enums.NotificationStatus;
-import org.example.autoreview.global.exception.errorcode.ErrorCode;
-import org.example.autoreview.global.exception.sub_exceptions.BadRequestException;
-import org.example.autoreview.global.exception.sub_exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class NotificationService {
 
-    private final NotificationRepository notificationRepository;
+    private final NotificationCommand notificationCommand;
+    private final MemberCommand memberCommand;
+    private final FcmTokenCommand fcmTokenCommand;
 
-    @Transactional
-    public void save(Member member, CodePost codePost) {
-        Notification notification = Notification.builder()
-                .title("ORI 복습 알림")
-                .content(codePost.getTitle())
-                .status(NotificationStatus.PENDING)
-                .executeTime(codePost.getReviewDay())
-                .member(member)
-                .codePostId(codePost.getId())
-                .build();
-
-        notificationRepository.save(notification);
-    }
-
-    public boolean existsById(Long id) {
-        return notificationRepository.existsById(id);
-    }
-
-    public boolean existsByCodePostId(Long id) {
-        return notificationRepository.existsByCodePostId(id);
-    }
-
-    public Notification findEntityById(Long id) {
-        return notificationRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
-        );
-    }
-
-    public List<Notification> findEntityAll() {
-        return notificationRepository.findAll();
-    }
-
+    /**
+     * 알림 전체 조회하는 메서드이다.
+     */
     public List<NotificationResponseDto> findAll() {
-        return notificationRepository.findAll().stream()
+        return notificationCommand.findAll().stream()
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<NotificationResponseDto> findAllByMemberId(Long memberId) {
-        return notificationRepository.findAllByMemberId(memberId).stream()
+    /**
+     * 사용자가 설정한 모든 알림을 조회하는 메서드이다.
+     */
+    public List<NotificationResponseDto> findAllByMemberId(String email) {
+        Long memberId = memberCommand.findByEmail(email).getId();
+        return notificationCommand.findAllByMemberId(memberId).stream()
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<NotificationResponseDto> findAllByDate(Long memberId, int year, int month) {
-        return notificationRepository.findAllByDate(memberId,year,month);
+    /**
+     * 특정 날짜에 사용자가 설정해놓은 알림 전체 조회하는 메서드이다.
+     */
+    public List<NotificationResponseDto> findAllByDate(String email, int year, int month) {
+        Long memberId = memberCommand.findByEmail(email).getId();
+        return notificationCommand.findAllByDate(memberId,year,month);
     }
 
-    public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(Long memberId) {
+    /**
+     * 사용자가 읽지 않은 알림을 전체 조회하는 메서드이다.
+     */
+    public List<NotificationResponseDto> findAllNotificationIsNotCheckedByMemberId(String email) {
         LocalDate now = LocalDate.now();
-        List<Notification> notifications = notificationRepository.findAllNotificationIsNotCheckedByMemberId(memberId, now);
-
-        return notifications.stream()
+        Long memberId = memberCommand.findByEmail(email).getId();
+        return notificationCommand.findAllNotificationIsNotCheckedByMemberId(memberId, now).stream()
                 .map(NotificationResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void update(String email, CodePost codePost, NotificationStatus status) {
-        Notification notification = notificationRepository.findByCodePostId(codePost.getId()).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
-        );
-        userValidator(email, notification);
-        notification.update(codePost, status);
+    /**
+     * 알림을 읽음 상태로 변경해주는 메서드이다.
+     */
+    public void stateUpdate(Long id) {
+        Notification notification = notificationCommand.findById(id);
+        notificationCommand.readNotification(notification);
     }
 
-    @Transactional
-    public void delete(String email, Long id) {
-        Notification notification = notificationRepository.findByCodePostId(id).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_NOTIFICATION)
-        );
-        userValidator(email,notification);
-        notificationRepository.delete(notification);
-    }
+    /**
+     * FCM으로 전송할 알림을 요청하는 외부 API이다.
+     */
+    public void sendNotification() {
+        LocalDate today = LocalDate.now();
+        List<Notification> notificationList = notificationCommand.getNotifications();
 
-    @Transactional
-    public void deleteAll(List<Notification> completedNotifications) {
-        notificationRepository.deleteAll(completedNotifications);
-    }
-
-    private static void userValidator(String email, Notification notification) {
-        if (!notification.getMember().getEmail().equals(email)) {
-            throw new BadRequestException(ErrorCode.UNMATCHED_EMAIL);
+        //
+        for (Notification notification : notificationList) {
+            if (notification.getStatus().equals(NotificationStatus.PENDING) && notification.getExecuteTime().isEqual(today)) {
+                notificationCommand.updateStatus(notification);
+                List<FcmToken> fcmTokens = notification.getMember().getFcmTokens();
+                pushNotification(fcmTokens, notification.getTitle(), notification.getContent());
+            }
         }
+    }
+
+    private void pushNotification(List<FcmToken> fcmTokens, String title, String content) {
+        log.info("pushNotification 트랜잭션 존재 여부: {}", TransactionSynchronizationManager.isActualTransactionActive());
+
+        Map<FcmToken, LocalDate> fcmTokenMap = new ConcurrentHashMap<>();
+        for (FcmToken fcmToken : fcmTokens) {
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Message message = Message.builder()
+                            .putData("title", title)
+                            .putData("body", content)
+                            .setToken(fcmToken.getToken())
+                            .build();
+
+                    FirebaseMessaging.getInstance().send(message);
+                    fcmTokenMap.put(fcmToken, LocalDate.now());
+
+                } catch (FirebaseMessagingException e) {
+                    log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
+                } catch (Exception e) {
+                    log.error("An unexpected error occurred: {}", e.getMessage());
+                }
+            });
+        }
+        fcmTokenCommand.fcmTokensUpdate(fcmTokenMap);
+    }
+
+    @Transactional
+    public void deleteCompleteNotification() {
+        List<Notification> completedNotifications = new ArrayList<>();
+        List<Notification> notificationList = notificationCommand.findAll();
+
+        for (Notification notification : notificationList) {
+            if(notification.getStatus().equals(NotificationStatus.COMPLETE)) {
+                completedNotifications.add(notification);
+            }
+        }
+        notificationCommand.deleteAll(completedNotifications);
     }
 
 }

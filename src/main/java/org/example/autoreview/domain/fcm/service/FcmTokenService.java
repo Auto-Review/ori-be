@@ -1,55 +1,24 @@
 package org.example.autoreview.domain.fcm.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.fcm.dto.request.FcmTokenSaveRequestDto;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
-import org.example.autoreview.domain.fcm.entity.FcmTokenRepository;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.member.service.MemberCommand;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class FcmTokenService {
 
-    private final FcmTokenRepository fcmTokenRepository;
+    private final MemberCommand memberCommand;
+    private final FcmTokenCommand fcmTokenCommand;
 
-    @Transactional(readOnly = false)
-    public Long save(FcmTokenSaveRequestDto requestDto, Member member) {
+    public Long save(FcmTokenSaveRequestDto requestDto, String email) {
+        Member member = memberCommand.findByEmail(email);
         FcmToken fcmToken = requestDto.toEntity(member);
-        return fcmTokenRepository.save(fcmToken).getId();
+        return fcmTokenCommand.save(fcmToken);
     }
-
-    public void pushNotification(List<FcmToken> fcmTokens, String title, String content) {
-        log.info("pushNotification 트랜잭션 존재 여부: {}", TransactionSynchronizationManager.isActualTransactionActive());
-
-        for (FcmToken fcmToken : fcmTokens) {
-            CompletableFuture.runAsync(() -> {
-                try {
-                    Message message = Message.builder()
-                            .putData("title", title)
-                            .putData("body", content)
-                            .setToken(fcmToken.getToken())
-                            .build();
-
-                    FirebaseMessaging.getInstance().send(message);
-                    fcmToken.updateDate();
-
-                } catch (FirebaseMessagingException e) {
-                    log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
-                } catch (Exception e) {
-                    log.error("An unexpected error occurred: {}", e.getMessage());
-                }
-            });
-        }
-    }
-
 }
