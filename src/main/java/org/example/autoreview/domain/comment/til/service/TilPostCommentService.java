@@ -17,11 +17,10 @@ public class TilPostCommentService extends CommentService<TilPostComment, TilPos
 
     private final TilPostCommand tilPostCommand;
 
-    public TilPostCommentService(TilPostCommentRepository tilPostCommentRepository,
-                                  TilPostCommentCommand tilPostCommentCommand,
-                                  TilPostCommand tilPostCommand,
-                                  MemberCommand memberCommand) {
-        super(tilPostCommentRepository, tilPostCommentCommand, memberCommand);
+    public TilPostCommentService(TilPostCommentCommand tilPostCommentCommand,
+                                 TilPostCommand tilPostCommand,
+                                 MemberCommand memberCommand) {
+        super(tilPostCommentCommand, memberCommand);
         this.tilPostCommand = tilPostCommand;
     }
 

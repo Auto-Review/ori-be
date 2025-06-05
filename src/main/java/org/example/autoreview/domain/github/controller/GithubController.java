@@ -39,7 +39,7 @@ public class GithubController {
     @Operation
     @PostMapping("/push/post/code")
     public ResponseEntity<String> push(@AuthenticationPrincipal UserDetails userDetails,
-                                     @RequestBody GithubCodePushRequestDto requestDto) throws IOException {
+                                       @RequestBody GithubCodePushRequestDto requestDto) throws IOException {
         githubService.pushToGithub(userDetails.getUsername(), requestDto);
         return ResponseEntity.ok().body("Push to GitHub completed successfully.");
     }
