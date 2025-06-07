@@ -6,7 +6,7 @@ import static org.springframework.data.domain.PageRequest.of;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.request.CodePostBookmarkSaveRequestDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkListResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.codepost.entity.CodePostRepository;
+import org.example.autoreview.domain.codepost.service.CodePostCommand;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Role;
@@ -27,23 +27,21 @@ class CodePostBookmarkServiceIntegrationTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private CodePostRepository codePostRepository;
+    private CodePostCommand codePostCommand;
 
     private CodePostBookmarkSaveRequestDto saveRequestDto;
     private Member testMember;
     private CodePost testCodePost;
-    private String email;
 
     @BeforeEach
     void setUp() {
-        email = "test@example.com";
         testMember = memberRepository.save(Member.builder()
-                .email(email)
+                .email("test@example.com")
                 .nickname("tester")
                 .role(Role.USER)
                 .build());
 
-        testCodePost = codePostRepository.save(CodePost.builder()
+        testCodePost = codePostCommand.save(CodePost.builder()
                 .writerId(1L)
                 .isPublic(true)
                 .build());
