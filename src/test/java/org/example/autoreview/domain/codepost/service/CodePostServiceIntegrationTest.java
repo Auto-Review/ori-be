@@ -5,18 +5,19 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Role;
 import org.example.autoreview.domain.notification.service.NotificationCommand;
 import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -25,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Transactional
 public class CodePostServiceIntegrationTest {
 
     @Autowired
@@ -33,6 +33,9 @@ public class CodePostServiceIntegrationTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CodePostRepository codePostRepository;
 
     @Autowired
     CodePostBookmarkCommand codePostBookmarkCommand;
@@ -60,6 +63,12 @@ public class CodePostServiceIntegrationTest {
                 .language(Language.JAVA)
                 .isPublic(false)
                 .build());
+    }
+
+    @AfterEach
+    void cleanUp() {
+        memberRepository.deleteAll();
+        codePostRepository.deleteAll();
     }
 
     @Test
@@ -120,9 +129,9 @@ public class CodePostServiceIntegrationTest {
                 .build());
 
         // when + then
-        assertThrows(CustomRuntimeException.class, () -> {
-           codePostService.findById(testCodePost.getId(), user.getEmail());
-        });
+        assertThrows(CustomRuntimeException.class,
+                () -> codePostService.findById(testCodePost.getId(), user.getEmail())
+        );
     }
 
     @Test
@@ -146,11 +155,12 @@ public class CodePostServiceIntegrationTest {
         String beforeLanguage = testCodePost.getLanguage().getType();
 
         // when
-        codePostService.update(requestDto, testMember.getEmail());
+        Long updatePostId = codePostService.update(requestDto, testMember.getEmail());
+        CodePost updatePost = codePostRepository.findById(updatePostId).get();
 
         // then
-        assertThat(testCodePost.getLanguage().getType()).isNotEqualTo(beforeLanguage);
-        assertThat(testCodePost.getLanguage()).isEqualTo(Language.CPP);
+        assertThat(updatePost.getLanguage().getType()).isNotEqualTo(beforeLanguage);
+        assertThat(updatePost.getLanguage()).isEqualTo(Language.CPP);
     }
 
     @Test

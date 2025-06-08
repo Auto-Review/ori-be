@@ -42,7 +42,7 @@ public class GithubService {
 
     public Long update(GithubTokenRequestDto requestDto) {
         GithubToken githubToken = githubCommand.findByEmail(requestDto.email());
-        return githubCommand.update(githubToken, requestDto.githubToken()).getId();
+        return githubCommand.update(githubToken.getId(), requestDto.githubToken()).getId();
     }
 
     public boolean tokenCheck(String email) {

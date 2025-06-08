@@ -69,7 +69,10 @@ public class CodePostCommand {
     }
 
     @Transactional
-    public void update(CodePost codePost, CodePostUpdateRequestDto requestDto) {
+    public void update(Long codePostId, CodePostUpdateRequestDto requestDto) {
+        CodePost codePost = codePostRepository.findById(codePostId).orElseThrow(
+                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_POST)
+        );
         codePost.update(requestDto);
     }
 

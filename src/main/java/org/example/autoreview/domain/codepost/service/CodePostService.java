@@ -180,7 +180,7 @@ public class CodePostService {
         CodePost codePost = codePostCommand.findById(requestDto.getId());
         memberValidator(email, codePost);
         Member member = memberCommand.findByEmail(email);
-        codePostCommand.update(codePost, requestDto);
+        codePostCommand.update(codePost.getId(), requestDto);
 
         boolean notificationExists = notificationCommand.existsByCodePostId(requestDto.getId());
 

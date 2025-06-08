@@ -36,7 +36,10 @@ public abstract class CommentCommand<C extends Comment, R extends CommentReposit
     }
 
     @Transactional
-    public void update(C comment, CommentUpdateRequestDto requestDto) {
+    public void update(Long commentId, CommentUpdateRequestDto requestDto) {
+        C comment = repository.findById(commentId).orElseThrow(
+                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_COMMENT)
+        );
         comment.update(requestDto);
     }
 

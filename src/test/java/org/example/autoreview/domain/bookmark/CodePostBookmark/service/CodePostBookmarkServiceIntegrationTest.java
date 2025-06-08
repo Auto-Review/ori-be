@@ -1,37 +1,47 @@
 package org.example.autoreview.domain.bookmark.CodePostBookmark.service;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.data.domain.PageRequest.of;
-
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.request.CodePostBookmarkSaveRequestDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkListResponseDto;
+import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmarkRepository;
 import org.example.autoreview.domain.codepost.entity.CodePost;
+import org.example.autoreview.domain.codepost.entity.CodePostRepository;
 import org.example.autoreview.domain.codepost.service.CodePostCommand;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.MemberRepository;
 import org.example.autoreview.domain.member.entity.Role;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(properties = "spring.profiles.active=test")
-@Transactional
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.data.domain.PageRequest.of;
+
+@ActiveProfiles("test")
+@SpringBootTest
 class CodePostBookmarkServiceIntegrationTest {
 
     @Autowired
-    private CodePostBookmarkService service;
+    private CodePostBookmarkService codePostBookmarkService;
+
+    @Autowired
+    private CodePostCommand codePostCommand;
 
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
-    private CodePostCommand codePostCommand;
+    private CodePostRepository codePostRepository;
+
+    @Autowired
+    private CodePostBookmarkRepository codePostBookmarkRepository;
 
     private CodePostBookmarkSaveRequestDto saveRequestDto;
     private Member testMember;
     private CodePost testCodePost;
+
 
     @BeforeEach
     void setUp() {
@@ -42,20 +52,27 @@ class CodePostBookmarkServiceIntegrationTest {
                 .build());
 
         testCodePost = codePostCommand.save(CodePost.builder()
-                .writerId(1L)
+                .writerId(testMember.getId())
                 .isPublic(true)
                 .build());
 
         saveRequestDto = new CodePostBookmarkSaveRequestDto(testCodePost.getId());
     }
 
+    @AfterEach
+    void cleanUp() {
+        memberRepository.deleteAll();
+        codePostRepository.deleteAll();
+        codePostBookmarkRepository.deleteAll();
+    }
+
     @Test
     void saveOrUpdate_trySave() {
         // when
-        Long bookmarkId = service.saveOrUpdate(saveRequestDto, testMember.getEmail());
+        Long bookmarkId = codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
 
         // then
-        CodePostBookmarkListResponseDto bookmarks = service.findAllByMemberId(testMember.getEmail(), of(0, 10));
+        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByMemberId(testMember.getEmail(), of(0, 10));
 
         assertThat(bookmarkId).isNotNull();
         assertThat(bookmarks.dtoList().size()).isEqualTo(1);
@@ -66,16 +83,15 @@ class CodePostBookmarkServiceIntegrationTest {
     void saveOrUpdate_fallbackToUpdate() {
         // when
         // bookmark 여부 true -> false 로 변경
-        Long saveFirstBookmarkId = service.saveOrUpdate(saveRequestDto, testMember.getEmail());
-        Long saveSecondBookmarkId = service.saveOrUpdate(saveRequestDto, testMember.getEmail());
+        Long bookmarkId = codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
+        boolean beforeState = codePostBookmarkRepository.findById(bookmarkId).get().isDeleted();
+
+        codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
 
         // then
-        CodePostBookmarkListResponseDto bookmarks = service.findAllByMemberId(testMember.getEmail(), of(0, 10));
-
-        assertThat(bookmarks.dtoList().size()).isEqualTo(0);
-        assertThat(saveFirstBookmarkId).isEqualTo(saveSecondBookmarkId);
+        assertThat(beforeState).isFalse();
+        assertThat(codePostBookmarkRepository.findById(bookmarkId).get().isDeleted()).isTrue();
     }
-
 
     @Test
     void saveOrUpdate_then_findAllByMemberId() {
@@ -83,10 +99,10 @@ class CodePostBookmarkServiceIntegrationTest {
         CodePostBookmarkSaveRequestDto requestDto = new CodePostBookmarkSaveRequestDto(testCodePost.getId());
 
         // when
-        Long bookmarkId = service.saveOrUpdate(requestDto, testMember.getEmail());
+        Long bookmarkId = codePostBookmarkService.saveOrUpdate(requestDto, testMember.getEmail());
 
         // then
-        CodePostBookmarkListResponseDto bookmarks = service.findAllByMemberId(testMember.getEmail(), of(0, 10));
+        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByMemberId(testMember.getEmail(), of(0, 10));
 
         assertThat(bookmarks.dtoList().size()).isEqualTo(1);
         assertThat(bookmarks.dtoList().get(0).getCodePostId()).isEqualTo(testCodePost.getId());

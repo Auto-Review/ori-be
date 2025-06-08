@@ -111,7 +111,7 @@ public abstract class CommentService<C extends Comment, R extends CommentReposit
     public Long update(CommentUpdateRequestDto requestDto, String email) {
         C comment = commentCommand.findById(requestDto.commentId());
         memberValidator(comment.getWriterId(), email);
-        commentCommand.update(comment, requestDto);
+        commentCommand.update(comment.getId(), requestDto);
 
         return comment.getId();
     }
