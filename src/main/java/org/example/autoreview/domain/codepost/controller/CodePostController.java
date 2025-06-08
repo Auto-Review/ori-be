@@ -7,7 +7,7 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
-import org.example.autoreview.domain.codepost.service.CodePostDtoService;
+import org.example.autoreview.domain.codepost.service.CodePostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +21,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/api/post/code")
 public class CodePostController {
 
-    private final CodePostDtoService codePostMemberService;
+    private final CodePostService codePostService;
 
     @Operation(summary = "코드 포스트 생성", description = "코드 포스트 생성")
     @PostMapping
     public ResponseEntity<Long> save(@RequestBody CodePostSaveRequestDto requestDto,
                                      @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.postSave(requestDto, userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.save(requestDto, userDetails.getUsername()));
     }
 
     @Operation(summary = "제목으로 코드 포스트 검색", description = "공백 또는 null 입력 시 에러 반환")
     @GetMapping("/search")
     public ResponseEntity<CodePostListResponseDto> search(@RequestParam String keyword,
                                                           @PageableDefault(page = 0, size = 9) Pageable pageable) {
-        return ResponseEntity.ok().body(codePostMemberService.postSearch(keyword, pageable));
+        return ResponseEntity.ok().body(codePostService.search(keyword, pageable));
     }
 
     @Operation(summary = "코드 포스트 단일 조회", description = "공개된 포스트 or 작성자일 경우만 조회됨 + 북마크 여부 포함")
     @GetMapping("/detail/{id}")
     public ResponseEntity<CodePostResponseDto> view(@PathVariable("id") Long codePostId,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.findPostById(codePostId,userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.findById(codePostId,userDetails.getUsername()));
     }
 
     @Operation(summary = "코드 포스트 전체 조회", description = "코드 포스트 전체 조회(비공개 포스트는 제외)")
@@ -51,14 +51,14 @@ public class CodePostController {
                                                            @RequestParam(defaultValue = "desc") String direction,
                                                            @RequestParam(defaultValue = "id") String sortBy,
                                                            @RequestParam(defaultValue = "all") String language) {
-        return ResponseEntity.ok().body(codePostMemberService.findPostByPage(page,size,direction,sortBy,language));
+        return ResponseEntity.ok().body(codePostService.findPostByPage(page,size,direction,sortBy,language));
     }
 
     @Operation(summary = "내가 쓴 코드 포스트 조회", description = "내가 쓴 코드 포스트 조회")
     @GetMapping("/own")
     public ResponseEntity<CodePostListResponseDto> myCodePostPage(@PageableDefault(page = 0, size = 9) Pageable pageable,
                                                                @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.findPostByMemberId(pageable, userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.findByMemberId(pageable, userDetails.getUsername()));
     }
 
     @Operation(summary = "내 코드 포스트 검색", description = "내 코드 포스트 검색")
@@ -66,21 +66,21 @@ public class CodePostController {
     public ResponseEntity<CodePostListResponseDto> mySearch(@RequestParam String keyword,
                                                          @PageableDefault(page = 0, size = 9) Pageable pageable,
                                                          @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.postMySearch(keyword, pageable, userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.mySearch(keyword, pageable, userDetails.getUsername()));
     }
 
     @Operation(summary = "코드 포스트 수정", description = "코드 포스트 수정")
     @PutMapping
     public ResponseEntity<Long> update(@RequestBody CodePostUpdateRequestDto requestDto,
                                     @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.postUpdate(requestDto, userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.update(requestDto, userDetails.getUsername()));
     }
 
     @Operation(summary = "코드 포스트 삭제", description = "코드 포스트 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable("id") Long codePostId,
                                     @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostMemberService.postDelete(codePostId, userDetails.getUsername()));
+        return ResponseEntity.ok().body(codePostService.delete(codePostId, userDetails.getUsername()));
     }
 
 }

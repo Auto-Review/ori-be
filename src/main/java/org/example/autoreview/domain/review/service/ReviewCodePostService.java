@@ -1,15 +1,16 @@
 package org.example.autoreview.domain.review.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.codepost.entity.CodePost;
-import org.example.autoreview.domain.codepost.service.CodePostService;
+import org.example.autoreview.domain.codepost.service.CodePostCommand;
 import org.example.autoreview.domain.review.dto.request.ReviewDeleteRequestDto;
 import org.example.autoreview.domain.review.dto.request.ReviewSaveRequestDto;
 import org.example.autoreview.domain.review.dto.request.ReviewUpdateRequestDto;
 import org.example.autoreview.domain.review.dto.response.ReviewResponseDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,10 +18,10 @@ import org.springframework.stereotype.Service;
 public class ReviewCodePostService {
 
     private final ReviewService reviewService;
-    private final CodePostService codePostService;
+    private final CodePostCommand codePostCommand;
 
     public Long save(ReviewSaveRequestDto requestDto) {
-        CodePost codePost = codePostService.findEntityById(requestDto.codePostId());
+        CodePost codePost = codePostCommand.findById(requestDto.codePostId());
         return reviewService.save(requestDto, codePost).getId();
     }
 
@@ -29,7 +30,7 @@ public class ReviewCodePostService {
     }
 
     public List<ReviewResponseDto> findAllByCodePostId(Long codePostId) {
-        CodePost codePost = codePostService.findEntityById(codePostId);
+        CodePost codePost = codePostCommand.findById(codePostId);
         return reviewService.findAllByCodePost(codePost);
     }
 

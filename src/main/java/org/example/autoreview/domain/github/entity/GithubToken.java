@@ -29,9 +29,9 @@ public class GithubToken extends BaseEntity {
         this.githubToken = githubToken;
     }
 
-    public Long update(String githubToken) {
+    public GithubToken update(String githubToken) {
         this.githubToken = githubToken;
-        return this.id;
+        return this;
     }
 
 }
