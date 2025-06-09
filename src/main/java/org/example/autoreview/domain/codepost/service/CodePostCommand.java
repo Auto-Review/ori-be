@@ -49,8 +49,28 @@ public class CodePostCommand {
     }
 
     @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> findByMemberIdSortByCommentCountDesc(Pageable pageable, Long memberId, Language language) {
+        return codePostRepository.findByMemberIdSortByCommentCountDesc(pageable, memberId, language);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> findByMemberIdSortByCommentCountAsc(Pageable pageable, Long memberId, Language language) {
+        return codePostRepository.findByMemberIdSortByCommentCountAsc(pageable, memberId, language);
+    }
+
+    @Transactional(readOnly = true)
     public Page<CodePost> mySearch(String keyword, Pageable pageable, Long memberId) {
         return codePostRepository.mySearch(keyword, pageable, memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> mySearchSortByCommentCountDesc(String keyword, Pageable pageable, Long memberId, Language language) {
+        return codePostRepository.mySearchSortByCommentCountDesc(keyword, pageable, memberId, language);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> mySearchSortByCommentCountAsc(String keyword, Pageable pageable, Long memberId, Language language) {
+        return codePostRepository.mySearchSortByCommentCountAsc(keyword, pageable, memberId, language);
     }
 
     @Transactional(readOnly = true)
@@ -66,6 +86,16 @@ public class CodePostCommand {
     @Transactional(readOnly = true)
     public Page<CodePostThumbnailResponseDto> findByPageSortByCommentCountAsc(Pageable pageable, Language language) {
         return codePostRepository.findByPageSortByCommentCountAsc(pageable, language);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> searchSortByCommentCountDesc(String keyword, Pageable pageable, Language language) {
+        return codePostRepository.searchSortByCommentCountDesc(keyword, pageable, language);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CodePostThumbnailResponseDto> searchSortByCommentCountAsc(String keyword, Pageable pageable, Language language) {
+        return codePostRepository.searchSortByCommentCountAsc(keyword, pageable, language);
     }
 
     @Transactional
