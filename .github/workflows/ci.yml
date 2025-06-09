@@ -39,6 +39,10 @@ jobs:
           echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
         shell: bash
 
+      - name: Debug application-test.yml
+        run: |
+          head -n 10 ./src/test/resources/application-test.yml
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
