@@ -8,8 +8,6 @@ import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestD
 import org.example.autoreview.domain.codepost.dto.response.CodePostListResponseDto;
 import org.example.autoreview.domain.codepost.dto.response.CodePostResponseDto;
 import org.example.autoreview.domain.codepost.service.CodePostService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,8 +31,12 @@ public class CodePostController {
     @Operation(summary = "제목으로 코드 포스트 검색", description = "공백 또는 null 입력 시 에러 반환")
     @GetMapping("/search")
     public ResponseEntity<CodePostListResponseDto> search(@RequestParam String keyword,
-                                                          @PageableDefault(page = 0, size = 9) Pageable pageable) {
-        return ResponseEntity.ok().body(codePostService.search(keyword, pageable));
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "9") int size,
+                                                          @RequestParam(defaultValue = "desc") String direction,
+                                                          @RequestParam(defaultValue = "id") String sortBy,
+                                                          @RequestParam(defaultValue = "all") String language) {
+        return ResponseEntity.ok().body(codePostService.search(keyword, page,size,direction,sortBy,language));
     }
 
     @Operation(summary = "코드 포스트 단일 조회", description = "공개된 포스트 or 작성자일 경우만 조회됨 + 북마크 여부 포함")
@@ -56,17 +58,25 @@ public class CodePostController {
 
     @Operation(summary = "내가 쓴 코드 포스트 조회", description = "내가 쓴 코드 포스트 조회")
     @GetMapping("/own")
-    public ResponseEntity<CodePostListResponseDto> myCodePostPage(@PageableDefault(page = 0, size = 9) Pageable pageable,
-                                                               @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostService.findByMemberId(pageable, userDetails.getUsername()));
+    public ResponseEntity<CodePostListResponseDto> myCodePostPage(@AuthenticationPrincipal UserDetails userDetails,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "9") int size,
+                                                                  @RequestParam(defaultValue = "desc") String direction,
+                                                                  @RequestParam(defaultValue = "id") String sortBy,
+                                                                  @RequestParam(defaultValue = "all") String language) {
+        return ResponseEntity.ok().body(codePostService.findByMemberId(userDetails.getUsername(),page,size,direction,sortBy,language));
     }
 
     @Operation(summary = "내 코드 포스트 검색", description = "내 코드 포스트 검색")
     @GetMapping("/own/search")
     public ResponseEntity<CodePostListResponseDto> mySearch(@RequestParam String keyword,
-                                                         @PageableDefault(page = 0, size = 9) Pageable pageable,
-                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(codePostService.mySearch(keyword, pageable, userDetails.getUsername()));
+                                                            @AuthenticationPrincipal UserDetails userDetails,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "9") int size,
+                                                            @RequestParam(defaultValue = "desc") String direction,
+                                                            @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(defaultValue = "all") String language) {
+        return ResponseEntity.ok().body(codePostService.mySearch(keyword, userDetails.getUsername(), page,size,direction,sortBy,language));
     }
 
     @Operation(summary = "코드 포스트 수정", description = "코드 포스트 수정")
