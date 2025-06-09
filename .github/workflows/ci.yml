@@ -36,7 +36,7 @@ jobs:
           cd ./src/test/resources
           rm -rf ./application.properties
           touch ./application.yml
-          echo "${{ secrets.APPLICATION_TEST_YML }}" > ./application-test.yml
+          echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
