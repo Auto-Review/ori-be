@@ -1,5 +1,9 @@
 package org.example.autoreview.domain.codepost.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.LocalDate;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.service.CodePostBookmarkCommand;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
 import org.example.autoreview.domain.codepost.dto.request.CodePostUpdateRequestDto;
@@ -17,14 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-@ActiveProfiles("test")
 @SpringBootTest
 public class CodePostServiceIntegrationTest {
 
