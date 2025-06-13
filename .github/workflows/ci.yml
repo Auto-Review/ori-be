@@ -49,17 +49,18 @@ jobs:
           sudo apt-get update && sudo apt-get install -y redis-tools
           redis-cli -h localhost ping
 
-      - name: Copy private test resources
-        run: ./gradlew copyTestYml --no-daemon
+      - name: Copy private ci resources
+        run: ./gradlew copyCiYml --no-daemon
 
       - name: 테스트 실행
         run: ./gradlew test
         env:
+          SPRING_PROFILES_ACTIVE: ci
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
           DB_NAME: test
           DB_USER: tester
-          DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD}}
+          DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
           REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
 

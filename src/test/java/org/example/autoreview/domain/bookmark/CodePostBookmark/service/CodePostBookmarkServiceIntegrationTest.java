@@ -1,5 +1,8 @@
 package org.example.autoreview.domain.bookmark.CodePostBookmark.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.data.domain.PageRequest.of;
+
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.request.CodePostBookmarkSaveRequestDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkListResponseDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmarkRepository;
@@ -14,12 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.data.domain.PageRequest.of;
-
-@ActiveProfiles("test")
 @SpringBootTest
 class CodePostBookmarkServiceIntegrationTest {
 

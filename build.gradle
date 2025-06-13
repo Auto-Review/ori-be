@@ -73,9 +73,9 @@ tasks.register('copyYml', Copy) {
     }
 }
 
-tasks.register('copyTestYml', Copy) {
+tasks.register('copyCiYml', Copy) {
     from 'security_setting'
-    include 'application-test.yml'
+    include 'application-ci.yml'
     into 'src/test/resources'
 }
 
