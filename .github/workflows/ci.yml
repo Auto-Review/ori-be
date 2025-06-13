@@ -42,7 +42,7 @@ jobs:
       - name: MySQL 연결 확인
         run: |
           sudo apt-get update && sudo apt-get install -y mysql-client
-          mysql -htest -P3306 -utester -p${{ secrets.TEST_DB_PASSWORD}} -e "SHOW DATABASES;"
+          mysql -hlocalhost -P3306 -utester -p${{ secrets.TEST_DB_PASSWORD}} -e "SHOW DATABASES;"
 
       - name: Redis 연결 확인
         run: |
