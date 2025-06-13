@@ -73,6 +73,12 @@ tasks.register('copyYml', Copy) {
     }
 }
 
+tasks.register('copyTestYml', Copy) {
+    from 'security_setting'
+    include 'application-test.yml'
+    into 'src/test/resources'
+}
+
 tasks.register('copyLog', Copy) {
     copy {
         from 'security_setting'

@@ -49,6 +49,9 @@ jobs:
           sudo apt-get update && sudo apt-get install -y redis-tools
           redis-cli -h localhost ping
 
+      - name: Copy private test resources
+        run: ./gradlew copyTestYml --no-daemon
+
       - name: 테스트 실행
         run: ./gradlew test
         env:
