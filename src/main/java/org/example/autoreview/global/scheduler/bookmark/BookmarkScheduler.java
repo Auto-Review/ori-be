@@ -13,10 +13,10 @@ public class BookmarkScheduler {
 
     private final TILBookmarkService tilBookmarkService;
 
-    @Scheduled(cron = "0 10 6 * * ?") // 매달 10일 오전 6시
-    public void deleteUselessBookmark(){
-        log.info("start delete bookmark");
-        tilBookmarkService.deleteUseless();
-        log.info("end delete bookmark");
-    }
+//    @Scheduled(cron = "0 10 6 * * ?") // 매달 10일 오전 6시
+//    public void deleteUselessBookmark(){
+//        log.info("start delete bookmark");
+//        tilBookmarkService.deleteUseless();
+//        log.info("end delete bookmark");
+//    }
 }

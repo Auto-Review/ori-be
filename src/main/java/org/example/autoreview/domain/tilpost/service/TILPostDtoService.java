@@ -34,16 +34,16 @@ public class TILPostDtoService {
         return tilPostService.save(requestDto, member);
     }
 
-    public Long bookmarkPost(String email, Long postId){
-        try{
-            tilPostService.findEntityById(postId);
-            tilBookmarkService.update(email, postId);
-        } catch (NoSuchElementException e){
-            log.info("create bookmark");
-            tilBookmarkService.save(email, postId);
-        }
-        return postId;
-    }
+//    public Long bookmarkPost(String email, Long postId){
+//        try{
+//            tilPostService.findEntityById(postId);
+//            tilBookmarkService.update(email, postId);
+//        } catch (NoSuchElementException e){
+//            log.info("create bookmark");
+//            tilBookmarkService.save(email, postId);
+//        }
+//        return postId;
+//    }
 
     // 나중에 다시 볼 것
 //    public TILBookmarkResponseDto findBookmark(String email, Long postId){
@@ -51,9 +51,9 @@ public class TILPostDtoService {
 //                -> new NotFoundException(ErrorCode.NOT_FOUND_BOOKMARK));
 //    }
 
-    public void deleteUselessPost(){
-        tilBookmarkService.deleteUseless();
-    }
+//    public void deleteUselessPost(){
+//        tilBookmarkService.deleteUseless();
+//    }
 
     public TILPageResponseDto findPostByMember(String email, Pageable pageable){
         Member member = memberService.findByEmail(email);
@@ -77,14 +77,14 @@ public class TILPostDtoService {
         return tilPostService.findById(id);
     }
 
-    public TILBookmarkPostResponseDto findBookmarkPostById(String email, Long postId){
-        Optional<TILBookmark> bookmark = tilBookmarkService.findById(email, postId);
-        TILPost post = tilPostService.findEntityById(postId);
-        Member member = memberCommand.findById(post.getWriterId());
-        return bookmark.map(tilBookmark ->
-                new TILBookmarkPostResponseDto(post, tilBookmark.getIsBookmarked(), member)).orElseGet(() ->
-                new TILBookmarkPostResponseDto(post, null, member));
-    }
+//    public TILBookmarkPostResponseDto findBookmarkPostById(String email, Long postId){
+//        Optional<TILBookmark> bookmark = tilBookmarkService.findById(email, postId);
+//        TILPost post = tilPostService.findEntityById(postId);
+//        Member member = memberCommand.findById(post.getWriterId());
+//        return bookmark.map(tilBookmark ->
+//                new TILBookmarkPostResponseDto(post, tilBookmark.getIsBookmarked(), member)).orElseGet(() ->
+//                new TILBookmarkPostResponseDto(post, null, member));
+//    }
 
     public Long postUpdate(TILPostUpdateRequestDto requestDto, String email){
         return tilPostService.update(requestDto, email);

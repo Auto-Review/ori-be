@@ -28,8 +28,8 @@ public class MyPageService {
         return memberService.update(requestDto.getId(), requestDto.getNickname());
     }
 
-    public TILPageResponseDto memberBookmarkedTILPost(String email, Pageable pageable){
-        List<Long> postList = tilBookmarkService.findPostIdByMemberEmail(email, pageable);
-        return tilPostService.findByIdList(postList, pageable);
-    }
+//    public TILPageResponseDto memberBookmarkedTILPost(String email, Pageable pageable){
+//        List<Long> postList = tilBookmarkService.findPostIdByMemberEmail(email, pageable);
+//        return tilPostService.findByIdList(postList, pageable);
+//    }
 }

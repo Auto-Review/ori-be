@@ -85,12 +85,12 @@ public class TILPostApiController {
         return ResponseEntity.ok().body(tilPostDtoService.findPostById(id));
     }
 
-    @Operation(summary = "로그인된 유저의 특정 TIL 게시물 조회", description = "개별 조회")
-    @GetMapping("/own/{id}")
-    public ResponseEntity<TILBookmarkPostResponseDto> findByIdLoginIn(@PathVariable Long id,
-                                                                   @AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.ok().body(tilPostDtoService.findBookmarkPostById(userDetails.getUsername(), id));
-    }
+//    @Operation(summary = "로그인된 유저의 특정 TIL 게시물 조회", description = "개별 조회")
+//    @GetMapping("/own/{id}")
+//    public ResponseEntity<TILBookmarkPostResponseDto> findByIdLoginIn(@PathVariable Long id,
+//                                                                   @AuthenticationPrincipal UserDetails userDetails){
+//        return ResponseEntity.ok().body(tilPostDtoService.findBookmarkPostById(userDetails.getUsername(), id));
+//    }
 
     @Operation(summary = "TIL 게시물 생성", description = "토큰을 통해 유저 선택")
     @PostMapping
@@ -117,12 +117,12 @@ public class TILPostApiController {
 //        return ResponseEntity.ok().body(tilPostDtoService.findBookmark(userDetails.getUsername(), postId));
 //    }
 
-    @Operation(summary = "TIL 게시물 북마크 생성", description = "유저 북마크 생성")
-    @PostMapping("/bookmark")
-    public ResponseEntity<?> bookmark(@RequestBody TILBookmarkRequestDto requestDto,
-                                   @AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.ok().body(tilPostDtoService.bookmarkPost(userDetails.getUsername(), requestDto.getPostId()));
-    }
+//    @Operation(summary = "TIL 게시물 북마크 생성", description = "유저 북마크 생성")
+//    @PostMapping("/bookmark")
+//    public ResponseEntity<?> bookmark(@RequestBody TILBookmarkRequestDto requestDto,
+//                                   @AuthenticationPrincipal UserDetails userDetails){
+//        return ResponseEntity.ok().body(tilPostDtoService.bookmarkPost(userDetails.getUsername(), requestDto.getPostId()));
+//    }
 
     @Operation(summary = "TIL 게시물 삭제", description = "토큰을 통해 유저 식별")
     @DeleteMapping("/{id}")
@@ -132,10 +132,10 @@ public class TILPostApiController {
         return ResponseEntity.ok().body(tilPostDtoService.postDelete(id, userDetails.getUsername()));
     }
 
-    @Operation(summary = "TIL 게시물 북마크 전체 삭제", description = "유저 북마크 false 전체 삭제")
-    @DeleteMapping("/bookmark")
-    public ResponseEntity<?> deleteUselessBookmark(){
-        tilPostDtoService.deleteUselessPost();
-        return ResponseEntity.ok().body("deleted");
-    }
+//    @Operation(summary = "TIL 게시물 북마크 전체 삭제", description = "유저 북마크 false 전체 삭제")
+//    @DeleteMapping("/bookmark")
+//    public ResponseEntity<?> deleteUselessBookmark(){
+//        tilPostDtoService.deleteUselessPost();
+//        return ResponseEntity.ok().body("deleted");
+//    }
 }

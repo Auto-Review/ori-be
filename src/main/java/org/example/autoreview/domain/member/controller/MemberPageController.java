@@ -33,9 +33,9 @@ public class MemberPageController {
         return ResponseEntity.ok().body(myPageService.memberUpdate(requestDto));
     }
 
-    @GetMapping("/bookmark/til")
-    public ResponseEntity<TILPageResponseDto> bookmarkedTIL(@PageableDefault(page = 0, size = 9) Pageable pageable,
-                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok().body(myPageService.memberBookmarkedTILPost(userDetails.getUsername(), pageable));
-    }
+//    @GetMapping("/bookmark/til")
+//    public ResponseEntity<TILPageResponseDto> bookmarkedTIL(@PageableDefault(page = 0, size = 9) Pageable pageable,
+//                                                         @AuthenticationPrincipal UserDetails userDetails) {
+//        return ResponseEntity.ok().body(myPageService.memberBookmarkedTILPost(userDetails.getUsername(), pageable));
+//    }
 }
