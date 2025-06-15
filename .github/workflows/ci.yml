@@ -109,6 +109,9 @@ jobs:
       - name: Copy private resources
         run: ./gradlew copyYml --no-daemon
 
+      - name: Copy private logback config
+        run: ./gradlew copyLog --no-daemon
+
       - name: Create Firebase JSON file
         run: |
           echo '{
