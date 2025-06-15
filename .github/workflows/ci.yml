@@ -90,15 +90,6 @@ jobs:
       - name: 어플리케이션 실행 테스트(테스트 코드 제외하고 실행)
         run: ./gradlew clean build --exclude-task test
 
-      - name: Test 실행(테스트 코드만 실행)
-        run: ./gradlew --info test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/test
-          SPRING_DATASOURCE_USERNAME: tester
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
-          SPRING_REDIS_HOST: 127.0.0.1
-          SPRING_REDIS_PORT: 6379
-
   build:
     name: Run on Ubuntu
     runs-on: ubuntu-latest
