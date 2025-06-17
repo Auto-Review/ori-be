@@ -7,7 +7,8 @@ import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.Code
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkResponseDto;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberCommand;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,13 @@ public class CodePostBookmarkService {
 
     /**
      * 북마크가 없을 시 생성, 있으면 상태 변경하는 메서드이다.
-     * 1. DB에 code_post_id, member_id로 UNIQUE 제약 조건 설정
-     * 2. UNIQUE 제약 조건 위반 시 catch를 통해 update() 로직 실행
+     * MySQL 에서 지원하는 Upsert 기능을 통해 유니크 키가 중복될 경우 update 실행
      */
     public Long saveOrUpdate(CodePostBookmarkSaveRequestDto requestDto, String email) {
         Member member = memberCommand.findByEmail(email);
-
-        try {
-            return codePostBookmarkCommand.trySave(requestDto, member);
-        } catch (DataIntegrityViolationException e) {
-            return codePostBookmarkCommand.fallbackToUpdate(requestDto.codePostId(), member.getId());
-        }
+        return codePostBookmarkCommand.saveOrUpdate(requestDto, member).orElseThrow(
+                () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_BOOKMARK)
+        ).getId();
     }
 
     /**

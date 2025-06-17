@@ -11,6 +11,16 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CodePostBookmarkRepository extends JpaRepository<CodePostBookmark,Long> {
 
+    @Modifying
+    @Query(
+        value = " INSERT INTO code_post_bookmark (member_id, code_post_id, is_deleted, create_date, update_date) " +
+                " VALUES (:memberId, :codePostId, false, NOW(), NOW()) " +
+                " ON DUPLICATE KEY UPDATE is_deleted = NOT is_deleted, update_date = NOW() ",
+        nativeQuery = true
+    )
+    void upsert(@Param("memberId") Long memberId, @Param("codePostId") Long codePostId);
+
+
     @Query("SELECT b FROM CodePostBookmark b WHERE b.member.id = :memberId AND b.codePostId = :codePostId")
     Optional<CodePostBookmark> findById(@Param("memberId") Long memberId, @Param("codePostId") Long codePostId);
 
