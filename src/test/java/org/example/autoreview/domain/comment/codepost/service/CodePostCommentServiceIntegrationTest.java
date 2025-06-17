@@ -4,7 +4,9 @@ import org.example.autoreview.domain.codepost.service.CodePostCommand;
 import org.example.autoreview.domain.member.service.MemberCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("${spring.profiles.active:test}")
 @SpringBootTest
 public class CodePostCommentServiceIntegrationTest {
 
@@ -19,6 +21,8 @@ public class CodePostCommentServiceIntegrationTest {
 
     @Autowired
     private CodePostCommentService codePostCommentService;
+
+
 
 
 }
