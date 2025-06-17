@@ -17,7 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("${spring.profiles.active:test}")
 @SpringBootTest
 class CodePostBookmarkServiceIntegrationTest {
 
@@ -65,7 +67,7 @@ class CodePostBookmarkServiceIntegrationTest {
     }
 
     @Test
-    void saveOrUpdate_trySave() {
+    void save() {
         // when
         Long bookmarkId = codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
 
@@ -78,7 +80,7 @@ class CodePostBookmarkServiceIntegrationTest {
     }
 
     @Test
-    void saveOrUpdate_fallbackToUpdate() {
+    void update() {
         // when
         // bookmark 여부 true -> false 로 변경
         Long bookmarkId = codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
