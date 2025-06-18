@@ -37,7 +37,7 @@ public class CodePostBookmarkController {
     @GetMapping("/list")
     public ResponseEntity<CodePostBookmarkListResponseDto> findAll(@AuthenticationPrincipal UserDetails userDetails,
                                                                    @PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return ResponseEntity.ok().body(codePostBookmarkService.findAllByMemberId(userDetails.getUsername(), pageable));
+        return ResponseEntity.ok().body(codePostBookmarkService.findAllByEmail(userDetails.getUsername(), pageable));
     }
 
     @Operation(summary = "북마크 삭제")

@@ -1,17 +1,22 @@
 package org.example.autoreview.domain.bookmark.CodePostBookmark.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.global.common.basetime.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @NoArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(name = "uq_codepost_member",
-        columnNames = {"code_post_id", "member_id"})}
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uq_email_codepost",
+        columnNames = {"email", "code_post_id"})}
 )
 @Entity
 public class CodePostBookmark extends BaseEntity {
@@ -19,9 +24,8 @@ public class CodePostBookmark extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Member member;
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private Long codePostId;
@@ -31,9 +35,9 @@ public class CodePostBookmark extends BaseEntity {
     private boolean isDeleted;
 
     @Builder
-    public CodePostBookmark(Long codePostId, Member member, boolean isDeleted) {
+    public CodePostBookmark(Long codePostId, String email, boolean isDeleted) {
         this.codePostId = codePostId;
-        this.member = member;
+        this.email = email;
         this.isDeleted = isDeleted;
     }
 

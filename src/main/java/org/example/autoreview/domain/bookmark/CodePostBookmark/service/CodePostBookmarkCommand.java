@@ -6,7 +6,6 @@ import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.request.CodeP
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkResponseDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmark;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmarkRepository;
-import org.example.autoreview.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -19,9 +18,9 @@ public class CodePostBookmarkCommand {
     private final CodePostBookmarkRepository codePostBookmarkRepository;
 
     @Transactional
-    public Optional<CodePostBookmark> saveOrUpdate(CodePostBookmarkSaveRequestDto requestDto, Member member) {
-        codePostBookmarkRepository.upsert(member.getId(), requestDto.codePostId());
-        return codePostBookmarkRepository.findById(member.getId(), requestDto.codePostId());
+    public Optional<CodePostBookmark> saveOrUpdate(CodePostBookmarkSaveRequestDto requestDto, String email) {
+        codePostBookmarkRepository.upsert(email, requestDto.codePostId());
+        return codePostBookmarkRepository.findById(email, requestDto.codePostId());
     }
 
     @Transactional
@@ -30,12 +29,12 @@ public class CodePostBookmarkCommand {
     }
 
     @Transactional(readOnly = true)
-    public Optional<CodePostBookmark> findByCodePostBookmark(Long memberId, Long codePostId) {
-        return codePostBookmarkRepository.findById(memberId,codePostId);
+    public Optional<CodePostBookmark> findByCodePostBookmark(String email, Long codePostId) {
+        return codePostBookmarkRepository.findById(email,codePostId);
     }
 
     @Transactional(readOnly = true)
-    public Page<CodePostBookmarkResponseDto> findAllByMemberId(Long memberId, Pageable pageable) {
-        return codePostBookmarkRepository.findAllByMemberId(memberId, pageable);
+    public Page<CodePostBookmarkResponseDto> findAllByEmail(String email, Pageable pageable) {
+        return codePostBookmarkRepository.findAllByEmail(email, pageable);
     }
 }

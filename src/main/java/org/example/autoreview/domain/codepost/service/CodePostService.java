@@ -1,5 +1,7 @@
 package org.example.autoreview.domain.codepost.service;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmark;
@@ -26,9 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -116,7 +115,7 @@ public class CodePostService {
         Member member = memberCommand.findByEmail(email);
         CodePost codePost = codePostCommand.findByIdIsPublic(id, member.getId());
         Member writer = memberCommand.findById(codePost.getWriterId());
-        Optional<CodePostBookmark> codePostBookmark = codePostBookmarkCommand.findByCodePostBookmark(member.getId(), codePost.getId());
+        Optional<CodePostBookmark> codePostBookmark = codePostBookmarkCommand.findByCodePostBookmark(email, codePost.getId());
 
         boolean isBookmarked = false;
         if (codePostBookmark.isPresent()) {
