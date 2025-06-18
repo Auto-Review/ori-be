@@ -25,7 +25,7 @@ public interface CodePostBookmarkRepository extends JpaRepository<CodePostBookma
     Optional<CodePostBookmark> findById(@Param("memberId") Long memberId, @Param("codePostId") Long codePostId);
 
     @Query("SELECT new org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkResponseDto(b,c,m) from CodePostBookmark b "
-            + "JOIN CodePost c ON b.codePostId = c.id JOIN Member m ON m.id = c.writerId WHERE b.isDeleted = FALSE")
+            + "JOIN CodePost c ON b.codePostId = c.id JOIN Member m ON m.id = c.writerId WHERE b.isDeleted = FALSE AND b.member.id = :memberId")
     Page<CodePostBookmarkResponseDto> findAllByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
     @Modifying
