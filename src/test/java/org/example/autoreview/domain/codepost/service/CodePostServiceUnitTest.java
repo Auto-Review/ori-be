@@ -1,5 +1,15 @@
 package org.example.autoreview.domain.codepost.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBookmark;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.service.CodePostBookmarkCommand;
 import org.example.autoreview.domain.codepost.dto.request.CodePostSaveRequestDto;
@@ -9,7 +19,6 @@ import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.domain.notification.entity.Notification;
-import org.example.autoreview.domain.notification.enums.NotificationStatus;
 import org.example.autoreview.domain.notification.service.NotificationCommand;
 import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +28,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CodePostServiceUnitTest {
@@ -37,27 +39,24 @@ class CodePostServiceUnitTest {
     private MemberCommand memberCommand;
 
     @Mock
-    CodePostBookmarkCommand codePostBookmarkCommand;
+    private NotificationCommand notificationCommand;
 
     @Mock
-    private NotificationCommand notificationCommand;
+    private CodePostBookmarkCommand codePostBookmarkCommand;
 
     @InjectMocks
     private CodePostService codePostService;
 
     private Long codePostId;
     private Long memberId;
-    private Long notificationId;
     private String email;
     private Member mockMember;
     private CodePost mockCodePost;
-    private Notification mockNotification;
 
     @BeforeEach
     void setUp() {
         codePostId = 123L;
         memberId = 1L;
-        notificationId = 2L;
         email = "test@example.com";
         mockMember = Member.builder()
                 .email(email)
@@ -70,18 +69,8 @@ class CodePostServiceUnitTest {
                 .isPublic(false)
                 .build();
 
-        mockNotification = Notification.builder()
-                .title("test")
-                .content("test")
-                .status(NotificationStatus.PENDING)
-                .executeTime(null)
-                .member(mockMember)
-                .codePostId(codePostId)
-                .build();
-
         ReflectionTestUtils.setField(mockMember, "id", memberId);
         ReflectionTestUtils.setField(mockCodePost, "id", codePostId);
-        ReflectionTestUtils.setField(mockNotification, "id", notificationId);
     }
 
     @Test
@@ -150,16 +139,16 @@ class CodePostServiceUnitTest {
                 .thenThrow(CustomRuntimeException.class);
 
         //when + then
-        assertThrows(CustomRuntimeException.class, () -> {
-            codePostService.findById(mockCodePost.getId(), email);
-        });
+        assertThrows(CustomRuntimeException.class,
+                () -> codePostService.findById(mockCodePost.getId(), email)
+        );
     }
 
     @Test
     void 비공개_포스트를_작성자가_조회() {
         //given
         CodePostBookmark mockBookmark = CodePostBookmark.builder()
-                .member(mockMember)
+                .email(mockMember.getEmail())
                 .codePostId(codePostId)
                 .isDeleted(false)
                 .build();
@@ -169,6 +158,7 @@ class CodePostServiceUnitTest {
         when(memberCommand.findByEmail(email)).thenReturn(mockMember);
         when(codePostCommand.findByIdIsPublic(codePostId, memberId)).thenReturn(mockCodePost);
         when(memberCommand.findById(memberId)).thenReturn(mockMember);
+        when(codePostBookmarkCommand.findByCodePostBookmark(email,codePostId)).thenReturn(Optional.empty());
 
         //when
         CodePostResponseDto responseDto = codePostService.findById(codePostId, email);
