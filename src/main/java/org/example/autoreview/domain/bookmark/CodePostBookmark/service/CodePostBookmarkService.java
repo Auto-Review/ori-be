@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.request.CodePostBookmarkSaveRequestDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkListResponseDto;
 import org.example.autoreview.domain.bookmark.CodePostBookmark.dto.response.CodePostBookmarkResponseDto;
-import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
@@ -26,18 +25,16 @@ public class CodePostBookmarkService {
      * MySQL 에서 지원하는 Upsert 기능을 통해 유니크 키가 중복될 경우 update 실행
      */
     public Long saveOrUpdate(CodePostBookmarkSaveRequestDto requestDto, String email) {
-        Member member = memberCommand.findByEmail(email);
-        return codePostBookmarkCommand.saveOrUpdate(requestDto, member).orElseThrow(
+        return codePostBookmarkCommand.saveOrUpdate(requestDto, email).orElseThrow(
                 () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_BOOKMARK)
         ).getId();
     }
 
     /**
-     * 회원 아이디를 통해 북마크한 포스트를 조회하는 메서드이다.
+     * 회원 이메일을 통해 북마크한 포스트를 조회하는 메서드이다.
      */
-    public CodePostBookmarkListResponseDto findAllByMemberId(String email, Pageable pageable) {
-        Long memberId = memberCommand.findByEmail(email).getId();
-        Page<CodePostBookmarkResponseDto> pageDto = codePostBookmarkCommand.findAllByMemberId(memberId,pageable);
+    public CodePostBookmarkListResponseDto findAllByEmail(String email, Pageable pageable) {
+        Page<CodePostBookmarkResponseDto> pageDto = codePostBookmarkCommand.findAllByEmail(email,pageable);
 
         return new CodePostBookmarkListResponseDto(pageDto.getContent(),pageDto.getTotalPages());
     }
