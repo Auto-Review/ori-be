@@ -13,7 +13,6 @@ import org.example.autoreview.domain.bookmark.CodePostBookmark.entity.CodePostBo
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.entity.Role;
-import org.example.autoreview.domain.member.service.MemberCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +30,6 @@ class CodePostBookmarkServiceUnitTest {
     @Mock
     private CodePostBookmarkCommand codePostBookmarkCommand;
 
-    @Mock
-    private MemberCommand memberCommand;
-
     @InjectMocks
     private CodePostBookmarkService codePostBookmarkService;
 
@@ -45,16 +41,13 @@ class CodePostBookmarkServiceUnitTest {
 
     private Long codePostId;
 
-    private Long memberId;
-
-    private Long bookmarkId;
-
     @BeforeEach
     void setUp() {
-        memberId = 1L;
+        Long memberId = 1L;
+        Long bookmarkId = 1L;
         codePostId = 123L;
-        bookmarkId = 1L;
         email = "test@example.com";
+
         mockMember = Member.builder()
                 .nickname("tester")
                 .role(Role.USER)
@@ -62,7 +55,7 @@ class CodePostBookmarkServiceUnitTest {
                 .build();
 
         mockCodePostBookmark = CodePostBookmark.builder()
-                .member(mockMember)
+                .email(mockMember.getEmail())
                 .codePostId(codePostId)
                 .isDeleted(false)
                 .build();
@@ -75,8 +68,7 @@ class CodePostBookmarkServiceUnitTest {
     void saveOrUpdate_성공적으로_북마크를_저장한다() {
         // given
         CodePostBookmarkSaveRequestDto requestDto = new CodePostBookmarkSaveRequestDto(codePostId);
-        when(memberCommand.findByEmail(email)).thenReturn(mockMember);
-        when(codePostBookmarkCommand.saveOrUpdate(requestDto, mockMember))
+        when(codePostBookmarkCommand.saveOrUpdate(requestDto, mockMember.getEmail()))
                 .thenReturn(Optional.ofNullable(mockCodePostBookmark));
 
         // when
@@ -84,22 +76,22 @@ class CodePostBookmarkServiceUnitTest {
 
         // then
         assertThat(result).isEqualTo(mockCodePostBookmark.getId());
-        verify(codePostBookmarkCommand).saveOrUpdate(requestDto, mockMember);
+        verify(codePostBookmarkCommand).saveOrUpdate(requestDto, mockMember.getEmail());
     }
 
     @Test
     void saveOrUpdate_UNIQUE_제약조건_위반시_업데이트로_전환한다() {
         // given
         CodePostBookmark updateBookmark = CodePostBookmark.builder()
-                .member(mockMember)
+                .email(mockMember.getEmail())
                 .codePostId(codePostId)
                 .isDeleted(!mockCodePostBookmark.isDeleted())
                 .build();
         ReflectionTestUtils.setField(updateBookmark,"id",2L);
 
         CodePostBookmarkSaveRequestDto requestDto = new CodePostBookmarkSaveRequestDto(codePostId);
-        when(memberCommand.findByEmail(email)).thenReturn(mockMember);
-        when(codePostBookmarkCommand.saveOrUpdate(requestDto, mockMember)).thenReturn(
+
+        when(codePostBookmarkCommand.saveOrUpdate(requestDto, mockMember.getEmail())).thenReturn(
                 Optional.of(updateBookmark));
 
         // when
@@ -107,21 +99,21 @@ class CodePostBookmarkServiceUnitTest {
 
         // then
         assertThat(result).isEqualTo(2L);
-        verify(codePostBookmarkCommand).saveOrUpdate(requestDto, mockMember);
+        verify(codePostBookmarkCommand).saveOrUpdate(requestDto, mockMember.getEmail());
     }
 
     @Test
-    void findAllByMemberId_정상조회() {
+    void findAllByEmail_정상조회() {
         // given
         CodePostBookmark bookmark1 = CodePostBookmark.builder()
                 .codePostId(1L)
-                .member(mockMember)
+                .email(mockMember.getEmail())
                 .isDeleted(false)
                 .build();
 
         CodePostBookmark bookmark2 = CodePostBookmark.builder()
                 .codePostId(2L)
-                .member(mockMember)
+                .email(mockMember.getEmail())
                 .isDeleted(false)
                 .build();
 
@@ -136,13 +128,10 @@ class CodePostBookmarkServiceUnitTest {
         var dtoList = of(dto1, dto2);
         Page<CodePostBookmarkResponseDto> page = new PageImpl<>(dtoList, PageRequest.of(0, 10), 2);
 
-        when(memberCommand.findByEmail(email)).thenReturn(mockMember);
-
-        // mockMember 의 id값이 null이기 때문에 memberId에 null 삽입한 채로 진행
-        when(codePostBookmarkCommand.findAllByMemberId(memberId, PageRequest.of(0, 10))).thenReturn(page);
+        when(codePostBookmarkCommand.findAllByEmail(email, PageRequest.of(0, 10))).thenReturn(page);
 
         // when
-        CodePostBookmarkListResponseDto result = codePostBookmarkService.findAllByMemberId(email, PageRequest.of(0, 10));
+        CodePostBookmarkListResponseDto result = codePostBookmarkService.findAllByEmail(email, PageRequest.of(0, 10));
 
         // then
         assertThat(result.dtoList().size()).isEqualTo(2);

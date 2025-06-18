@@ -72,7 +72,7 @@ class CodePostBookmarkServiceIntegrationTest {
         Long bookmarkId = codePostBookmarkService.saveOrUpdate(saveRequestDto, testMember.getEmail());
 
         // then
-        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByMemberId(testMember.getEmail(), of(0, 10));
+        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByEmail(testMember.getEmail(), of(0, 10));
 
         assertThat(bookmarkId).isNotNull();
         assertThat(bookmarks.dtoList().size()).isEqualTo(1);
@@ -102,7 +102,7 @@ class CodePostBookmarkServiceIntegrationTest {
         Long bookmarkId = codePostBookmarkService.saveOrUpdate(requestDto, testMember.getEmail());
 
         // then
-        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByMemberId(testMember.getEmail(), of(0, 10));
+        CodePostBookmarkListResponseDto bookmarks = codePostBookmarkService.findAllByEmail(testMember.getEmail(), of(0, 10));
 
         assertThat(bookmarks.dtoList().size()).isEqualTo(1);
         assertThat(bookmarks.dtoList().get(0).getCodePostId()).isEqualTo(testCodePost.getId());
