@@ -7,7 +7,7 @@ import org.example.autoreview.domain.member.entity.Member;
 
 @Getter
 @NoArgsConstructor
-public class FcmTokenSaveRequestDto {
+public class FcmTokenRequestDto {
 
     private String fcmToken;
 
