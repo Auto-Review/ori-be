@@ -26,4 +26,11 @@ public class FcmTokenCommand {
             entry.getKey().updateDate(entry.getValue());
         }
     }
+
+    @Transactional
+    public Long delete(String token, Long memberId) {
+        FcmToken fcmToken = fcmTokenRepository.findByTokenAndMember(token, memberId);
+        fcmTokenRepository.delete(fcmToken);
+        return fcmToken.getId();
+    }
 }
