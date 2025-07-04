@@ -10,6 +10,9 @@ import org.example.autoreview.domain.member.entity.Member;
 
 @Getter
 @NoArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uq_fcm_token",
+        columnNames = {"token"})}
+)
 @Entity
 public class FcmToken {
 
