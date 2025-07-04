@@ -8,6 +8,7 @@ import org.example.autoreview.domain.member.entity.Member;
 import org.example.autoreview.domain.member.service.MemberCommand;
 import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
 import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -38,7 +39,9 @@ public class FcmTokenService {
             Member member = memberCommand.findByEmail(email);
             FcmToken fcmToken = requestDto.toEntity(member);
             return fcmTokenCommand.save(fcmToken);
-        } finally {
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomRuntimeException(ErrorCode.DUPLICATE_ERROR);
+        }finally {
             lock.unlock();
         }
     }
