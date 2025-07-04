@@ -1,55 +1,54 @@
 package org.example.autoreview.domain.fcm.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.autoreview.domain.fcm.dto.request.FcmTokenSaveRequestDto;
+import org.example.autoreview.domain.fcm.dto.request.FcmTokenRequestDto;
 import org.example.autoreview.domain.fcm.entity.FcmToken;
-import org.example.autoreview.domain.fcm.entity.FcmTokenRepository;
 import org.example.autoreview.domain.member.entity.Member;
+import org.example.autoreview.domain.member.service.MemberCommand;
+import org.example.autoreview.global.exception.base_exceptions.CustomRuntimeException;
+import org.example.autoreview.global.exception.errorcode.ErrorCode;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class FcmTokenService {
 
-    private final FcmTokenRepository fcmTokenRepository;
+    private final MemberCommand memberCommand;
+    private final FcmTokenCommand fcmTokenCommand;
 
-    @Transactional(readOnly = false)
-    public Long save(FcmTokenSaveRequestDto requestDto, Member member) {
-        FcmToken fcmToken = requestDto.toEntity(member);
-        return fcmTokenRepository.save(fcmToken).getId();
-    }
+    // 토큰 단위 락 (메모리 기준)
+    private final Map<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
 
-    public void pushNotification(List<FcmToken> fcmTokens, String title, String content) {
-        log.info("pushNotification 트랜잭션 존재 여부: {}", TransactionSynchronizationManager.isActualTransactionActive());
+    public Long save(FcmTokenRequestDto requestDto, String email) {
+        String tokenKey = requestDto.getFcmToken();
+        ReentrantLock lock = lockMap.computeIfAbsent(tokenKey, k -> new ReentrantLock());
 
-        for (FcmToken fcmToken : fcmTokens) {
-            CompletableFuture.runAsync(() -> {
-                try {
-                    Message message = Message.builder()
-                            .putData("title", title)
-                            .putData("body", content)
-                            .setToken(fcmToken.getToken())
-                            .build();
+        boolean locked = lock.tryLock();
+        if (!locked) {
+            throw new CustomRuntimeException(ErrorCode.DUPLICATE_ERROR);
+        }
 
-                    FirebaseMessaging.getInstance().send(message);
-                    fcmToken.updateDate();
-
-                } catch (FirebaseMessagingException e) {
-                    log.error("Failed to send message to device {}: {}", fcmToken.getId(), e.getMessage());
-                } catch (Exception e) {
-                    log.error("An unexpected error occurred: {}", e.getMessage());
-                }
-            });
+        try {
+            Member member = memberCommand.findByEmail(email);
+            FcmToken fcmToken = requestDto.toEntity(member);
+            return fcmTokenCommand.save(fcmToken);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomRuntimeException(ErrorCode.DUPLICATE_ERROR);
+        }finally {
+            lock.unlock();
         }
     }
 
+
+    public Long delete(FcmTokenRequestDto requestDto, String email) {
+        Member member = memberCommand.findByEmail(email);
+        return fcmTokenCommand.delete(requestDto.getFcmToken(), member.getId());
+    }
 }

@@ -14,13 +14,14 @@ public class MemberCommand {
 
     private final MemberRepository memberRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(
                 () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_MEMBER)
         );
     }
 
+    @Transactional(readOnly = true)
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(
                 () -> new CustomRuntimeException(ErrorCode.NOT_FOUND_MEMBER)

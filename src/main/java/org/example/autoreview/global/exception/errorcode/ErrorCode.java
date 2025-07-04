@@ -12,6 +12,7 @@ public enum ErrorCode {
     INVALID_PARAMETER(400, HttpStatus.BAD_REQUEST, "잘못된 매개변수가 포함되었습니다."),
     NOT_FOUND_RESOURCE(404, HttpStatus.NOT_FOUND, "자원을 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다."),
+    DUPLICATE_ERROR(409, HttpStatus.CONFLICT, "중복 요청 오류가 발생했습니다."),
 
     // SECURITY
     UNAUTHORIZED_SECURITY(401, HttpStatus.UNAUTHORIZED, "자격 증명에 실패했습니다."),
@@ -34,6 +35,7 @@ public enum ErrorCode {
 
     // POST
     NOT_FOUND_POST(404, HttpStatus.NOT_FOUND, "해당 포스트를 찾을 수 없습니다."),
+    NOT_FOUND_LANGUAGE(404, HttpStatus.NOT_FOUND, "해당 언어를 찾을 수 없습니다."),
 
     // NOTIFICATION
     NOT_FOUND_NOTIFICATION(404, HttpStatus.NOT_FOUND, "해당 알림을 찾을 수 없습니다."),
@@ -48,7 +50,10 @@ public enum ErrorCode {
     NOT_FOUND_BOOKMARK(404, HttpStatus.NOT_FOUND, "해당 북마크를 찾을 수 없습니다."),
 
     // Comment
-    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다.")
+    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
+
+    // GitHub Token
+    NOT_FOUND_GITHUB_TOKEN(404, HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다.")
 
     ;
 

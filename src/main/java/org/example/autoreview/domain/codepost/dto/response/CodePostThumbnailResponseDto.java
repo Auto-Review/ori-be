@@ -14,6 +14,9 @@ public class CodePostThumbnailResponseDto {
     private final String writerNickName;
     private final String title;
     private final int level;
+    private final int commentCount;
+    private final int reviewCount;
+    private final boolean isPublic;
     private final String description;
     private final LocalDateTime createdDate;
 
@@ -24,7 +27,17 @@ public class CodePostThumbnailResponseDto {
         this.writerNickName = writer.getNickname();
         this.title = entity.getTitle();
         this.level = entity.getLevel();
-        this.description = entity.getDescription();
+        this.commentCount = entity.getCodePostCommentList().size();
+        this.reviewCount = entity.getReviewList().size();
+        this.isPublic = entity.isPublic();
+        this.description = summarize(entity.getDescription(),100);
         this.createdDate = entity.getCreateDate();
+    }
+
+    private String summarize(String text, int maxLength) {
+        if (text == null) {
+            return "";
+        }
+        return text.length() <= maxLength ? text : text.substring(0, maxLength) + "...";
     }
 }

@@ -2,10 +2,11 @@ package org.example.autoreview.domain.codepost.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import org.example.autoreview.domain.codepost.entity.CodePost;
 import org.example.autoreview.domain.codepost.entity.Language;
 import org.example.autoreview.domain.member.entity.Member;
+
+import java.time.LocalDate;
 
 public record CodePostSaveRequestDto(
 
@@ -14,6 +15,9 @@ public record CodePostSaveRequestDto(
 
         @Schema(description = "난이도", example = "4")
         int level,
+
+        @Schema(description = "공개여부", example = "true")
+        boolean isPublic,
 
         @Schema(description = "복습일 설정", example = "2024-10-11")
         LocalDate reviewDay,
@@ -33,6 +37,7 @@ public record CodePostSaveRequestDto(
                 .writerId(member.getId())
                 .title(title)
                 .level(level)
+                .isPublic(isPublic)
                 .reviewDay(reviewDay)
                 .description(description)
                 .language(Language.of(language))

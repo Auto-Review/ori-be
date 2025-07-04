@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.flywaydb.flyway' version '8.5.13'
+    id 'org.flywaydb.flyway' version '11.10.0'
 }
 
 group = 'org.example'
@@ -26,9 +26,12 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation ('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'commons-logging'
+    }
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
@@ -44,10 +47,13 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // Flyway 라이브러리 사용을 위한 기본적인 의존성 추가
-    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-core:11.10.0'
 
     // MySQL 을 사용해야한다면 추가
     implementation 'org.flywaydb:flyway-mysql'
+
+    // Github API 사용을 위해 추가
+    implementation 'org.kohsuke:github-api:1.327'
 
 
     compileOnly 'org.projectlombok:lombok'
@@ -65,6 +71,20 @@ tasks.register('copyYml', Copy) {
     copy {
         from 'security_setting'
         include "*.yml"
+        into 'src/main/resources'
+    }
+}
+
+tasks.register('copyCiYml', Copy) {
+    from 'security_setting'
+    include 'application-ci.yml'
+    into 'src/test/resources'
+}
+
+tasks.register('copyLog', Copy) {
+    copy {
+        from 'security_setting'
+        include "logback-spring.xml"
         into 'src/main/resources'
     }
 }
