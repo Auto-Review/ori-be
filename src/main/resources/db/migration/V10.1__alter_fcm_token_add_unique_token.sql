@@ -4,4 +4,4 @@
 
 -- 2. token 컬럼에 UNIQUE 제약 추가
 ALTER TABLE fcm_token
-    ADD CONSTRAINT uq_fcm_token UNIQUE (token);
+ADD CONSTRAINT uq_fcm_token UNIQUE (token);
