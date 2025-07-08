@@ -194,4 +194,4 @@ jobs:
             sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
             sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
-            sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network ${{ secrets.DOCKER_NETWORK_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
+            sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --volume /ori/log:/ori/log --network ${{ secrets.DOCKER_NETWORK_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY_NAME }}:prod
